@@ -1,0 +1,66 @@
+name: Тикет DevOps-задачи
+description: Задача для практики
+title: "Название задачи"
+labels: [learning, devops]
+assignees:
+  - DavyRoy
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## 🎯 Цель
+        Что нужно сделать? Какой результат должен получиться?
+  - type: input
+    id: module
+    attributes:
+      label: Модуль
+      description: Docker, Kubernetes
+      placeholder: "Модуль"
+    validations:
+      required: true
+
+  - type: textarea
+    id: theory
+    attributes:
+      label: 🎯 Задача
+      description: Поставленная задача
+    validations:
+      required: false
+
+  - type: textarea
+    id: task
+    attributes:
+      label: 🛠️ Инструкция
+      description: Этапы выполнения задачи
+    validations:
+      required: true
+
+  - type: textarea
+    id: submit
+    attributes:
+      label: ✅ Итог
+      description: Что должно получиться в результате выполнения задачи?
+    validations:
+      required: true
+
+  - type: textarea
+    id: hints
+    attributes:
+      label: 🧠 Подсказки
+      description: Подсказки, ссылки, материалы
+    validations:
+      required: false
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: 💡 Решение
+      description: Решение задачи
+      placeholder: |
+        - Команды, которые я использовал
+        - Скрин вывода `docker ps`
+        - docker-compose.yaml или Dockerfile
+        - Вывод или результат
+        - Ссылка на GitHub-коммит
+    validations:
+      required: false
