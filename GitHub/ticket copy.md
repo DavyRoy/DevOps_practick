@@ -383,38 +383,67 @@ touch .github/workflows/conditional.yml
 3. `Используй matrix.env: [dev, stage, prod]`
 
 ```
-docker volume create webdata
-webdata
 
-docker network create dev-net
-2791c19b808fe4dd9ea9d9e07779785b68d4c16e2d58f01037646a70a0e9be51
 ```
 4. `Добавь: •	if: matrix.env == 'prod' для спец-шагов •	Параметры fail-fast, max-parallel в стратегии`
 
 ```
+name: CI Pipeline
+
+on: [push]
+
+env:
+  APP_NAME: ConditionalAPP
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      max-parallel: 1
+      matrix:
+        env: [dev, stage, prod]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Диплой всех окружений
+        run: echo "Диплой $APP_NAME на ${{ matrix.env }}"
+
+      - name: Only on prod
+        if: matrix.env == 'prod'
+        run: echo "!!! Production deploy !!!"
+```
+5. `Сделай git push — проверь, что workflow сработал`
 
 ```
-5. `Зайди в контейнер nginx, проверь, что /usr/share/nginx/html монтировано`
+git push -u origin gha-02-matrix-env
+Enumerating objects: 9, done.
+Counting objects: 100% (9/9), done.
+Delta compression using up to 10 threads
+Compressing objects: 100% (5/5), done.
+Writing objects: 100% (5/5), 479 bytes | 479.00 KiB/s, done.
+Total 5 (delta 2), reused 0 (delta 0), pack-reused 0
+remote: Resolving deltas: 100% (2/2), completed with 2 local objects.
+To https://github.com/DavyRoy/DevOps_practick.git
+   f9d5ef2..ed49aa4  gha-02-matrix-env -> gha-02-matrix-env
+branch 'gha-02-matrix-env' set up to track 'origin/gha-02-matrix-env'.
+```
+6. `Перейди в GitHub → вкладка Actions → убедись в успешном выполнении`
 
 ```
-docker exec -it ab630092b0b4 bash
+Run echo "Диплой $APP_NAME на dev"
+Диплой ConditionalAPP на dev
 
-root@ab630092b0b4:/# ls
-bin  boot  dev  docker-entrypoint.d  docker-entrypoint.sh  etc  home  lib  media  mnt  opt  proc  root  run  sbin  srv  sys  tmp  usr  var
-```
-6. `Останови контейнеры и удали только их (не образы!)`
+Run echo "Диплой $APP_NAME на stage"
+Диплой ConditionalAPP на stage
 
-```
-docker stop ab630092b0b4 6bce259f79a8
-ab630092b0b4
-6bce259f79a8
-
-docker rm ab630092b0b4 6bce259f79a8
-ab630092b0b4
-6bce259f79a8
-
-docker ps -a
-CONTAINER ID   IMAGE                                 COMMAND                  CREATED       STATUS                     PORTS                                                                                                                                  NAMES
+Run echo "Диплой $APP_NAME на prod"
+Диплой ConditionalAPP на prod
+0s
+Run echo "!!! Production deploy !!!"
+!!! Production deploy !!!
 ```
 
 `При необходимости прикрепитe сюда скриншоты
@@ -423,36 +452,44 @@ CONTAINER ID   IMAGE                                 COMMAND                  CR
 ![Название скриншота 1](ссылка на скриншот 1)`
 ---
 
-# Модуль "`Docker — Основы контейнеризации`" - `DOC-04 Dockerfile и создание собственного образа`
+# Модуль "`GitHub Actions`" - `GHA-04 — CI-пайплайн: линтинг, тесты, артефакты`
 
  ### 🎯 Цель урока
-Что такое Dockerfile
+CI-пайплайн: линтинг, тесты, артефакты
 
 ---
 
  ## 📘 Теория (кратко)
 
-Dockerfile — это скрипт, содержащий пошаговые инструкции, по которым Docker собирает образ (image).
+Цель любого CI-пайплайна — автоматическая проверка кода перед мержем или деплоем. Классическая структура пайплайна:
+	1.	Lint — проверка стиля (например, eslint, flake8, yamllint)
+	2.	Test — юнит-тесты, интеграционные тесты (pytest, jest, go test, и т.п.)
+	3.	Build / Артефакты — создание артефактов (например, бинарников, отчётов о тестах и пр.)
 
-Ты буквально программируешь, что установить, какие файлы скопировать, как запустить, и всё это становится частью одного файла.
+📌 Как сохранять артефакты в GitHub Actions?
+- name: Save build artifacts
+  uses: actions/upload-artifact@v4
+  with:
+    name: my-artifacts
+    path: ./build/
+🔹 Файл или папка ./build/ будет доступна для скачивания из вкладки Artifacts в интерфейсе Actions.
 
-🔹 Основные директивы Dockerfile
-FROM Базовый образ (например, ubuntu, python, node)
-RUN Выполнение команды (например, установка пакетов)
-COPY Копирование файлов из текущей директории внутрь образа
-WORKDIR Установка рабочей директории в контейнере
-CMD Команда по умолчанию при запуске контейнера
-EXPOSE Документирование порта (не пробрасывает!)
-ENV Установка переменных окружения
-ENTRYPOINT Альтернатива CMD, задаёт основную команду контейнера
+🛠 Пример CI:
+jobs:
+  lint:
+    steps:
+      - run: flake8 app/
+  test:
+    steps:
+      - run: pytest tests/
+  build:
+    steps:
+      - run: make build
+      - uses: actions/upload-artifact@v4
+        with:
+          name: binary
+          path: ./dist/
 
-🔹 Пример Dockerfile (Python Hello API)
-	FROM python:3.12-alpine
-	WORKDIR /app
-	COPY . .
-	RUN pip install fastapi uvicorn
-	EXPOSE 8000
-	CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
 
  ## Ключевые команды:
 
