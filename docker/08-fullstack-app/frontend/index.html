@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+  <body>
+    <h1>Frontend: Fetch from Backend</h1>
+    <div id="result">Loading...</div>
+  <script>
+    fetch('/api')
+      .then(res => res.json())
+      .then(data => {
+        document.getElementById('result').innerText = data.message;
+      });
+  </script>
+  </body>
+</html>
