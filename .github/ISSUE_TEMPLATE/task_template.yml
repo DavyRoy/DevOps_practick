@@ -66,4 +66,4 @@ body:
         - Вывод или результат
         - Ссылка на GitHub-коммит
     validations:
-      required: false 
+      required: false
