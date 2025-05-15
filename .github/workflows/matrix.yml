@@ -21,3 +21,4 @@ jobs:
 
       - name: Use secret
         run: echo "Secret доступен"
+        

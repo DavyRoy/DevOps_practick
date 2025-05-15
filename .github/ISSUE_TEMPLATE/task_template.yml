@@ -64,3 +64,4 @@ body:
         - Ссылка на GitHub-коммит
     validations:
       required: false
+      
