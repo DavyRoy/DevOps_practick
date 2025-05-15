@@ -19,5 +19,5 @@ jobs:
       - name: Print Deploy
         run: echo "Deploying $APP_NAME to ${{ matrix.env }}"
 
-      - name: Print Secret
-        run: echo ${{ secrets.SUPER_SECRET }}
+      - name: Use secret
+        run: echo "Secret доступен"
