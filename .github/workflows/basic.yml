@@ -14,3 +14,4 @@ jobs:
       - name: Print Hello and Date
         run: |
           echo "Привет! Сейчас: $(date '+%d.%m.%Y %H:%M')"
+          

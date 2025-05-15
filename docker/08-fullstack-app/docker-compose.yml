@@ -18,3 +18,4 @@ services:
       - "8089:80"
     depends_on:
       - backend
+      
