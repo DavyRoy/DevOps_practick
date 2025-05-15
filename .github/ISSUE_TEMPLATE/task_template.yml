@@ -1,3 +1,4 @@
+---
 name: Тикет DevOps-задачи
 description: Задача для практики
 title: "Название задачи"
@@ -64,4 +65,3 @@ body:
         - Ссылка на GitHub-коммит
     validations:
       required: false
-      

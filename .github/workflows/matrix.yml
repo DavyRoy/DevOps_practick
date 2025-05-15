@@ -1,3 +1,4 @@
+---
 name: CI Pipeline
 
 on: [push]
@@ -21,4 +22,3 @@ jobs:
 
       - name: Use secret
         run: echo "Secret доступен"
-        
