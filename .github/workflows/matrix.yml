@@ -3,7 +3,7 @@ name: CI Pipeline
 on: [push]
 
 env:
-  APP_ENV: production
+  APP_ENV: MyCoolApp
 
 jobs:
   build:
