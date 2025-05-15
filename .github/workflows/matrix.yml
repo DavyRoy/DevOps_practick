@@ -1,0 +1,23 @@
+name: CI Pipeline
+
+on: [push]
+
+env:
+  APP_ENV: production
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        env: [dev, stage, prod]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Print Deploy
+        run: echo "Deploying $APP_NAME to ${{ matrix.env }}"
+
+      - name: Print Secret
+        run: echo ${{ secrets.SUPER_SECRET }}

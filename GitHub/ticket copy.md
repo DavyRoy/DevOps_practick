@@ -7,76 +7,155 @@
 
  ## 📘 Теория (кратко)
 
-🔹 Что такое Docker?
+📂 Где живёт CI?
 
-Docker — это платформа контейнеризации, позволяющая запускать приложения в изолированных окружениях, называемых контейнерами. Контейнеры используют общее ядро операционной системы, но при этом полностью изолированы на уровне процессов, сети, файловой системы и окружения.
+GitHub Actions читают YAML-файлы из каталога .github/workflows/.
+Каждый .yml в этой папке — это workflow, который выполняется по определённому событию (push, pull_request и т.д.)
 
-🔹 Отличие контейнера от виртуальной машины
-    - Контейнер                   
-Лёгкий, использует общее ядро хоста
-Запускается за секунды
-Использует меньше ресурсов
-Уровень — изоляция процессов
+🛠 Основная структура файла workflow:
+name: Имя воркфлоу
 
-    - Виртуальная машина
-Тяжёлый, содержит полную гостевую ОС
-Требует времени на загрузку
-Использует много ресурсов
-Уровень — виртуализация оборудования
+on: событие_триггер
+jobs:
+  имя_джоба:
+    runs-on: runner
+    steps:
+      - name: шаг
+        run: команда
 
-🔹 Компоненты Docker:
-	1.	Docker Client (CLI):
-	•	Ты вводишь команды (docker run, docker build)
-	•	Передаёт инструкции Docker Daemon
-	2.	Docker Daemon (dockerd):
-	•	Слушает команды от клиента
-	•	Управляет контейнерами, образами, сетями, томами
-	3.	Docker Images:
-	•	Шаблоны файловой системы (read-only)
-	•	Содержат всё для запуска приложения (библиотеки, код, команды запуска)
-	4.	Docker Containers:
-	•	Изолированное рабочее окружение
-	•	Запускается из образа (image)
-	•	Лёгкий, быстро создаётся и удаляется
-	5.	Dockerfile:
-	•	Сценарий создания образа (шаги: копировать, установить, запустить)
-	6.	Docker Registry:
-	•	Хранилище образов (Docker Hub, GitHub Container Registry, self-hosted)
+🔑 Ключевые элементы:
+name: Имя workflow (для читаемости в GitHub UI)
+on: Событие, при котором запускается workflow (push, pull_request, schedule, и др.)
+jobs: Логические блоки задач, которые могут запускаться параллельно или последовательно
+runs-on: Тип runner’а (обычно ubuntu-latest)
+steps: Последовательные шаги внутри job
+run: Shell-команда для выполнения
+uses: Использование стороннего действия (например, actions/checkout@v4)
 
+🧠 Как это работает:
+	•	GitHub Actions следит за событиями (on:).
+	•	При совпадении события (push, pull_request) — запускается workflow.
+	•	В jobs: описаны независимые блоки задач, исполняющиеся на runner-ах.
+	•	В steps: находятся конкретные действия: shell-команды или сторонние actions.
 
-
- ## Ключевые команды:
-
-- 'docker build . → Собираем образ по Dockerfile'
-- 'docker run myimage → Контейнер создаётся и запускается из образа'
+ ## Ключевые команды:1
 
 ---
 
 ### Задание
 
-1. Тимлид просит тебя разобраться и визуализировать архитектуру Docker. А также объяснить это своими словами как будто ты наставник джуна.
+1. Разверни минимальный workflow, который при каждом пуше:
+	•	Выполняет checkout репозитория
+	•	Выводит текущее время и приветствие в лог
 
-1. `Найди или сам нарисуй архитектурную схему Docker (можно draw.io, Excalidraw, даже от руки и в PDF) •Отрази взаимодействие: CLI → Daemon → Image → Container → Registry`
+1. `Создай новую ветку gha-01-basic-workflow`
+```
+git switch -c gha-01-basic-workflow
+Switched to a new branch 'gha-01-basic-workflow'
+```
+2. `В папке .github/workflows/ создай файл basic.yml`
+```
+mkdir .github/workflows/
+touch .github/workflows/basic.yml
+```
+3. `Опиши workflow по шаблону выше (используй run: и uses: шаги)`
+```
+`name: CI Pipeline
 
-`При необходимости прикрепитe сюда скриншоты
-![Схема Docker](/Users/sergeylapshov/Documents/Devops/docker/image/14484804052022_08fda0244b5397e030ee401fd2bea5b24f78a72b.jpg)`
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Print Hello and Date
+        run: |
+          echo "Привет! Сейчас: $(date '+%d.%m.%Y %H:%M')"
+```
+4. `Сделай git push — проверь, что workflow сработал`
 
 ```
-Поле для вставки кода...
-....
-....
-....
-....
+git add .
+git commit -m "new commit"
+[gha-01-basic-workflow 746985d] new commit
+ 5 files changed, 1498 insertions(+), 940 deletions(-)
+ create mode 100644 .github/ISSUE_TEMPLATE/workflows/basic.yml
+ create mode 100644 GitHub/test copy.md
+ delete mode 100644 GitHub/test.md
+ create mode 100644 GitHub/ticket copy.md
+ delete mode 100644 GitHub/ticket.md
+git push -u origin gha-01-basic-workflow
+Enumerating objects: 7, done.
+Counting objects: 100% (7/7), done.
+Delta compression using up to 10 threads
+Compressing objects: 100% (3/3), done.
+Writing objects: 100% (4/4), 408 bytes | 408.00 KiB/s, done.
+Total 4 (delta 1), reused 0 (delta 0), pack-reused 0
+remote: Resolving deltas: 100% (1/1), completed with 1 local object.
+To https://github.com/DavyRoy/DevOps_practick.git
+   746985d..c4ea227  gha-01-basic-workflow -> gha-01-basic-workflow
+branch 'gha-01-basic-workflow' set up to track 'origin/gha-01-basic-workflow'.
 ```
-2. `Напиши объяснение своими словами: •	Что делает каждая часть •	Как всё это работает вместе`
+5. `Перейди в GitHub → вкладка Actions → убедись в успешном выполнении`
 
 ```
-CLI - взаимодействие клиента с docker по средствам команд введенных через терминал 
-Daemon - принимает команды от клиента 
-Image - шаблон приложения 
-Container - изолированное рабочее окружение которое запускается из image
-Registry - хранилище образа 
+build
+succeeded 9 minutes ago in 4s
+
+0s
+Current runner version: '2.323.0'
+Operating System
+Runner Image
+Runner Image Provisioner
+GITHUB_TOKEN Permissions
+Secret source: Actions
+Prepare workflow directory
+Prepare all required actions
+Getting action download info
+Download immutable action package 'actions/checkout@v4'
+Complete job name: build
+1s
+Run actions/checkout@v4
+Syncing repository: DavyRoy/DevOps_practick
+Getting Git version info
+Temporarily overriding HOME='/home/runner/work/_temp/4acc4139-13aa-4f28-850e-6c16ddc41bb1' before making global git config changes
+Adding repository directory to the temporary git global config as a safe directory
+/usr/bin/git config --global --add safe.directory /home/runner/work/DevOps_practick/DevOps_practick
+Deleting the contents of '/home/runner/work/DevOps_practick/DevOps_practick'
+Initializing the repository
+Disabling automatic garbage collection
+Setting up auth
+Fetching the repository
+Determining the checkout info
+/usr/bin/git sparse-checkout disable
+/usr/bin/git config --local --unset-all extensions.worktreeConfig
+Checking out the ref
+/usr/bin/git log -1 --format=%H
+c4ea2274a198f461fafb6ba5001ea85a6e87c526
+0s
+Run echo "Привет! Сейчас: $(date '+%d.%m.%Y %H:%M')"
+Привет! Сейчас: 15.05.2025 08:15
+0s
+Post job cleanup.
+/usr/bin/git version
+git version 2.49.0
+Temporarily overriding HOME='/home/runner/work/_temp/4f3e3cd8-aa84-4030-bbf1-3ad269c0bcd9' before making global git config changes
+Adding repository directory to the temporary git global config as a safe directory
+/usr/bin/git config --global --add safe.directory /home/runner/work/DevOps_practick/DevOps_practick
+/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+http.https://github.com/.extraheader
+/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+0s
+Cleaning up orphan processes
 ```
+
 
 `При необходимости прикрепитe сюда скриншоты
 ![Название скриншота 1](ссылка на скриншот 1)`
@@ -86,7 +165,7 @@ Registry - хранилище образа
 
 
 
-# Модуль "`Docker — Основы контейнеризации`" - `DOC-02 Установка Docker на macOS (M4)`
+# Модуль "`GitHub Actions`" - `GHA-02 Переменные, секреты и матрицы`
 
  ### 🎯 Цель урока
 Установка Docker на macOS
