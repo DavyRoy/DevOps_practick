@@ -8,6 +8,7 @@ env:
 jobs:
   build:
     runs-on: ubuntu-latest
+    if: matrix.env == 'prod'
     strategy:
       fail-fast: false
       max-parallel: 1
@@ -22,5 +23,4 @@ jobs:
         run: echo "Диплой $APP_NAME на ${{ matrix.env }}"
 
       - name: Only on prod
-        if: matrix.env == 'prod'
         run: echo "!!! Production deploy !!!"
