@@ -1,0 +1,17 @@
+name: Deploy Workflow
+
+on:
+  push:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Deploy via custom action
+        uses: ./github/actions/deploy
+        with:
+          app_name: MyCoolApp
+          env: stage

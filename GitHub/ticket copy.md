@@ -177,7 +177,7 @@ Cleaning up orphan processes
 🔹 1. Переменные (env)
 
 GitHub Actions поддерживает переменные окружения, которые можно определять:
-	•	На уровне workflow: 
+	•	На уровне workflow:
 env:
   APP_ENV: production
 
@@ -497,79 +497,127 @@ jobs:
 
 ### Задание
 
-1. Собери Docker-образ, в котором запущено простое Python-приложение на FastAPI, и проверь, что оно работает на localhost:8000.
+1. Создай CI workflow, который:
+	•	Запускается при push в любую ветку
+	•	Делает:
+	•	Линтинг — проверь синтаксис *.yml файлов (например, yamllint)
+	•	Тест — симулируй тестирование (команда echo "Тесты пройдены")
+	•	Build — создай папку build/ с каким-то файлом (например, touch build/app.txt)
+	•	Загрузи build/ как артефакт
 
-1. `Создай рабочую директорию docker/04-dockerfile`
-
-```
-mkdir 04-dockerfile | cd 04-dockerfile
-```
-2. `Создай файл main.py: from fastapi import FastAPI app = FastAPI() @app.get("/") def root(): return {"message": "Hello from Docker!"`
-
-```
-echo 'from fastapi import FastAPI
-
-app = FastAPI()
-
-@app.get("/")
-def root():
-    return {"message": "Hello from Docker!"}' > main.py
-```
-3. `Напиши Dockerfile с инструкциями: •	Базовый образ python:3.12-alpine •	Копировать main.py внутрь •	Установить fastapi, uvicorn •	Открыть порт 8000 •	Запустить uvicorn`
+1. `Ветка: gha-04-ci-pipeline`
 
 ```
-nano Dockerfile
-FROM python:3.12-alpine
-WORKDIR /app
-COPY . .
-RUN pip install fastapi uvicorn
-EXPOSE 8000
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
+git switch -c gha-04-ci-pipeline
+Switched to a new branch 'gha-04-ci-pipeline'
 ```
-4. `Собери образ: docker build -t myapi .`
+2. `Файл: .github/workflows/ci.yml`
 
 ```
-docker build -t myapi .
-[+] Building 34.5s (9/9) FINISHED                                                                                                            docker:desktop-linux
- => [internal] load build definition from Dockerfile                                                                                                         0.0s
- => => transferring dockerfile: 232B                                                                                                                         0.0s
- => [internal] load metadata for docker.io/library/python:3.12-alpine                                                                                        1.9s
- => [internal] load .dockerignore                                                                                                                            0.0s
- => => transferring context: 2B                                                                                                                              0.0s
- => [1/4] FROM docker.io/library/python:3.12-alpine@sha256:9c51ecce261773a684c8345b2d4673700055c513b4d54bc0719337d3e4ee552e                                  6.4s
- => => resolve docker.io/library/python:3.12-alpine@sha256:9c51ecce261773a684c8345b2d4673700055c513b4d54bc0719337d3e4ee552e                                  0.0s
- => => sha256:7692574bf4801943e7fc167f876c99a00dd65e9748b9cfd4840a398c57bf4f6c 13.71MB / 13.71MB                                                             5.7s
- => => sha256:0caf59132a0bc45e45c1d3c3cdea5e9adedca3b84de1300ec64d4ad49182ef2b 248B / 248B                                                                   2.5s
- => => sha256:9c51ecce261773a684c8345b2d4673700055c513b4d54bc0719337d3e4ee552e 10.30kB / 10.30kB                                                             0.0s
- => => sha256:28c8ac013225c99f00023757b69cb69b145f848da6ea7d86a0205d48164fd6f4 1.74kB / 1.74kB                                                               0.0s
- => => sha256:477ccb1ed21644af730edcd55e02034e6be58aea743ed7a13a6bd246ec1ebb76 5.35kB / 5.35kB                                                               0.0s
- => => sha256:f50b10efc2b0f5c71ea50728af1c0b9c1a4787270fc322139a1e8ceb93bb3b43 462.07kB / 462.07kB                                                           3.1s
- => => extracting sha256:f50b10efc2b0f5c71ea50728af1c0b9c1a4787270fc322139a1e8ceb93bb3b43                                                                    0.1s
- => => extracting sha256:7692574bf4801943e7fc167f876c99a00dd65e9748b9cfd4840a398c57bf4f6c                                                                    0.6s
- => => extracting sha256:0caf59132a0bc45e45c1d3c3cdea5e9adedca3b84de1300ec64d4ad49182ef2b                                                                    0.0s
- => [internal] load build context                                                                                                                            0.0s
- => => transferring context: 421B                                                                                                                            0.0s
- => [2/4] WORKDIR /app                                                                                                                                       0.1s
- => [3/4] COPY . .                                                                                                                                           0.0s
- => [4/4] RUN pip install fastapi uvicorn                                                                                                                   25.9s
- => exporting to image                                                                                                                                       0.1s
- => => exporting layers                                                                                                                                      0.1s
- => => writing image sha256:40905fb3b642d9f5add81c50b67e29903543b0b8b07882563be6a0b42d4f7d86                                                                 0.0s
- => => naming to docker.io/library/myapi                                                                                                                     0.0s
-
-View build details: docker-desktop://dashboard/build/desktop-linux/desktop-linux/eq57w4zertponjt6r1vjqrspd
+touch .github/workflows/ci.yml
 ```
-5. `Запусти контейнер: docker run -d -p 8000:8000 myapi`
+3. `Стадии: lint, test, build — как отдельные job, Используй upload-artifact только в job build, Линт — можешь установить yamllint (pip install yamllint) или сделать echo "Lint passed" — главное структура`
 
 ```
-docker run -d -p 8003:8000 myapi
-75f807b7e90563486e3c676136750efaeffd821d85937b4adb25707c5c94bfb3
-```
-6. `Проверь в браузере или через curl http://localhost:8000`
+---
+name: CI Pipeline
+
+on:
+  push:
+
+
+jobs:
+  lint:
+    name: Линтинг YAML файлов
+    runs-on: ubuntu-latest
+    steps:
+      - name: Клонируем код
+        uses: actions/checkout@v3
+
+      - name: Проверка синтаксиса YAML (симулированная)
+        run: |
+           sudo apt update
+           sudo apt install -y python3-pip
+           pip install yamllint
+           yamllint .
+
+  test:
+    name: Тестирование
+    runs-on: ubuntu-latest
+    needs: lint
+    steps:
+      - name: Клонируем код
+        uses: actions/checkout@v3
+
+      - name: Запускаем тесты (симуляция)
+        run: echo "Тесты пройдены"
+
+  build:
+    name: Сборка
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - name: Клонируем код
+        uses: actions/checkout@v3
+
+      - name: Создаём папку build/ и файл
+        run: |
+          mkdir -p build
+          echo "Hello from build" > build/app.txt
+
+      - name: Загружаем артефакт
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-artifact
+          path: build/
 
 ```
-curl http://localhost:8003
-{"message":"Hello from Docker!"}
+4. `Сделай git push — проверь, что workflow сработал`
+
+```
+git push -u origin gha-04-ci-pipeline
+Enumerating objects: 26, done.
+Counting objects: 100% (26/26), done.
+Delta compression using up to 10 threads
+Compressing objects: 100% (13/13), done.
+Writing objects: 100% (14/14), 1.26 KiB | 1.26 MiB/s, done.
+Total 14 (delta 7), reused 0 (delta 0), pack-reused 0
+remote: Resolving deltas: 100% (7/7), completed with 7 local objects.
+To https://github.com/DavyRoy/DevOps_practick.git
+   b55b770..adaba9e  gha-04-ci-pipeline -> gha-04-ci-pipeline
+branch 'gha-04-ci-pipeline' set up to track 'origin/gha-04-ci-pipeline'.
+```
+5. `Перейди в GitHub → вкладка Actions → убедись в успешном выполнении`
+
+```
+Reading package lists...
+Building dependency tree...
+Reading state information...
+python3-pip is already the newest version (24.0+dfsg-1ubuntu1.1).
+0 upgraded, 0 newly installed, 0 to remove and 16 not upgraded.
+Defaulting to user installation because normal site-packages is not writeable
+Collecting yamllint
+  Downloading yamllint-1.37.1-py3-none-any.whl.metadata (4.3 kB)
+Collecting pathspec>=0.5.3 (from yamllint)
+  Downloading pathspec-0.12.1-py3-none-any.whl.metadata (21 kB)
+Requirement already satisfied: pyyaml in /usr/lib/python3/dist-packages (from yamllint) (6.0.1)
+Downloading yamllint-1.37.1-py3-none-any.whl (68 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 68.8/68.8 kB 9.4 MB/s eta 0:00:00
+Downloading pathspec-0.12.1-py3-none-any.whl (31 kB)
+Installing collected packages: pathspec, yamllint
+Successfully installed pathspec-0.12.1 yamllint-1.37.1
+./.github/workflows/matrix.yml
+
+./.github/workflows/ci.yml
+
+./.github/workflows/conditional.yml
+
+./.github/workflows/basic.yml
+
+Run echo "Тесты пройдены"
+Тесты пройдены
+
+Run mkdir -p build
 ```
 
 `При необходимости прикрепитe сюда скриншоты
@@ -579,7 +627,7 @@ curl http://localhost:8003
 ---
 
 
-# Модуль "`Docker — Основы контейнеризации`" - `DOC-05 Docker Compose: многоконтейнерные приложения`
+# Модуль "`GitHub Actions`" - `DOC-05 Docker Compose: многоконтейнерные приложения`
 
  ### 🎯 Цель урока
 Что такое Docker Compose
@@ -621,7 +669,7 @@ services:
   'docker compose down - Остановка и удаление'
   'docker compose ps - Список сервисов'
   'docker compose logs - Логи всех сервисов'
-  'docker compose exec web sh - Войти внутрь сервиса` 
+  'docker compose exec web sh - Войти внутрь сервиса`
 
 ---
 
@@ -654,7 +702,7 @@ def root():
 3. `Создай Dockerfile (можно взять из DOC-04)`
 
 ```
-touch Dockerfile 
+touch Dockerfile
 FROM python:3.12-alpine
 WORKDIR /app
 COPY . .
@@ -674,14 +722,14 @@ services:
     depends_on:
       - redis
   redis:
-    image: "redis:alpine" 
+    image: "redis:alpine"
 ```
 5. `Запусти docker compose up -d`
 
 ```
 docker compose up -d
 [+] Running 8/8
- ✔ redis Pulled                                                                                                                                             26.6s 
+ ✔ redis Pulled                                                                                                                                             26.6s
 Compose can now delegate builds to bake for better performance.
  To do so, set COMPOSE_BAKE=true.
 [+] Building 35.4s (10/10) FINISHED                                                                                                          docker:desktop-linux
@@ -702,16 +750,16 @@ Compose can now delegate builds to bake for better performance.
  => => naming to docker.io/library/05-compose-web                                                                                                            0.0s
  => [web] resolving provenance for metadata file                                                                                                             0.0s
 [+] Running 4/4
- ✔ web                           Built                                                                                                                       0.0s 
- ✔ Network 05-compose_default    Created                                                                                                                     0.0s 
- ✔ Container 05-compose-redis-1  Started                                                                                                                     0.2s 
- ✔ Container 05-compose-web-1    Started            
+ ✔ web                           Built                                                                                                                       0.0s
+ ✔ Network 05-compose_default    Created                                                                                                                     0.0s
+ ✔ Container 05-compose-redis-1  Started                                                                                                                     0.2s
+ ✔ Container 05-compose-web-1    Started
 ```
 6. `Проверь, что на localhost:8005 возвращается JSON: {"status": "ok"}`
 
 ```
 curl http://localhost:8005
-{"status":"ok"}% 
+{"status":"ok"}%
 ```
 
 `При необходимости прикрепитe сюда скриншоты
@@ -782,7 +830,7 @@ mkdir 06-volume | cd 06-volume
 2. `Создай HTML-файл index.html с фразой "Hello from persistent volume"`
 
 ```
-touch index.html 
+touch index.html
 Hello from persistent volume
 ```
 3. `Создай volume webcontent`
@@ -797,14 +845,14 @@ webcontent
 docker run -d -p 8088:8080 -v webcontent:/usrlocal/tomcat/webapps/ROOT tomcat
 Unable to find image 'tomcat:latest' locally
 latest: Pulling from library/tomcat
-2f074dc76c5d: Pull complete 
-866e6e02a3bf: Pull complete 
-495e17cf917e: Pull complete 
-966861f2a238: Pull complete 
-4b1b55ea8a34: Pull complete 
-1d58fcd48c92: Pull complete 
-4f4fb700ef54: Pull complete 
-46b8d1047035: Pull complete 
+2f074dc76c5d: Pull complete
+866e6e02a3bf: Pull complete
+495e17cf917e: Pull complete
+966861f2a238: Pull complete
+4b1b55ea8a34: Pull complete
+1d58fcd48c92: Pull complete
+4f4fb700ef54: Pull complete
+46b8d1047035: Pull complete
 Digest: sha256:80585828cfe3aa2e12c231761b9f429c49a7a9c30987c6405af96faee57c70d3
 Status: Downloaded newer image for tomcat:latest
 b1222c163523d9481493570c2f96d457aad3377e568bbb410e8483c01d00d8bb
@@ -879,7 +927,7 @@ docker network create mynet # Создание кастомной сети
 docker network rm mynet # Удаление`
 - `docker run --network=bridge ...
 docker run --network=host ...
-docker run --network=none ...` 
+docker run --network=none ...`
 
 ---
 
@@ -910,7 +958,7 @@ docker run -dit --network=host --name=host-test alpine sh
 5. `В каждом контейнере выполни ping 8.8.8.8`
 
 ```
-docker exec -it 42038cab3be0 sh 
+docker exec -it 42038cab3be0 sh
 / # apk update && ping -c 2 8.8.8.8
 fetch https://dl-cdn.alpinelinux.org/alpine/v3.21/main/aarch64/APKINDEX.tar.gz
 fetch https://dl-cdn.alpinelinux.org/alpine/v3.21/community/aarch64/APKINDEX.tar.gz
@@ -951,7 +999,7 @@ round-trip min/avg/max = 351.167/390.197/429.227 ms
 6. `Проверь: в каком режиме есть доступ в интернет, а в каком — нет`
 
 ```
-в режиме none нет сети 
+в режиме none нет сети
 ```
 7. `Создай сеть custom-net и запусти два контейнера`
 
@@ -966,7 +1014,7 @@ b800c7ec6bcd4b3e8186787ed5b552274bd19b63206c847ad6ece744429ebe27
 8. `Из web попробуй ping db — должен работать`
 
 ```
-docker exec -it 7b34ff25cf0a sh 
+docker exec -it 7b34ff25cf0a sh
 / # ping db
 PING db (172.22.0.3): 56 data bytes
 64 bytes from 172.22.0.3: seq=0 ttl=64 time=0.094 ms
@@ -1153,7 +1201,7 @@ Docker — это инструмент для контейнеризации, п
  ## Ключевые команды:
 
 - `docker run`, `docker ps`, `docker stop`, `docker rm`
-- `docker images`, `docker exec` 
+- `docker images`, `docker exec`
 
 ---
 

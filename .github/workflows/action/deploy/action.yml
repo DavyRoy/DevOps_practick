@@ -1,0 +1,17 @@
+name: Hello Deploy Action
+description: Кастомная action для вывода деплоя
+
+inputs:
+  app_name:
+    description: Название приложения
+    required: true
+  env:
+    description: Окружение
+    required: true
+
+runs:
+  using: "docker"
+  image: "Dockerfile"
+  env:
+    APP_NAME: ${{ inputs.app_name }}
+    ENV: ${{ inputs.env }}
