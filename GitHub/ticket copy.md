@@ -627,139 +627,178 @@ Run mkdir -p build
 ---
 
 
-# Модуль "`GitHub Actions`" - `DOC-05 Docker Compose: многоконтейнерные приложения`
+# Модуль "`GitHub Actions`" - `GHA-05 — Деплой и кастомные действия (actions)`
 
  ### 🎯 Цель урока
-Что такое Docker Compose
+Деплой и кастомные действия (actions)
 
 ---
 
  ## 📘 Теория (кратко)
 
-Docker Compose — это инструмент, который позволяет определять и запускать многоконтейнерные Docker-приложения с помощью одного YAML-файла.
-Вместо длинных docker run ... ты описываешь всё в docker-compose.yml.
+🔹 Деплой в CI/CD
 
-⸻
+Под “деплоем” в GitHub Actions обычно понимается:
+	•	пуш в DockerHub / GitHub Container Registry
+	•	деплой в Kubernetes, облако, FTP, сервер и т.д.
 
-🔹 Ключевые концепции
-	•	services — контейнеры (например: web, db, redis)
-	•	image / build — либо используем готовый образ, либо собираем из Dockerfile
-	•	ports — проброс портов (хост:контейнер)
-	•	volumes — монтирование директорий/томов
-	•	networks — объединение сервисов в одну виртуальную сеть
-	•	depends_on — указывает, что один сервис зависит от другого
+🧠 Сам деплой может быть:
+	•	Через обычный run: ...
+	•	Через сторонние готовые actions
+	•	Через кастомные actions, написанные под проект
 
-Пример docker-compose.yml
+🔹 Готовые actions (из маркетплейса)
 
-version: '3.9'
+Пример: деплой на FTP
+- name: Deploy via FTP
+  uses: SamKirkland/FTP-Deploy-Action@v4
+  with:
+    server: ftp.example.com
+    username: ${{ secrets.FTP_USER }}
+    password: ${{ secrets.FTP_PASS }}
 
-services:
-  web:
-    build: .
-    ports:
-      - "8000:8000"
-    depends_on:
-      - redis
-  redis:
-    image: redis:alpine
+🔹 Кастомные actions (свои)
+
+Ты можешь создать свою action:
+	•	В формате Docker (исполняется в контейнере)
+	•	В формате JavaScript (исполняется прямо в раннере)
+
+📁 Структура:
+/my-action
+  └── action.yml
+  └── entrypoint.sh
+
+🧾 action.yml (пример shell-скрипта):
+name: Hello Action
+description: Prints Hello
+runs:
+  using: "docker"
+  image: "Dockerfile"
+
+🧾 Dockerfile:
+FROM alpine
+COPY entrypoint.sh /entrypoint.sh
+ENTRYPOINT ["/entrypoint.sh"]
+
+🧾 entrypoint.sh:
+#!/bin/sh
+echo "Hello from custom action!"
 
  ## Ключевые команды:
-
-- `docker compose up -d - апуск всех сервисов'
-  'docker compose down - Остановка и удаление'
-  'docker compose ps - Список сервисов'
-  'docker compose logs - Логи всех сервисов'
-  'docker compose exec web sh - Войти внутрь сервиса`
 
 ---
 
 ### Задание
 
-1. Разверни многоконтейнерное приложение, состоящее из:
-	•	FastAPI-приложения, как в DOC-04
-	•	Redis-сервера
+1. Создай кастомную action на shell (через Docker), которая:
+	•	Выводит сообщение: 📦 Deploying $APP_NAME to $ENV
 
-1. `Создай рабочую папку: docker/05-compose/`
+Создай workflow, который:
+	•	Запускается по push
+	•	Передаёт в action переменные APP_NAME и ENV
+	•	Вызывает кастомную action из поддиректории .github/actions/deploy
 
-```
-mkdir 05-compose | cd 05-compose
-```
-2. `Возьми main.py из прошлой миссии и обнови его, чтобы: •	сохранял в Redis ключ "status": "ok" •	возвращал значение по запросу`
-
-```
-touch main.py
-import redis
-from fastapi import FastAPI
-
-app = FastAPI()
-r = redis.Redis(host="redis", port=6379)
-
-@app.get("/")
-def root():
-    r.set("status", "ok")
-    return {"status": r.get("status").decode()}
-```
-3. `Создай Dockerfile (можно взять из DOC-04)`
+1. `Ветка: gha-05-custom-deploy`
 
 ```
-touch Dockerfile
-FROM python:3.12-alpine
-WORKDIR /app
-COPY . .
-RUN pip install fastapi uvicorn redis
-EXPOSE 8000
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
+git switch -c gha-05-custom-deploy
+Switched to a new branch 'gha-05-custom-deploy'
 ```
-4. `Напиши docker-compose.yml, который: •	собирает web из Dockerfile •	запускает redis:alpine •	пробрасывает порт 8005:8000`
+2. `Создай структуру`
 
 ```
-touch docker-compose.yml
-services:
-  web:
-    build: .
-    ports:
-      - "8005:8000"
-    depends_on:
-      - redis
-  redis:
-    image: "redis:alpine"
+.github/
+  workflows/ci-deploy.yml
+  actions/deploy/
+    Dockerfile
+    entrypoint.sh
+    action.yml
 ```
-5. `Запусти docker compose up -d`
+3. `Кастомная action должна принимать input-параметры: •	app_name •	env`
 
 ```
-docker compose up -d
-[+] Running 8/8
- ✔ redis Pulled                                                                                                                                             26.6s
-Compose can now delegate builds to bake for better performance.
- To do so, set COMPOSE_BAKE=true.
-[+] Building 35.4s (10/10) FINISHED                                                                                                          docker:desktop-linux
- => [web internal] load build definition from Dockerfile                                                                                                     0.0s
- => => transferring dockerfile: 232B                                                                                                                         0.0s
- => [web internal] load metadata for docker.io/library/python:3.12-alpine                                                                                    4.2s
- => [web internal] load .dockerignore                                                                                                                        0.0s
- => => transferring context: 2B                                                                                                                              0.0s
- => [web 1/4] FROM docker.io/library/python:3.12-alpine@sha256:9c51ecce261773a684c8345b2d4673700055c513b4d54bc0719337d3e4ee552e                              0.0s
- => [web internal] load build context                                                                                                                        0.0s
- => => transferring context: 715B                                                                                                                            0.0s
- => CACHED [web 2/4] WORKDIR /app                                                                                                                            0.0s
- => [web 3/4] COPY . .                                                                                                                                       0.0s
- => [web 4/4] RUN pip install fastapi uvicorn                                                                                                               31.0s
- => [web] exporting to image                                                                                                                                 0.1s
- => => exporting layers                                                                                                                                      0.1s
- => => writing image sha256:280279a5871f8c7ae640804fb80af34eed70fe80ae295017a52e684a759586f9                                                                 0.0s
- => => naming to docker.io/library/05-compose-web                                                                                                            0.0s
- => [web] resolving provenance for metadata file                                                                                                             0.0s
-[+] Running 4/4
- ✔ web                           Built                                                                                                                       0.0s
- ✔ Network 05-compose_default    Created                                                                                                                     0.0s
- ✔ Container 05-compose-redis-1  Started                                                                                                                     0.2s
- ✔ Container 05-compose-web-1    Started
-```
-6. `Проверь, что на localhost:8005 возвращается JSON: {"status": "ok"}`
 
 ```
-curl http://localhost:8005
-{"status":"ok"}%
+4. `В workflow передай эти параметры в uses: ./github/actions/deploy`
+
+```
+.github/actions/deploy/entrypoint.sh
+---
+#!/bin/sh
+echo "📦 Deploying $APP_NAME to $ENV"
+
+ .github/actions/deploy/Dockerfile
+ ---
+ FROM alpine
+
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
+ENTRYPOINT ["/entrypoint.sh"]
+
+.github/actions/deploy/action.yml
+---
+name: Hello Deploy Action
+description: Кастомная action для вывода деплоя
+
+inputs:
+  app_name:
+    description: Название приложения
+    required: true
+  env:
+    description: Окружение
+    required: true
+
+runs:
+  using: "docker"
+  image: "Dockerfile"
+  env:
+    APP_NAME: ${{ inputs.app_name }}
+    ENV: ${{ inputs.env }}
+
+ .github/workflows/ci-deploy.yml
+ ---
+ name: Deploy Workflow
+
+on:
+  push:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Deploy via custom action
+        uses: ./github/actions/deploy
+        with:
+          app_name: MyCoolApp
+          env: stage
+```
+5. `Сделай git push — проверь, что workflow сработал`
+
+```
+git push -u origin gha-05-custom-deploy
+
+Enumerating objects: 7, done.
+Counting objects: 100% (7/7), done.
+Delta compression using up to 10 threads
+Compressing objects: 100% (4/4), done.
+Writing objects: 100% (4/4), 421 bytes | 421.00 KiB/s, done.
+Total 4 (delta 2), reused 0 (delta 0), pack-reused 0
+remote: Resolving deltas: 100% (2/2), completed with 2 local objects.
+To https://github.com/DavyRoy/DevOps_practick.git
+   9b7b60a..204ffc0  gha-05-custom-deploy -> gha-05-custom-deploy
+branch 'gha-05-custom-deploy' set up to track 'origin/gha-05-custom-deploy'.
+```
+6. `Перейди в GitHub → вкладка Actions → убедись в успешном выполнении`
+
+```
+Run ./.github/actions/deploy
+Building docker image
+/usr/bin/docker run --name e9dfd6c852384a3524454c9d77e2e9bf2fbae5_0e4e7c --label e9dfd6 --workdir /github/workspace --rm -e "INPUT_APP_NAME" -e "INPUT_ENV" -e "APP_NAME" -e "ENV" -e "HOME" -e "GITHUB_JOB" -e "GITHUB_REF" -e "GITHUB_SHA" -e "GITHUB_REPOSITORY" -e "GITHUB_REPOSITORY_OWNER" -e "GITHUB_REPOSITORY_OWNER_ID" -e "GITHUB_RUN_ID" -e "GITHUB_RUN_NUMBER" -e "GITHUB_RETENTION_DAYS" -e "GITHUB_RUN_ATTEMPT" -e "GITHUB_ACTOR_ID" -e "GITHUB_ACTOR" -e "GITHUB_WORKFLOW" -e "GITHUB_HEAD_REF" -e "GITHUB_BASE_REF" -e "GITHUB_EVENT_NAME" -e "GITHUB_SERVER_URL" -e "GITHUB_API_URL" -e "GITHUB_GRAPHQL_URL" -e "GITHUB_REF_NAME" -e "GITHUB_REF_PROTECTED" -e "GITHUB_REF_TYPE" -e "GITHUB_WORKFLOW_REF" -e "GITHUB_WORKFLOW_SHA" -e "GITHUB_REPOSITORY_ID" -e "GITHUB_TRIGGERING_ACTOR" -e "GITHUB_WORKSPACE" -e "GITHUB_ACTION" -e "GITHUB_EVENT_PATH" -e "GITHUB_ACTION_REPOSITORY" -e "GITHUB_ACTION_REF" -e "GITHUB_PATH" -e "GITHUB_ENV" -e "GITHUB_STEP_SUMMARY" -e "GITHUB_STATE" -e "GITHUB_OUTPUT" -e "RUNNER_OS" -e "RUNNER_ARCH" -e "RUNNER_NAME" -e "RUNNER_ENVIRONMENT" -e "RUNNER_TOOL_CACHE" -e "RUNNER_TEMP" -e "RUNNER_WORKSPACE" -e "ACTIONS_RUNTIME_URL" -e "ACTIONS_RUNTIME_TOKEN" -e "ACTIONS_CACHE_URL" -e "ACTIONS_RESULTS_URL" -e GITHUB_ACTIONS=true -e CI=true -v "/var/run/docker.sock":"/var/run/docker.sock" -v "/home/runner/work/_temp/_github_home":"/github/home" -v "/home/runner/work/_temp/_github_workflow":"/github/workflow" -v "/home/runner/work/_temp/_runner_file_commands":"/github/file_commands" -v "/home/runner/work/DevOps_practick/DevOps_practick":"/github/workspace" e9dfd6:c852384a3524454c9d77e2e9bf2fbae5
+📦 Deploying MyCoolApp to stage
 ```
 
 `При необходимости прикрепитe сюда скриншоты
