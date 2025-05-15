@@ -5,6 +5,7 @@ title: "Название задачи"
 labels: [learning, devops]
 assignees:
   - DavyRoy
+
 body:
   - type: markdown
     attributes:
@@ -65,5 +66,4 @@ body:
         - Вывод или результат
         - Ссылка на GitHub-коммит
     validations:
-      required: false
-      
+      required: false 

@@ -1,12 +1,14 @@
 ---
 name: CI Pipeline
 
-on: [push]
+on:
+  push:
 
 env:
   APP_NAME: ConditionalAPP
 
 jobs:
+
   build:
     runs-on: ubuntu-latest
     strategy:
@@ -24,5 +26,4 @@ jobs:
 
       - name: Only on prod
         if: matrix.env == 'prod'
-        run: echo "!!! Production deploy !!!"     
-        
+        run: echo "!!! Production deploy !!!"

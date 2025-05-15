@@ -1,17 +1,18 @@
 ---
 name: CI Pipeline
 
-on: [push]
+on:
+  push:
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
+
       - name: Checkout code
         uses: actions/checkout@v4
 
       - name: Print Hello and Date
         run: |
           echo "Привет! Сейчас: $(date '+%d.%m.%Y %H:%M')"
-          
