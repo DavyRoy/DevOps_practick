@@ -168,30 +168,62 @@ Cleaning up orphan processes
 # Модуль "`GitHub Actions`" - `GHA-02 Переменные, секреты и матрицы`
 
  ### 🎯 Цель урока
-Установка Docker на macOS
+Переменные, секреты и матрицы
 
 ---
 
  ## 📘 Теория (кратко)
 
-📘 Теория: Установка Docker на macOS (Apple Silicon)
+🔹 1. Переменные (env)
 
-На macOS Docker работает через Docker Desktop — это GUI-приложение, которое устанавливает:
-	•	Docker Engine (демон)
-	•	Docker CLI
-	•	Docker Compose
-	•	Docker VM (под капотом — через виртуализацию)
+GitHub Actions поддерживает переменные окружения, которые можно определять:
+	•	На уровне workflow: 
+env:
+  APP_ENV: production
 
-Особенности для M1/M2/M3/M4 чипов (ARM64):
-	•	Используется встроенный hypervisor.framework, никакого VirtualBox
-	•	Требуются ARM-совместимые образы
-	•	Docker сам запускается внутри lightweight виртуальной машины
+	•	Внутри job или step:
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      BUILD_MODE: release
 
-🔹 Что будет установлено:
-	•	docker — клиент
-	•	docker compose — работа с многоконтейнерными приложениями
-	•	docker buildx — для сборки multi-arch образов
-	•	docker info, docker version — диагностика
+	•	Внутри конкретного step:
+      - name: Print mode
+        run: echo "$BUILD_MODE"
+        env:
+          BUILD_MODE: debug
+🔸 Также переменные можно переопределять на любом уровне.
+
+🔐 2. Секреты (secrets)
+	•	Хранятся в Settings → Secrets вашего репозитория.
+	•	Доступны через ${{ secrets.MY_SECRET }}
+Пример:
+      - name: Login to DockerHub
+        run: docker login -u ${{ secrets.DOCKER_USER }} -p ${{ secrets.DOCKER_PASS }}
+⚠️ Никогда не логируй секреты с помощью echo.
+
+🔁 3. Матрицы (matrix)
+
+Позволяют запускать job несколько раз с разными параметрами:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node: [14, 16, 18]
+    steps:
+      - run: echo "Testing with Node.js ${{ matrix.node }}"
+📌 В этом примере:
+	•	job выполнится 3 раза
+	•	В каждой итерации matrix.node будет 14, 16 и 18
+
+Можно передавать несколько параметров:
+strategy:
+  matrix:
+    os: [ubuntu-latest, macos-latest]
+    version: [1.0, 2.0]
+👉 Будет 2×2 = 4 запусках job’а (все комбинации os + version)
 
  ## Ключевые команды:
 
@@ -200,193 +232,79 @@ Cleaning up orphan processes
 
 ### Задание
 
-1. Установи Docker на свою машину и подтверди его работоспособность через CLI.
+1. Создай новый workflow, который:
+	•	Запускается при push
+	•	Использует матрицу из 3-х параметров: "dev", "stage", "prod"
+	•	Для каждого варианта:
+	•	Печатает Текущий ENV: dev (и т.п.)
+	•	Использует переменную APP_NAME
+	•	(по желанию) — используй секрет SUPER_SECRET (можешь создать фиктивный)
 
-1. `Перейди на официальный сайт Docker Desktop`
-
-```
-....
-```
-2. `Скачай версию для macOS (Apple chip)`
-
-```
-....
-```
-3. `Установи приложение как обычную .dmg`
+1. `Создай новую ветку gha-02-matrix-env`
 
 ```
-....
+git switch -c gha-02-matrix-env
+Switched to a new branch 'gha-02-matrix-env'
 ```
-4. `Открой Docker Desktop, дождись появления зелёной иконки 🟢`
-
-```
-....
-```
-5. `В терминале проверь:•	docker version •	docker info`
+2. `Создай matrix.yml в .github/workflows/`
 
 ```
-docker version
-Client:
- Version:           28.0.4
- API version:       1.48
- Go version:        go1.23.7
- Git commit:        b8034c0
- Built:             Tue Mar 25 15:06:09 2025
- OS/Arch:           darwin/arm64
- Context:           desktop-linux
-
-Server: Docker Desktop 4.40.0 (187762)
- Engine:
-  Version:          28.0.4
-  API version:      1.48 (minimum version 1.24)
-  Go version:       go1.23.7
-  Git commit:       6430e49
-  Built:            Tue Mar 25 15:07:18 2025
-  OS/Arch:          linux/arm64
-  Experimental:     false
- containerd:
-  Version:          1.7.26
-  GitCommit:        753481ec61c7c8955a23d6ff7bc8e4daed455734
- runc:
-  Version:          1.2.5
-  GitCommit:        v1.2.5-0-g59923ef
- docker-init:
-  Version:          0.19.0
-  GitCommit:        de40ad0
-
-docker info
-Client:
- Version:    28.0.4
- Context:    desktop-linux
- Debug Mode: false
- Plugins:
-  ai: Docker AI Agent - Ask Gordon (Docker Inc.)
-    Version:  v1.1.3
-    Path:     /Users/sergeylapshov/.docker/cli-plugins/docker-ai
-  buildx: Docker Buildx (Docker Inc.)
-    Version:  v0.22.0-desktop.1
-    Path:     /Users/sergeylapshov/.docker/cli-plugins/docker-buildx
-  cloud: Docker Cloud (Docker Inc.)
-    Version:  0.2.20
-    Path:     /Users/sergeylapshov/.docker/cli-plugins/docker-cloud
-  compose: Docker Compose (Docker Inc.)
-    Version:  v2.34.0-desktop.1
-    Path:     /Users/sergeylapshov/.docker/cli-plugins/docker-compose
-  debug: Get a shell into any image or container (Docker Inc.)
-    Version:  0.0.38
-    Path:     /Users/sergeylapshov/.docker/cli-plugins/docker-debug
-  desktop: Docker Desktop commands (Beta) (Docker Inc.)
-    Version:  v0.1.6
-    Path:     /Users/sergeylapshov/.docker/cli-plugins/docker-desktop
-  dev: Docker Dev Environments (Docker Inc.)
-    Version:  v0.1.2
-    Path:     /Users/sergeylapshov/.docker/cli-plugins/docker-dev
-  extension: Manages Docker extensions (Docker Inc.)
-    Version:  v0.2.27
-    Path:     /Users/sergeylapshov/.docker/cli-plugins/docker-extension
-  init: Creates Docker-related starter files for your project (Docker Inc.)
-    Version:  v1.4.0
-    Path:     /Users/sergeylapshov/.docker/cli-plugins/docker-init
-  model: Docker Model Runner (Docker Inc.)
-    Version:  v0.1.4
-    Path:     /Users/sergeylapshov/.docker/cli-plugins/docker-model
-  sbom: View the packaged-based Software Bill Of Materials (SBOM) for an image (Anchore Inc.)
-    Version:  0.6.0
-    Path:     /Users/sergeylapshov/.docker/cli-plugins/docker-sbom
-  scout: Docker Scout (Docker Inc.)
-    Version:  v1.17.0
-    Path:     /Users/sergeylapshov/.docker/cli-plugins/docker-scout
-
-Server:
- Containers: 41
-  Running: 21
-  Paused: 0
-  Stopped: 20
- Images: 20
- Server Version: 28.0.4
- Storage Driver: overlay2
-  Backing Filesystem: extfs
-  Supports d_type: true
-  Using metacopy: false
-  Native Overlay Diff: true
-  userxattr: false
- Logging Driver: json-file
- Cgroup Driver: cgroupfs
- Cgroup Version: 2
- Plugins:
-  Volume: local
-  Network: bridge host ipvlan macvlan null overlay
-  Log: awslogs fluentd gcplogs gelf journald json-file local splunk syslog
- CDI spec directories:
-  /etc/cdi
-  /var/run/cdi
- Swarm: inactive
- Runtimes: io.containerd.runc.v2 runc
- Default Runtime: runc
- Init Binary: docker-init
- containerd version: 753481ec61c7c8955a23d6ff7bc8e4daed455734
- runc version: v1.2.5-0-g59923ef
- init version: de40ad0
- Security Options:
-  seccomp
-   Profile: unconfined
-  cgroupns
- Kernel Version: 6.10.14-linuxkit
- Operating System: Docker Desktop
- OSType: linux
- Architecture: aarch64
- CPUs: 10
- Total Memory: 15.6GiB
- Name: docker-desktop
- ID: 3982237c-a55c-477c-a874-fce353e2b31f
- Docker Root Dir: /var/lib/docker
- Debug Mode: false
- HTTP Proxy: http.docker.internal:3128
- HTTPS Proxy: http.docker.internal:3128
- No Proxy: hubproxy.docker.internal
- Labels:
-  com.docker.desktop.address=unix:///Users/sergeylapshov/Library/Containers/com.docker.docker/Data/docker-cli.sock
- Experimental: false
- Insecure Registries:
-  hubproxy.docker.internal:5555
-  ::1/128
-  127.0.0.0/8
- Live Restore Enabled: false
-
-WARNING: DOCKER_INSECURE_NO_IPTABLES_RAW is set
-WARNING: daemon is not using the default seccomp profile
+touch .github/workflows/matrix.yml
+```
+3. `Определи: •	env: переменную APP_NAME •	matrix: стратегию с env: [dev, stage, prod]`
 
 ```
-6. `Запусти тест:•	docker run hello-world`
+name: CI Pipeline
+
+on: [push]
+
+env:
+  APP_NAME: MyCoolApp
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        env: [dev, stage, prod]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Print Deploy
+        run: echo "Deploying $APP_NAME to ${{ matrix.env }}"
+
+      - name: Use secret
+        run: echo "Secret доступен"
+```
+4. `Сделай git push — проверь, что workflow сработал`
 
 ```
-docker run hello-world
-Unable to find image 'hello-world:latest' locally
-latest: Pulling from library/hello-world
-c9c5fd25a1bd: Pull complete 
-Digest: sha256:c41088499908a59aae84b0a49c70e86f4731e588a737f1637e73c8c09d995654
-Status: Downloaded newer image for hello-world:latest
+ git push -u origin gha-02-matrix-env
+Enumerating objects: 9, done.
+Counting objects: 100% (9/9), done.
+Delta compression using up to 10 threads
+Compressing objects: 100% (5/5), done.
+Writing objects: 100% (5/5), 479 bytes | 479.00 KiB/s, done.
+Total 5 (delta 2), reused 0 (delta 0), pack-reused 0
+remote: Resolving deltas: 100% (2/2), completed with 2 local objects.
+To https://github.com/DavyRoy/DevOps_practick.git
+   f9d5ef2..ed49aa4  gha-02-matrix-env -> gha-02-matrix-env
+branch 'gha-02-matrix-env' set up to track 'origin/gha-02-matrix-env'.
+```
+5. `Перейди в GitHub → вкладка Actions → убедись в успешном выполнении`
 
-Hello from Docker!
-This message shows that your installation appears to be working correctly.
+```
+Run echo "Deploying $APP_NAME to dev"
+Deploying MyCoolApp to dev
 
-To generate this message, Docker took the following steps:
- 1. The Docker client contacted the Docker daemon.
- 2. The Docker daemon pulled the "hello-world" image from the Docker Hub.
-    (arm64v8)
- 3. The Docker daemon created a new container from that image which runs the
-    executable that produces the output you are currently reading.
- 4. The Docker daemon streamed that output to the Docker client, which sent it
-    to your terminal.
+Run echo "Deploying $APP_NAME to stage"
+Deploying MyCoolApp to stage
 
-To try something more ambitious, you can run an Ubuntu container with:
- $ docker run -it ubuntu bash
+Run echo "Deploying $APP_NAME to prod"
+Deploying MyCoolApp to prod
 
-Share images, automate workflows, and more with a free Docker ID:
- https://hub.docker.com/
-
-For more examples and ideas, visit:
- https://docs.docker.com/get-started/
 ```
 
 `При необходимости прикрепитe сюда скриншоты
@@ -396,54 +314,41 @@ For more examples and ideas, visit:
 ---
 
 
-# Модуль "`Docker — Основы контейнеризации`" - `DOC-03 Docker CLI: команды, образы, контейнеры`
+# Модуль "`GitHub Actions`" - `GHA-03 Основы job-стратегий и условий выполнения`
 
  ### 🎯 Цель урока
-Docker CLI — базовые команды
+Основы job-стратегий и условий выполнения (strategy + if)
 
 ---
 
  ## 📘 Теория (кратко)
 
-Docker CLI — это интерфейс командной строки для взаимодействия с Docker Engine. Именно через него ты управляешь всем: от скачивания образов до запуска контейнеров, настройки сети и управления данными.
+GitHub Actions поддерживает гибкое управление выполнением задач с помощью:
 
-🔹 Основные сущности и действия
+📌 Условных операторов (if)
 
-🧱 Образы (images)
+Позволяют выполнять шаги или job’ы только при выполнении условий: if: github.ref == 'refs/heads/main'
+Примеры:
+if: success() Выполнить, если предыдущие шаги успешны (по умолчанию)
+if: failure() Выполнить, если предыдущие шаги завершились с ошибкой
+if: github.actor == 'DavyRoy' Только если запустил указанный пользователь
+if: matrix.env == 'prod' Выполнять шаг только для prod-окружения
 
-Шаблоны, из которых создаются контейнеры.
-	•	docker pull nginx — скачать образ
-	•	docker images — список образов
-	•	docker rmi nginx — удалить образ
+📌 Стратегия fail-fast и max-parallel
 
-📦 Контейнеры (containers)
+strategy:
+  fail-fast: false - Останавливает все job’ы, если одна упала (true по умолчанию)
+  max-parallel: 2 - Число job’ов, выполняемых параллельно
 
-Работающие инстансы образов.
-	•	docker run nginx — создать и запустить контейнер
-	•	docker ps — запущенные контейнеры
-	•	docker ps -a — все контейнеры
-	•	docker stop <id> — остановить
-	•	docker rm <id> — удалить
+📌 Условие на шаг (step) vs job:
 
-🧩 Тома (volumes)
-
-Хранилища данных вне контейнера.
-	•	docker volume create mydata
-	•	docker volume ls
-	•	docker run -v mydata:/data nginx
-
-🌐 Сети (networks)
-
-Изоляция и взаимодействие между контейнерами.
-	•	docker network ls
-	•	docker network create mynet
-	•	docker run --network=mynet nginx
-
-📑 Полезные:
-	•	docker inspect <id> — детальная информация
-	•	docker logs <id> — логи контейнера
-	•	docker exec -it <id> bash — подключение внутрь
-
+jobs:
+  deploy:
+    if: github.ref == 'refs/heads/main' # условие на весь job
+    ...
+    steps:
+      - name: Only on prod
+        if: matrix.env == 'prod'
 
 
  ## Ключевые команды:
@@ -453,50 +358,29 @@ Docker CLI — это интерфейс командной строки для 
 
 ### Задание
 
-1. Ты получаешь временный dev-сервер, где нужно:
-	•	Развернуть тестовое окружение на nginx
-	•	Подключить том для хранения /usr/share/nginx/html
-	•	Создать кастомную сеть и запустить 2 контейнера в ней
+1. Создай workflow, который:
+	•	Запускается по push
+	•	Имеет матрицу окружений: dev, stage, prod
+	•	Выполняет:
+	•	echo "Деплой на ..." во всех
+	•	Дополнительный step только для prod с echo "!!! Production deploy !!!"
+	•	Добавь fail-fast: false
+	•	Установи max-parallel: 1
 
 
-1. `Очисти окружение: удали все старые контейнеры и образы (опционально).`
-
-```
-
-```
-2. `Скачай nginx и redis образы.`
-
-```
-docker pull nginx
-Using default tag: latest
-latest: Pulling from library/nginx
-943331d8a9a9: Pull complete 
-67ef22056282: Pull complete 
-844fa86a5e03: Pull complete 
-4e82158dafdd: Pull complete 
-e1242a59b7fa: Pull complete 
-ff2745aabaf7: Pull complete 
-a53cddf3d9ee: Pull complete 
-Digest: sha256:c15da6c91de8d2f436196f3a768483ad32c258ed4e1beb3d367a27ed67253e66
-Status: Downloaded newer image for nginx:latest
-docker.io/library/nginx:latest
-
-docker pull redis
-Using default tag: latest
-latest: Pulling from library/redis
-943331d8a9a9: Already exists 
-5a0938ddd3e8: Pull complete 
-06242992f645: Pull complete 
-47fccd451853: Pull complete 
-6c1d4ef16ede: Pull complete 
-4f4fb700ef54: Pull complete 
-3595f9893a45: Pull complete 
-Digest: sha256:1b7c17f650602d97a10724d796f45f0b5250d47ee5ba02f28de89f8a1531f3ce
-Status: Downloaded newer image for redis:latest
-docker.io/library/redis:latest
+1. `Создай новую ветку gha-03-conditional-prod`
 
 ```
-3. `Создай:•	том webdata •	сеть dev-net`
+git switch -c gha-03-conditional-prod
+Switched to a new branch 'gha-03-conditional-prod'
+```
+2. `Файл .github/workflows/conditional.yml`
+
+```
+touch .github/workflows/conditional.yml
+
+```
+3. `Используй matrix.env: [dev, stage, prod]`
 
 ```
 docker volume create webdata
@@ -505,17 +389,10 @@ webdata
 docker network create dev-net
 2791c19b808fe4dd9ea9d9e07779785b68d4c16e2d58f01037646a70a0e9be51
 ```
-4. `Запусти два контейнера: •	nginx с монтированным томом webdata:/usr/share/nginx/html •	redis в той же сети`
+4. `Добавь: •	if: matrix.env == 'prod' для спец-шагов •	Параметры fail-fast, max-parallel в стратегии`
 
 ```
-docker run -d --network=dev-net -v webdata:/usr/share/nginx/html nginx
-ab630092b0b417060cf7b4d1dde7bc66d2ef8ab3652f1013ce370ba0573e6676
 
-docker run -d --network=dev-net redis
-6bce259f79a896dc133b6af90ce939a953ea9154ecece6b919e32c2fbe0c09b7
-
-6bce259f79a8   redis                         "docker-entrypoint.s…"   14 seconds ago   Up 14 seconds      6379/tcp   adoring_poitras
-ab630092b0b4   nginx                         "/docker-entrypoint.…"   57 seconds ago   Up 57 seconds      80/tcp     sleepy_roentgen
 ```
 5. `Зайди в контейнер nginx, проверь, что /usr/share/nginx/html монтировано`
 

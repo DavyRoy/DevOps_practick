@@ -1,0 +1,26 @@
+name: CI Pipeline
+
+on: [push]
+
+env:
+  APP_NAME: ConditionalAPP
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      max-parallel: 1
+      matrix:
+        env: [dev, stage, prod]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Диплой всех окружений
+        run: echo "Диплой $APP_NAME на ${{ matrix.env }}"
+
+      - name: Only on prod
+        if: matrix.env == 'prod'
+        run: echo "!!! Production deploy !!!"
