@@ -1,0 +1,7 @@
+---
+name: Hello Deploy Action
+description: Кастомная action
+
+runs:
+  using: "docker"
+  image: "Dockerfile"

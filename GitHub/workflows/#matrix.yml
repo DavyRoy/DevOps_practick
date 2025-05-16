@@ -1,0 +1,25 @@
+---
+name: CI Pipeline
+
+on:
+  push:
+
+env:
+  APP_NAME: MyCoolApp
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        env: [dev, stage, prod]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Print Deploy
+        run: echo "Deploying $APP_NAME to ${{ matrix.env }}"
+
+      - name: Use secret
+        run: echo "Secret доступен"
