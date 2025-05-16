@@ -859,44 +859,49 @@ Workflow должен запускаться при любом коммите в
 1. `Создай .github/workflows/docker-build.yml.`
 
 ```
-mkdir 06-volume | cd 06-volume
+touch .github/workflows/docker-build.yml
 ```
 2. `Укажи событие push в ветку main.`
 
 ```
-touch index.html
-Hello from persistent volume
+
 ```
 3. `Добавь job на базе ubuntu-latest.`
 
 ```
-docker volume create webcontent
-webcontent
+
 ```
 4. `Добавь step для сборки Docker-образа из Dockerfile в корне репозитория.`
 
 ```
-docker run -d -p 8088:8080 -v webcontent:/usrlocal/tomcat/webapps/ROOT tomcat
-Unable to find image 'tomcat:latest' locally
-latest: Pulling from library/tomcat
-2f074dc76c5d: Pull complete
-866e6e02a3bf: Pull complete
-495e17cf917e: Pull complete
-966861f2a238: Pull complete
-4b1b55ea8a34: Pull complete
-1d58fcd48c92: Pull complete
-4f4fb700ef54: Pull complete
-46b8d1047035: Pull complete
-Digest: sha256:80585828cfe3aa2e12c231761b9f429c49a7a9c30987c6405af96faee57c70d3
-Status: Downloaded newer image for tomcat:latest
-b1222c163523d9481493570c2f96d457aad3377e568bbb410e8483c01d00d8bb
+nano .github/workflows/docker-build.yml
+name: Build Docker image
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build Docker image
+        run: docker build -t test-image:latest ./.github/actions/deploy
+
 ```
 
 5. `Убедись, что workflow проходит после коммита.`
 
 ```
-docker cp index.html b1222c163523:/usr/local/tomcat/webapps/ROOT
-Successfully copied 2.05kB to b1222c163523:/usr/local/tomcat/webapps/ROOT
+Run ./.github/actions/deploy
+Building docker image
+/usr/bin/docker run --name ccc482fb2784ff45f69a94bb5eb091235c_985deb --label 0443cc --workdir /github/workspace --rm -e "HOME" -e "GITHUB_JOB" -e "GITHUB_REF" -e "GITHUB_SHA" -e "GITHUB_REPOSITORY" -e "GITHUB_REPOSITORY_OWNER" -e "GITHUB_REPOSITORY_OWNER_ID" -e "GITHUB_RUN_ID" -e "GITHUB_RUN_NUMBER" -e "GITHUB_RETENTION_DAYS" -e "GITHUB_RUN_ATTEMPT" -e "GITHUB_ACTOR_ID" -e "GITHUB_ACTOR" -e "GITHUB_WORKFLOW" -e "GITHUB_HEAD_REF" -e "GITHUB_BASE_REF" -e "GITHUB_EVENT_NAME" -e "GITHUB_SERVER_URL" -e "GITHUB_API_URL" -e "GITHUB_GRAPHQL_URL" -e "GITHUB_REF_NAME" -e "GITHUB_REF_PROTECTED" -e "GITHUB_REF_TYPE" -e "GITHUB_WORKFLOW_REF" -e "GITHUB_WORKFLOW_SHA" -e "GITHUB_REPOSITORY_ID" -e "GITHUB_TRIGGERING_ACTOR" -e "GITHUB_WORKSPACE" -e "GITHUB_ACTION" -e "GITHUB_EVENT_PATH" -e "GITHUB_ACTION_REPOSITORY" -e "GITHUB_ACTION_REF" -e "GITHUB_PATH" -e "GITHUB_ENV" -e "GITHUB_STEP_SUMMARY" -e "GITHUB_STATE" -e "GITHUB_OUTPUT" -e "RUNNER_OS" -e "RUNNER_ARCH" -e "RUNNER_NAME" -e "RUNNER_ENVIRONMENT" -e "RUNNER_TOOL_CACHE" -e "RUNNER_TEMP" -e "RUNNER_WORKSPACE" -e "ACTIONS_RUNTIME_URL" -e "ACTIONS_RUNTIME_TOKEN" -e "ACTIONS_CACHE_URL" -e "ACTIONS_RESULTS_URL" -e GITHUB_ACTIONS=true -e CI=true -v "/var/run/docker.sock":"/var/run/docker.sock" -v "/home/runner/work/_temp/_github_home":"/github/home" -v "/home/runner/work/_temp/_github_workflow":"/github/workflow" -v "/home/runner/work/_temp/_runner_file_commands":"/github/file_commands" -v "/home/runner/work/DevOps_practick/DevOps_practick":"/github/workspace" 0443cc:c482fb2784ff45f69a94bb5eb091235c
+Hello from the deploy action!
 ```
 
 `При необходимости прикрепитe сюда скриншоты
@@ -906,169 +911,46 @@ Successfully copied 2.05kB to b1222c163523:/usr/local/tomcat/webapps/ROOT
 ---
 
 
-# Модуль "`Docker — Основы контейнеризации`" - `DOC-07 Сетевые режимы Docker`
+# Модуль "`GitHub Actions`" - `DOC-GHA-03 Разделение build и push по шагам`
 
  ### 🎯 Цель урока
-Сетевые драйверы и режимы в Docker
+Зачем разделять build и push в GitHub Actions
 
 ---
 
  ## 📘 Теория (кратко)
 
-Docker предоставляет несколько сетевых режимов (network drivers), каждый из которых определяет, как контейнер взаимодействует с внешним миром и другими контейнерами.
+🔹 Почему нельзя всё в одном шаге?
 
-🔹 Основные сетевые режимы
-bridge - 🧱 По умолчанию. Контейнер получает IP в отдельной сети. Может выходить в интернет.
-host - 🏠 Контейнер использует сетевой стек хоста напрямую (Linux only).
-none - ❌ Полная изоляция. Контейнер без сети.
-overlay - 🌐 Сети между хостами (в Docker Swarm или k8s).
-macvlan - 📡 Контейнер получает отдельный IP, как устройство в сети. Требует продвинутой настройки.
+Сборка и публикация — это разные стадии CI/CD:
+	•	build — можно кэшировать, использовать как артефакт, проверять на ошибки.
+	•	push — требует внешнего взаимодействия, секретов и даёт побочный эффект (меняет внешний реестр).
 
-🔹 Кастомная сеть: как связать контейнеры по имени
-	1.	Создаёшь сеть: docker network create dev-net
-	2.	Запускаешь два контейнера: --network=dev-net
-	3.	Они могут обращаться друг к другу по имени (DNS внутри Docker)
+Разделение даёт:
+	•	🧪 Гибкость: можно выполнять тесты между build и push.
+	•	🔒 Безопасность: push выполняется только при определённых условиях (например, из main, из PR с одобрением и т.д.).
+	•	💨 Кэширование и многопоточность: docker/build-push-action умеет собирать быстрее через buildx.
+
+🔹 Используемые экшены:
+- uses: docker/setup-buildx-action@v3
+- uses: docker/login-action@v3
+- uses: docker/build-push-action@v5
+
+🔹 Стратегия:
+      - name: Build (only)
+        uses: docker/build-push-action@v5
+        with:
+          push: false
+
+      - name: Push (only)
+        uses: docker/build-push-action@v5
+        with:
+          push: true
+🔹 Пример сценария:
+	1.	Выполняем build → проверяем → если всё хорошо, push.
+	2.	Это удобно при pull request’ах: build делается, но push разрешён только в main.
 
 
- ## Ключевые команды:
-
-- `docker network ls # Список сетей
-docker network inspect bridge # Детали по сети
-docker network create mynet # Создание кастомной сети
-docker network rm mynet # Удаление`
-- `docker run --network=bridge ...
-docker run --network=host ...
-docker run --network=none ...`
-
----
-
-### Задание
-
-1. Создай три контейнера, каждый в своём сетевом режиме (bridge, host, none), и проверь доступность интернета и других контейнеров.
-
-1. `Создай папку docker/07-network/`
-
-```
-mkdir 07-network | cd 07-network
-```
-2. `Запусти контейнер alpine в режиме bridge`
-
-```
-docker run -dit --network=bridge --name=bridge-test alpine sh
-```
-3. `Запусти alpine в режиме none`
-
-```
-docker run -dit --network=none --name=none-test alpine sh
-```
-4. `Запусти alpine в режиме host (только на Linux)`
-
-```
-docker run -dit --network=host --name=host-test alpine sh
-```
-5. `В каждом контейнере выполни ping 8.8.8.8`
-
-```
-docker exec -it 42038cab3be0 sh
-/ # apk update && ping -c 2 8.8.8.8
-fetch https://dl-cdn.alpinelinux.org/alpine/v3.21/main/aarch64/APKINDEX.tar.gz
-fetch https://dl-cdn.alpinelinux.org/alpine/v3.21/community/aarch64/APKINDEX.tar.gz
-v3.21.3-480-gb04256b6954 [https://dl-cdn.alpinelinux.org/alpine/v3.21/main]
-v3.21.3-482-gf091f8194f5 [https://dl-cdn.alpinelinux.org/alpine/v3.21/community]
-OK: 25250 distinct packages available
-PING 8.8.8.8 (8.8.8.8): 56 data bytes
-64 bytes from 8.8.8.8: seq=0 ttl=63 time=351.664 ms
-64 bytes from 8.8.8.8: seq=1 ttl=63 time=563.316 ms
-
---- 8.8.8.8 ping statistics ---
-2 packets transmitted, 2 packets received, 0% packet loss
-round-trip min/avg/max = 351.664/457.490/563.316 ms
-
-docker exec -it 59e162742e7b sh
-/ # apk update && ping -c 2 8.8.8.8
-fetch https://dl-cdn.alpinelinux.org/alpine/v3.21/main/aarch64/APKINDEX.tar.gz
-WARNING: updating and opening https://dl-cdn.alpinelinux.org/alpine/v3.21/main: temporary error (try again later)
-fetch https://dl-cdn.alpinelinux.org/alpine/v3.21/community/aarch64/APKINDEX.tar.gz
-WARNING: updating and opening https://dl-cdn.alpinelinux.org/alpine/v3.21/community: temporary error (try again later)
-4 unavailable, 0 stale; 15 distinct packages available
-
-docker exec -it 99cc7358240c sh
-/ # apk update && ping -c 2 8.8.8.8
-fetch https://dl-cdn.alpinelinux.org/alpine/v3.21/main/aarch64/APKINDEX.tar.gz
-fetch https://dl-cdn.alpinelinux.org/alpine/v3.21/community/aarch64/APKINDEX.tar.gz
-v3.21.3-480-gb04256b6954 [https://dl-cdn.alpinelinux.org/alpine/v3.21/main]
-v3.21.3-482-gf091f8194f5 [https://dl-cdn.alpinelinux.org/alpine/v3.21/community]
-OK: 25250 distinct packages available
-PING 8.8.8.8 (8.8.8.8): 56 data bytes
-64 bytes from 8.8.8.8: seq=0 ttl=64 time=429.227 ms
-64 bytes from 8.8.8.8: seq=1 ttl=64 time=351.167 ms
-
---- 8.8.8.8 ping statistics ---
-2 packets transmitted, 2 packets received, 0% packet loss
-round-trip min/avg/max = 351.167/390.197/429.227 ms
-```
-6. `Проверь: в каком режиме есть доступ в интернет, а в каком — нет`
-
-```
-в режиме none нет сети
-```
-7. `Создай сеть custom-net и запусти два контейнера`
-
-```
-docker network create custom-net
-docker run -dit --network=custom-net --name=web alpine sh
-docker run -dit --network=custom-net --name=db alpine sh
-66dc922c4982cf41cef058369bdcdddfdd60d2fa716426f6222ce08d48f0642b
-7b34ff25cf0a1922c44c8ba554511fbc6dd15ae56486480af3e6f17517cc00fa
-b800c7ec6bcd4b3e8186787ed5b552274bd19b63206c847ad6ece744429ebe27
-```
-8. `Из web попробуй ping db — должен работать`
-
-```
-docker exec -it 7b34ff25cf0a sh
-/ # ping db
-PING db (172.22.0.3): 56 data bytes
-64 bytes from 172.22.0.3: seq=0 ttl=64 time=0.094 ms
-64 bytes from 172.22.0.3: seq=1 ttl=64 time=0.169 ms
-64 bytes from 172.22.0.3: seq=2 ttl=64 time=0.197 ms
-64 bytes from 172.22.0.3: seq=3 ttl=64 time=0.179 ms
-64 bytes from 172.22.0.3: seq=4 ttl=64 time=0.137 ms
-64 bytes from 172.22.0.3: seq=5 ttl=64 time=0.178 ms
-64 bytes from 172.22.0.3: seq=6 ttl=64 time=0.160 ms
-64 bytes from 172.22.0.3: seq=7 ttl=64 time=0.159 ms
-ç64 bytes from 172.22.0.3: seq=8 ttl=64 time=0.175 ms
-64 bytes from 172.22.0.3: seq=9 ttl=64 time=0.175 ms
-^C
---- db ping statistics ---
-10 packets transmitted, 10 packets received, 0% packet loss
-round-trip min/avg/max = 0.094/0.162/0.197 ms
-```
-
-`При необходимости прикрепитe сюда скриншоты
-![Название скриншота 1](ссылка на скриншот 1)`
-![Название скриншота 1](ссылка на скриншот 1)`
-![Название скриншота 1](ссылка на скриншот 1)`
----
-
-# Модуль "`Docker — Основы контейнеризации`" - `DOC-08 Практика: сборка и запуск веб-приложения`
-
- ### 🎯 Цель урока
-НПрактика: сборка и запуск веб-приложения
-
----
-
- ## 📘 Теория (кратко)
-
-В реальной разработке приложения часто состоят минимум из двух частей:
-	•	Frontend (например, на React, Vue, HTML)
-	•	Backend/API (например, на FastAPI, Django, Node.js)
-
-Мы упакуем оба компонента в свои контейнеры, настроим проброс портов и обеспечим связку.
-
-🔹 Общие принципы
-	•	Каждый компонент = отдельный контейнер
-	•	Общение — через одну сеть
-	•	Управление — через Docker Compose
 
  ## Ключевые команды:
 
@@ -1076,119 +958,77 @@ round-trip min/avg/max = 0.094/0.162/0.197 ms
 
 ### Задание
 
-1. Собери и запусти простое fullstack-приложение:
-	•	Frontend — HTML-страница с fetch('/api')
-	•	Backend — FastAPI, отдающий JSON
-	•	Связь через Docker Compose
+1. Настрой .github/workflows/docker-release.yml, в котором:
+	•	При пуше в main происходит сборка образа,
+	•	Потом (в отдельном step-е) — публикация его в DockerHub.
 
-1. `Создай папку: docker/08-fullstack-app/`
+Оба шага должны быть чётко разделены, и между ними можно будет вставить шаг проверки или echo.
 
-```
-mkdir 08-fullstack-app
-```
-2. `Внутри — 2 подпапки frontend и backend`
+1. `Создай workflow docker-release.yml.`
 
 ```
-frontend/
-└── index.html
-
-backend/
-└── main.py
-└── Dockerfile
+touch docker-release.yml
 ```
-3. `index.html - <!DOCTYPE html>
-<html>
-  <body>
-    <h1>Frontend: Fetch from Backend</h1>
-    <div id="result">Loading...</div>
-    <script>
-      fetch('http://backend:8000/api')
-        .then(res => res.json())
-        .then(data => {
-          document.getElementById('result').innerText = data.message;
-        });
-    </script>
-  </body>
-</html>`
+2. `Используй docker/setup-buildx-action для подготовки билдера.`
 
 ```
-Поле для вставки кода...
-<!DOCTYPE html>
-<html>
-  <body>
-    <h1>Frontend: Fetch from Backend</h1>
-    <div id="result">Loading...</div>
-  <script>
-    fetch('/api')
-      .then(res => res.json())
-      .then(data => {
-        document.getElementById('result').innerText = data.message;
-      });
-  </script>
-  </body>
-</html>
-```
-4. `main.py - from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
-
-app = FastAPI()
-
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_methods=["*"],
-    allow_headers=["*"]
-)
-
-@app.get("/api")
-def read_root():
-    return {"message": "Hello from Backend"}`
 
 ```
-from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
-
-app = FastAPI()
-
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_methods=["*"],
-    allow_headers=["*"]
-)
-
-@app.get("/api")
-def read_root():
-    return {"message": "Hello from Backend"}
-```
-5. `Запусти`
+3. `Первый шаг — build образа, но без пуша (push: false).`
 
 ```
-version: '3.9'
-
-services:
-  backend:
-    build: ./backend
-    container_name: backend
-    ports:
-      - "8000:8000"
-
-  frontend:
-    image: nginx:alpine
-    container_name: frontend
-    volumes:
-      - ./frontend:/usr/share/nginx/html
-      - ./frontend/nginx.conf:/etc/nginx/nginx.conf
-    ports:
-      - "8089:80"
-    depends_on:
-      - backend
-```
-6. `Перейди в браузере на: http://localhost:8080 — и должен появиться ответ от бэкенда!`
 
 ```
-curl http://localhost:8089/api
-{"message":"Hello from Backend"}
+4. `Второй шаг — push образа в DockerHub, используй secrets.`
+
+```
+
+```
+5. `Теги: yourusername/appname:latest`
+
+```
+name: Docker Release
+
+on:
+  push:
+    branches:
+      - main  # только при пуше в main
+
+jobs:
+  docker-release:
+    name: 🐳 Build & Push Docker Image
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 Checkout repo
+        uses: actions/checkout@v3
+
+      - name: 🔧 Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: 🔐 Login to DockerHub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: 🛠️ Build Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: false
+          tags: yourusername/appname:latest
+          outputs: type=docker  # локальный образ для следующего шага
+
+      - name: ✅ Проверка после сборки
+        run: echo "Образ успешно собран. Переходим к публикации..."
+
+      - name: 📤 Push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          tags: yourusername/appname:latest
 ```
 
 `При необходимости прикрепитe сюда скриншоты
@@ -1196,237 +1036,3 @@ curl http://localhost:8089/api
 ![Название скриншота 1](ссылка на скриншот 1)`
 ![Название скриншота 1](ссылка на скриншот 1)`
 ---
-
-
-# Модуль "`Docker — Основы контейнеризации`" - `DOC-08 Практика: сборка и запуск веб-приложения`
-
- ### 🎯 Цель урока
-Научиться устанавливать Docker, запускать контейнеры, управлять ими и проверять их статус.
-
----
-
- ## 📘 Теория (кратко)
-
-Docker — это инструмент для контейнеризации, позволяющий упаковывать приложение и его зависимости в единый образ.
-
- ## Ключевые команды:
-
-- `docker run`, `docker ps`, `docker stop`, `docker rm`
-- `docker images`, `docker exec`
-
----
-
-### Задание
-
-1. Установи Docker (если не установлен)
-2. Запусти контейнер с NGINX на порту 8080
-3. Запусти контейнер с PostgreSQL
-4. Убедись, что контейнеры работают
-5. Останови и удали один из них
-
-1. `Заполните здесь этапы выполнения, если требуется ....`
-
-```
-Поле для вставки кода...
-....
-....
-....
-....
-```
-2. `Заполните здесь этапы выполнения, если требуется ....`
-
-```
-Поле для вставки кода...
-....
-....
-....
-....
-```
-3. `Заполните здесь этапы выполнения, если требуется ....`
-
-```
-Поле для вставки кода...
-....
-....
-....
-....
-```
-4. `Заполните здесь этапы выполнения, если требуется ....`
-
-```
-Поле для вставки кода...
-....
-....
-....
-....
-```
-5. `Заполните здесь этапы выполнения, если требуется ....`
-
-```
-Поле для вставки кода...
-....
-....
-....
-....
-```
-6. `Заполните здесь этапы выполнения, если требуется ....`
-
-```
-Поле для вставки кода...
-....
-....
-....
-....
-```
-
-`При необходимости прикрепитe сюда скриншоты
-![Название скриншота 1](ссылка на скриншот 1)`
-![Название скриншота 1](ссылка на скриншот 1)`
-![Название скриншота 1](ссылка на скриншот 1)`
----
-
-# Модуль "`Docker — Основы контейнеризации`" - `DOC-07 Сетевые режимы Docker`
-
- ### 🎯 Цель урока
-Сетевые драйверы и режимы в Docker
-
----
-
- ## 📘 Теория (кратко)
-
-Docker предоставляет несколько сетевых режимов (network drivers), каждый из которых определяет, как контейнер взаимодействует с внешним миром и другими контейнерами.
-
-🔹 Основные сетевые режимы
-bridge - 🧱 По умолчанию. Контейнер получает IP в отдельной сети. Может выходить в интернет.
-host - 🏠 Контейнер использует сетевой стек хоста напрямую (Linux only).
-none - ❌ Полная изоляция. Контейнер без сети.
-overlay - 🌐 Сети между хостами (в Docker Swarm или k8s).
-macvlan - 📡 Контейнер получает отдельный IP, как устройство в сети. Требует продвинутой настройки.
-
-🔹 Кастомная сеть: как связать контейнеры по имени
-	1.	Создаёшь сеть: docker network create dev-net
-	2.	Запускаешь два контейнера: --network=dev-net
-	3.	Они могут обращаться друг к другу по имени (DNS внутри Docker)
-
-
- ## Ключевые команды:
-
-- `docker network ls # Список сетей
-docker network inspect bridge # Детали по сети
-docker network create mynet # Создание кастомной сети
-docker network rm mynet # Удаление`
-- `docker run --network=bridge ...
-docker run --network=host ...
-docker run --network=none ...`
-
----
-
-### Задание
-
-1. Создай три контейнера, каждый в своём сетевом режиме (bridge, host, none), и проверь доступность интернета и других контейнеров.
-
-1. `Создай папку docker/07-network/`
-
-```
-mkdir 07-network | cd 07-network
-```
-2. `Запусти контейнер alpine в режиме bridge`
-
-```
-docker run -dit --network=bridge --name=bridge-test alpine sh
-```
-3. `Запусти alpine в режиме none`
-
-```
-docker run -dit --network=none --name=none-test alpine sh
-```
-4. `Запусти alpine в режиме host (только на Linux)`
-
-```
-docker run -dit --network=host --name=host-test alpine sh
-```
-5. `В каждом контейнере выполни ping 8.8.8.8`
-
-```
-docker exec -it 42038cab3be0 sh
-/ # apk update && ping -c 2 8.8.8.8
-fetch https://dl-cdn.alpinelinux.org/alpine/v3.21/main/aarch64/APKINDEX.tar.gz
-fetch https://dl-cdn.alpinelinux.org/alpine/v3.21/community/aarch64/APKINDEX.tar.gz
-v3.21.3-480-gb04256b6954 [https://dl-cdn.alpinelinux.org/alpine/v3.21/main]
-v3.21.3-482-gf091f8194f5 [https://dl-cdn.alpinelinux.org/alpine/v3.21/community]
-OK: 25250 distinct packages available
-PING 8.8.8.8 (8.8.8.8): 56 data bytes
-64 bytes from 8.8.8.8: seq=0 ttl=63 time=351.664 ms
-64 bytes from 8.8.8.8: seq=1 ttl=63 time=563.316 ms
-
---- 8.8.8.8 ping statistics ---
-2 packets transmitted, 2 packets received, 0% packet loss
-round-trip min/avg/max = 351.664/457.490/563.316 ms
-
-docker exec -it 59e162742e7b sh
-/ # apk update && ping -c 2 8.8.8.8
-fetch https://dl-cdn.alpinelinux.org/alpine/v3.21/main/aarch64/APKINDEX.tar.gz
-WARNING: updating and opening https://dl-cdn.alpinelinux.org/alpine/v3.21/main: temporary error (try again later)
-fetch https://dl-cdn.alpinelinux.org/alpine/v3.21/community/aarch64/APKINDEX.tar.gz
-WARNING: updating and opening https://dl-cdn.alpinelinux.org/alpine/v3.21/community: temporary error (try again later)
-4 unavailable, 0 stale; 15 distinct packages available
-
-docker exec -it 99cc7358240c sh
-/ # apk update && ping -c 2 8.8.8.8
-fetch https://dl-cdn.alpinelinux.org/alpine/v3.21/main/aarch64/APKINDEX.tar.gz
-fetch https://dl-cdn.alpinelinux.org/alpine/v3.21/community/aarch64/APKINDEX.tar.gz
-v3.21.3-480-gb04256b6954 [https://dl-cdn.alpinelinux.org/alpine/v3.21/main]
-v3.21.3-482-gf091f8194f5 [https://dl-cdn.alpinelinux.org/alpine/v3.21/community]
-OK: 25250 distinct packages available
-PING 8.8.8.8 (8.8.8.8): 56 data bytes
-64 bytes from 8.8.8.8: seq=0 ttl=64 time=429.227 ms
-64 bytes from 8.8.8.8: seq=1 ttl=64 time=351.167 ms
-
---- 8.8.8.8 ping statistics ---
-2 packets transmitted, 2 packets received, 0% packet loss
-round-trip min/avg/max = 351.167/390.197/429.227 ms
-```
-6. `Проверь: в каком режиме есть доступ в интернет, а в каком — нет`
-
-```
-в режиме none нет сети
-```
-7. `Создай сеть custom-net и запусти два контейнера`
-
-```
-docker network create custom-net
-docker run -dit --network=custom-net --name=web alpine sh
-docker run -dit --network=custom-net --name=db alpine sh
-66dc922c4982cf41cef058369bdcdddfdd60d2fa716426f6222ce08d48f0642b
-7b34ff25cf0a1922c44c8ba554511fbc6dd15ae56486480af3e6f17517cc00fa
-b800c7ec6bcd4b3e8186787ed5b552274bd19b63206c847ad6ece744429ebe27
-```
-8. `Из web попробуй ping db — должен работать`
-
-```
-docker exec -it 7b34ff25cf0a sh
-/ # ping db
-PING db (172.22.0.3): 56 data bytes
-64 bytes from 172.22.0.3: seq=0 ttl=64 time=0.094 ms
-64 bytes from 172.22.0.3: seq=1 ttl=64 time=0.169 ms
-64 bytes from 172.22.0.3: seq=2 ttl=64 time=0.197 ms
-64 bytes from 172.22.0.3: seq=3 ttl=64 time=0.179 ms
-64 bytes from 172.22.0.3: seq=4 ttl=64 time=0.137 ms
-64 bytes from 172.22.0.3: seq=5 ttl=64 time=0.178 ms
-64 bytes from 172.22.0.3: seq=6 ttl=64 time=0.160 ms
-64 bytes from 172.22.0.3: seq=7 ttl=64 time=0.159 ms
-ç64 bytes from 172.22.0.3: seq=8 ttl=64 time=0.175 ms
-64 bytes from 172.22.0.3: seq=9 ttl=64 time=0.175 ms
-^C
---- db ping statistics ---
-10 packets transmitted, 10 packets received, 0% packet loss
-round-trip min/avg/max = 0.094/0.162/0.197 ms
-```
-
-`При необходимости прикрепитe сюда скриншоты
-![Название скриншота 1](ссылка на скриншот 1)`
-![Название скриншота 1](ссылка на скриншот 1)`
-![Название скриншота 1](ссылка на скриншот 1)`
----
-
-# Модуль "`Docker — Основы контейнеризации`" - `DOC-08 Практика: сборка и запуск веб-приложения`
