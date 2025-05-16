@@ -1,7 +1,9 @@
-name: Deploy Docker
+name: Build Docker image
 
 on:
   push:
+    branches:
+      - main
 
 jobs:
   deploy:
@@ -11,5 +13,5 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Deploy via custom action
-        uses: ./.github/actions/deploy
+      - name: Build Docker image
+        run: docker build -t test-image:latest .
