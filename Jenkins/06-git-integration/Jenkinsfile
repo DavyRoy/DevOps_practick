@@ -1,0 +1,17 @@
+pipeline {
+  agent any
+
+  stages {
+    stage('Git') {
+      steps {
+        checkout scm
+        echo 'Репозиторий загружен.'
+      }
+    }
+    stage('Build') {
+      steps {
+        sh 'echo "CI выполняется..."'
+      }
+    }
+  }
+}
