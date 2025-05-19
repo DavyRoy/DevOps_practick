@@ -448,65 +448,83 @@ post {} действия после билдов (success/failure/always)
 
 ### Задание
 
-1. Установи Docker (если не установлен)
-2. Запусти контейнер с NGINX на порту 8080
-3. Запусти контейнер с PostgreSQL
-4. Убедись, что контейнеры работают
-5. Останови и удали один из них
+1. Создай Jenkins Pipeline Job, который читает Jenkinsfile из репозитория.
 
-1. `Заполните здесь этапы выполнения, если требуется ....`
+
+1. `В своём репозитории (jenkins-docker-lab) создай новый файл: Jenkinsfile`
 
 ```
-Поле для вставки кода...
-....
-....
-....
-....
-```
-2. `Заполните здесь этапы выполнения, если требуется ....`
 
 ```
-Поле для вставки кода...
-....
-....
-....
-....
-```
-3. `Заполните здесь этапы выполнения, если требуется ....`
+2. `Напиши простой Declarative Pipeline:`
 
 ```
-Поле для вставки кода...
-....
-....
-....
-....
+pipeline {
+  agent any
+
+  stages {
+    stage('Hello') {
+      steps {
+        echo 'Hello from Declarative Pipeline!'
+      }
+    }
+  }
+}
 ```
-4. `Заполните здесь этапы выполнения, если требуется ....`
+3. `В Jenkins: •	New Item → Pipeline → hello-pipeline-file •	Выбери: “Pipeline from SCM” •	Укажи Git URL и путь к Jenkinsfile`
 
 ```
-Поле для вставки кода...
-....
-....
-....
-....
-```
-5. `Заполните здесь этапы выполнения, если требуется ....`
 
 ```
-Поле для вставки кода...
-....
-....
-....
-....
-```
-6. `Заполните здесь этапы выполнения, если требуется ....`
+4. `Запусти сборку. Убедись, что pipeline работает, и выводит сообщение.`
 
 ```
-Поле для вставки кода...
-....
-....
-....
-....
+Started by user sergey
+Obtained Jenkins/jenkins-docker-lab/Jenkinsfile from git https://github.com/DavyRoy/DevOps_practick.git
+[Pipeline] Start of Pipeline
+[Pipeline] node
+Running on Jenkins in /var/jenkins_home/workspace/hello-pipeline-file
+[Pipeline] {
+[Pipeline] stage
+[Pipeline] { (Declarative: Checkout SCM)
+[Pipeline] checkout
+Selected Git installation does not exist. Using Default
+The recommended git tool is: NONE
+using credential GitHub
+Cloning the remote Git repository
+Cloning repository https://github.com/DavyRoy/DevOps_practick.git
+ > git init /var/jenkins_home/workspace/hello-pipeline-file # timeout=10
+Fetching upstream changes from https://github.com/DavyRoy/DevOps_practick.git
+ > git --version # timeout=10
+ > git --version # 'git version 2.39.5'
+using GIT_ASKPASS to set credentials GitHub Access Token
+ > git fetch --tags --force --progress -- https://github.com/DavyRoy/DevOps_practick.git +refs/heads/*:refs/remotes/origin/* # timeout=10
+ > git config remote.origin.url https://github.com/DavyRoy/DevOps_practick.git # timeout=10
+ > git config --add remote.origin.fetch +refs/heads/*:refs/remotes/origin/* # timeout=10
+Avoid second fetch
+ > git rev-parse refs/remotes/origin/main^{commit} # timeout=10
+Checking out Revision 49488f6040df68fddf22fc75a160fb627d4e7c44 (refs/remotes/origin/main)
+ > git config core.sparsecheckout # timeout=10
+ > git checkout -f 49488f6040df68fddf22fc75a160fb627d4e7c44 # timeout=10
+Commit message: "Jenkins 01"
+First time build. Skipping changelog.
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] stage
+[Pipeline] { (Hello)
+[Pipeline] echo
+Hello from Declarative Pipeline!
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] }
+[Pipeline] // node
+[Pipeline] End of Pipeline
+Finished: SUCCESS
+
 ```
 
 `При необходимости прикрепитe сюда скриншоты
@@ -515,33 +533,79 @@ post {} действия после билдов (success/failure/always)
 ![Название скриншота 1](ссылка на скриншот 1)`
 ---
 
-# Модуль "`Jenkins`" - `DOC-06 Volumes и управление данными`
+# Модуль "`Jenkins`" - `JEN-06: Jenkinsfile и Git — интеграция с репозиторием`
 
  ### 🎯 Цель урока
-Научиться устанавливать Docker, запускать контейнеры, управлять ими и проверять их статус.
+Git + Jenkins Pipeline
 
 ---
 
  ## 📘 Теория (кратко)
 
-Docker — это инструмент для контейнеризации, позволяющий упаковывать приложение и его зависимости в единый образ.
+🔹 Jenkinsfile в Git
+	•	Jenkins может брать pipeline напрямую из репозитория
+	•	Это делается через “Pipeline from SCM”
+	•	Jenkinsfile должен находиться в корне проекта или по указанному пути
 
- ## Ключевые команды:
+🔹 Способы подключения репозитория:
+HTTPS - https://github.com/user/repo.git - Доступен публично или через токен
+SSH - git@github.com:user/repo.git - Jenkins должен иметь SSH-ключ
+Private Repo (GitHub/GitLab) - Через Credentials - Токен или SSH-пара доступов
 
-- `docker run`, `docker ps`, `docker stop`, `docker rm`
-- `docker images`, `docker exec`
+🔹 Принцип работы:
+	1.	Jenkins проверяет Git-репозиторий
+	2.	Считывает Jenkinsfile
+	3.	Выполняет пайплайн
+	4.	(опционально) Триггер по вебхуку
+
+🔹 Credentials в Jenkins
+
+Если репозиторий приватный — Jenkins должен знать, как авторизоваться:
+	•	Manage Jenkins → Credentials
+	•	Добавить Username + Password (или Token)
+или
+SSH Key (если используешь git@)
+
+🔹 Пример Jenkinsfile из репозитория:
+pipeline {
+  agent any
+
+  stages {
+    stage('Git Checkout') {
+      steps {
+        checkout scm
+        echo 'Код успешно получен!'
+      }
+    }
+    stage('Build') {
+      steps {
+        sh 'echo "Сборка..."'
+      }
+    }
+  }
+}
+📌 checkout scm — встроенная команда, чтобы получить репозиторий, указанный в Pipeline Job.
+
+ ## Конспект:
+
+ 	•	Pipeline Job может подключаться к Git-репозиторию и использовать Jenkinsfile
+	•	Протоколы: HTTPS (удобно), SSH (надёжно)
+	•	Приватный репозиторий = нужны credentials
+	•	checkout scm — встроенная команда получения кода
+
 
 ---
 
 ### Задание
 
-1. Установи Docker (если не установлен)
-2. Запусти контейнер с NGINX на порту 8080
-3. Запусти контейнер с PostgreSQL
-4. Убедись, что контейнеры работают
-5. Останови и удали один из них
+1. Создай Jenkins Pipeline Job, который:
+	•	Подключается к GitHub-репозиторию
+	•	Считывает Jenkinsfile
+	•	Клонирует весь проект
+	•	Выполняет пайплайн с checkout scm
 
-1. `Заполните здесь этапы выполнения, если требуется ....`
+
+1. `Убедись, что Jenkinsfile лежит в корне твоего проекта (ветка 06-git-integration)`
 
 ```
 Поле для вставки кода...
