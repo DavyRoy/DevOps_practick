@@ -1,0 +1,28 @@
+image: node:18
+
+stages:
+  - build_app
+  - test_app
+  - deploy_app
+
+build_app:
+  stage: build_app
+  script: echo Hello
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main"'
+      when: always
+    - when: never
+
+test_app:
+  stage: test_app
+  script: echo Hello
+  rules:
+    - when: always
+
+deploy_app:
+  stage: deploy_app
+  script: echo Hello
+  rules:
+    - if: '$CI_COMMIT_TAG == "v1.0"'
+      when: always
+    - when: manual
