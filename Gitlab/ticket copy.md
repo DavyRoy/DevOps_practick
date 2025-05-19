@@ -573,453 +573,407 @@ Job succeeded
 # Модуль "`GitLab CI/CD`" - `GLCI-04 Conditions и only/except / rules`
 
  ### 🎯 Цель урока
-CI-пайплайн: линтинг, тесты, артефакты
+Условия: only, except и rules
 
 ---
 
  ## 📘 Теория (кратко)
 
-Цель любого CI-пайплайна — автоматическая проверка кода перед мержем или деплоем. Классическая структура пайплайна:
-	1.	Lint — проверка стиля (например, eslint, flake8, yamllint)
-	2.	Test — юнит-тесты, интеграционные тесты (pytest, jest, go test, и т.п.)
-	3.	Build / Артефакты — создание артефактов (например, бинарников, отчётов о тестах и пр.)
-
-📌 Как сохранять артефакты в GitHub Actions?
-- name: Save build artifacts
-  uses: actions/upload-artifact@v4
-  with:
-    name: my-artifacts
-    path: ./build/
-🔹 Файл или папка ./build/ будет доступна для скачивания из вкладки Artifacts в интерфейсе Actions.
-
-🛠 Пример CI:
-jobs:
-  lint:
-    steps:
-      - run: flake8 app/
-  test:
-    steps:
-      - run: pytest tests/
-  build:
-    steps:
-      - run: make build
-      - uses: actions/upload-artifact@v4
-        with:
-          name: binary
-          path: ./dist/
-
-
- ## Ключевые команды:
-
----
-
-### Задание
-
-1. Создай CI workflow, который:
-	•	Запускается при push в любую ветку
-	•	Делает:
-	•	Линтинг — проверь синтаксис *.yml файлов (например, yamllint)
-	•	Тест — симулируй тестирование (команда echo "Тесты пройдены")
-	•	Build — создай папку build/ с каким-то файлом (например, touch build/app.txt)
-	•	Загрузи build/ как артефакт
-
-1. `Ветка: gha-04-ci-pipeline`
-
-```
-git switch -c gha-04-ci-pipeline
-Switched to a new branch 'gha-04-ci-pipeline'
-```
-2. `Файл: .github/workflows/ci.yml`
-
-```
-touch .github/workflows/ci.yml
-```
-3. `Стадии: lint, test, build — как отдельные job, Используй upload-artifact только в job build, Линт — можешь установить yamllint (pip install yamllint) или сделать echo "Lint passed" — главное структура`
-
-```
----
-name: CI Pipeline
-
-on:
-  push:
-
-
-jobs:
-  lint:
-    name: Линтинг YAML файлов
-    runs-on: ubuntu-latest
-    steps:
-      - name: Клонируем код
-        uses: actions/checkout@v3
-
-      - name: Проверка синтаксиса YAML (симулированная)
-        run: |
-           sudo apt update
-           sudo apt install -y python3-pip
-           pip install yamllint
-           yamllint .
-
-  test:
-    name: Тестирование
-    runs-on: ubuntu-latest
-    needs: lint
-    steps:
-      - name: Клонируем код
-        uses: actions/checkout@v3
-
-      - name: Запускаем тесты (симуляция)
-        run: echo "Тесты пройдены"
-
-  build:
-    name: Сборка
-    runs-on: ubuntu-latest
-    needs: test
-    steps:
-      - name: Клонируем код
-        uses: actions/checkout@v3
-
-      - name: Создаём папку build/ и файл
-        run: |
-          mkdir -p build
-          echo "Hello from build" > build/app.txt
-
-      - name: Загружаем артефакт
-        uses: actions/upload-artifact@v4
-        with:
-          name: build-artifact
-          path: build/
-
-```
-4. `Сделай git push — проверь, что workflow сработал`
-
-```
-git push -u origin gha-04-ci-pipeline
-Enumerating objects: 26, done.
-Counting objects: 100% (26/26), done.
-Delta compression using up to 10 threads
-Compressing objects: 100% (13/13), done.
-Writing objects: 100% (14/14), 1.26 KiB | 1.26 MiB/s, done.
-Total 14 (delta 7), reused 0 (delta 0), pack-reused 0
-remote: Resolving deltas: 100% (7/7), completed with 7 local objects.
-To https://github.com/DavyRoy/DevOps_practick.git
-   b55b770..adaba9e  gha-04-ci-pipeline -> gha-04-ci-pipeline
-branch 'gha-04-ci-pipeline' set up to track 'origin/gha-04-ci-pipeline'.
-```
-5. `Перейди в GitHub → вкладка Actions → убедись в успешном выполнении`
-
-```
-Reading package lists...
-Building dependency tree...
-Reading state information...
-python3-pip is already the newest version (24.0+dfsg-1ubuntu1.1).
-0 upgraded, 0 newly installed, 0 to remove and 16 not upgraded.
-Defaulting to user installation because normal site-packages is not writeable
-Collecting yamllint
-  Downloading yamllint-1.37.1-py3-none-any.whl.metadata (4.3 kB)
-Collecting pathspec>=0.5.3 (from yamllint)
-  Downloading pathspec-0.12.1-py3-none-any.whl.metadata (21 kB)
-Requirement already satisfied: pyyaml in /usr/lib/python3/dist-packages (from yamllint) (6.0.1)
-Downloading yamllint-1.37.1-py3-none-any.whl (68 kB)
-   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 68.8/68.8 kB 9.4 MB/s eta 0:00:00
-Downloading pathspec-0.12.1-py3-none-any.whl (31 kB)
-Installing collected packages: pathspec, yamllint
-Successfully installed pathspec-0.12.1 yamllint-1.37.1
-./.github/workflows/matrix.yml
-
-./.github/workflows/ci.yml
-
-./.github/workflows/conditional.yml
-
-./.github/workflows/basic.yml
-
-Run echo "Тесты пройдены"
-Тесты пройдены
-
-Run mkdir -p build
-```
-
-`При необходимости прикрепитe сюда скриншоты
-![Название скриншота 1](ссылка на скриншот 1)`
-![Название скриншота 1](ссылка на скриншот 1)`
-![Название скриншота 1](ссылка на скриншот 1)`
----
-
-
-# Модуль "`GitLab CI/CD`" - `GHA-05 — Деплой и кастомные действия (actions)`
-
- ### 🎯 Цель урока
-Деплой и кастомные действия (actions)
-
----
-
- ## 📘 Теория (кратко)
-
-🔹 Деплой в CI/CD
-
-Под “деплоем” в GitHub Actions обычно понимается:
-	•	пуш в DockerHub / GitHub Container Registry
-	•	деплой в Kubernetes, облако, FTP, сервер и т.д.
-
-🧠 Сам деплой может быть:
-	•	Через обычный run: ...
-	•	Через сторонние готовые actions
-	•	Через кастомные actions, написанные под проект
-
-🔹 Готовые actions (из маркетплейса)
-
-Пример: деплой на FTP
-- name: Deploy via FTP
-  uses: SamKirkland/FTP-Deploy-Action@v4
-  with:
-    server: ftp.example.com
-    username: ${{ secrets.FTP_USER }}
-    password: ${{ secrets.FTP_PASS }}
-
-🔹 Кастомные actions (свои)
-
-Ты можешь создать свою action:
-	•	В формате Docker (исполняется в контейнере)
-	•	В формате JavaScript (исполняется прямо в раннере)
-
-📁 Структура:
-/my-action
-  └── action.yml
-  └── entrypoint.sh
-
-🧾 action.yml (пример shell-скрипта):
-name: Hello Action
-description: Prints Hello
-runs:
-  using: "docker"
-  image: "Dockerfile"
-
-🧾 Dockerfile:
-FROM alpine
-COPY entrypoint.sh /entrypoint.sh
-ENTRYPOINT ["/entrypoint.sh"]
-
-🧾 entrypoint.sh:
-#!/bin/sh
-echo "Hello from custom action!"
-
- ## Ключевые команды:
-
----
-
-### Задание
-
-1. Создай кастомную action на shell (через Docker), которая:
-	•	Выводит сообщение: 📦 Deploying $APP_NAME to $ENV
-
-Создай workflow, который:
-	•	Запускается по push
-	•	Передаёт в action переменные APP_NAME и ENV
-	•	Вызывает кастомную action из поддиректории .github/actions/deploy
-
-1. `Ветка: gha-05-custom-deploy`
-
-```
-git switch -c gha-05-custom-deploy
-Switched to a new branch 'gha-05-custom-deploy'
-```
-2. `Создай структуру`
-
-```
-.github/
-  workflows/ci-deploy.yml
-  actions/deploy/
-    Dockerfile
-    entrypoint.sh
-    action.yml
-```
-3. `Кастомная action должна принимать input-параметры: •	app_name •	env`
-
-```
-
-```
-4. `В workflow передай эти параметры в uses: ./github/actions/deploy`
-
-```
-.github/actions/deploy/entrypoint.sh
----
-#!/bin/sh
-echo "📦 Deploying $APP_NAME to $ENV"
-
- .github/actions/deploy/Dockerfile
- ---
- FROM alpine
-
-COPY entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
-
-ENTRYPOINT ["/entrypoint.sh"]
-
-.github/actions/deploy/action.yml
----
-name: Hello Deploy Action
-description: Кастомная action для вывода деплоя
-
-inputs:
-  app_name:
-    description: Название приложения
-    required: true
-  env:
-    description: Окружение
-    required: true
-
-runs:
-  using: "docker"
-  image: "Dockerfile"
-  env:
-    APP_NAME: ${{ inputs.app_name }}
-    ENV: ${{ inputs.env }}
-
- .github/workflows/ci-deploy.yml
- ---
- name: Deploy Workflow
-
-on:
-  push:
-
-jobs:
-  deploy:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Deploy via custom action
-        uses: ./github/actions/deploy
-        with:
-          app_name: MyCoolApp
-          env: stage
-```
-5. `Сделай git push — проверь, что workflow сработал`
-
-```
-git push -u origin gha-05-custom-deploy
-
-Enumerating objects: 7, done.
-Counting objects: 100% (7/7), done.
-Delta compression using up to 10 threads
-Compressing objects: 100% (4/4), done.
-Writing objects: 100% (4/4), 421 bytes | 421.00 KiB/s, done.
-Total 4 (delta 2), reused 0 (delta 0), pack-reused 0
-remote: Resolving deltas: 100% (2/2), completed with 2 local objects.
-To https://github.com/DavyRoy/DevOps_practick.git
-   9b7b60a..204ffc0  gha-05-custom-deploy -> gha-05-custom-deploy
-branch 'gha-05-custom-deploy' set up to track 'origin/gha-05-custom-deploy'.
-```
-6. `Перейди в GitHub → вкладка Actions → убедись в успешном выполнении`
-
-```
-Run ./.github/actions/deploy
-Building docker image
-/usr/bin/docker run --name e9dfd6c852384a3524454c9d77e2e9bf2fbae5_0e4e7c --label e9dfd6 --workdir /github/workspace --rm -e "INPUT_APP_NAME" -e "INPUT_ENV" -e "APP_NAME" -e "ENV" -e "HOME" -e "GITHUB_JOB" -e "GITHUB_REF" -e "GITHUB_SHA" -e "GITHUB_REPOSITORY" -e "GITHUB_REPOSITORY_OWNER" -e "GITHUB_REPOSITORY_OWNER_ID" -e "GITHUB_RUN_ID" -e "GITHUB_RUN_NUMBER" -e "GITHUB_RETENTION_DAYS" -e "GITHUB_RUN_ATTEMPT" -e "GITHUB_ACTOR_ID" -e "GITHUB_ACTOR" -e "GITHUB_WORKFLOW" -e "GITHUB_HEAD_REF" -e "GITHUB_BASE_REF" -e "GITHUB_EVENT_NAME" -e "GITHUB_SERVER_URL" -e "GITHUB_API_URL" -e "GITHUB_GRAPHQL_URL" -e "GITHUB_REF_NAME" -e "GITHUB_REF_PROTECTED" -e "GITHUB_REF_TYPE" -e "GITHUB_WORKFLOW_REF" -e "GITHUB_WORKFLOW_SHA" -e "GITHUB_REPOSITORY_ID" -e "GITHUB_TRIGGERING_ACTOR" -e "GITHUB_WORKSPACE" -e "GITHUB_ACTION" -e "GITHUB_EVENT_PATH" -e "GITHUB_ACTION_REPOSITORY" -e "GITHUB_ACTION_REF" -e "GITHUB_PATH" -e "GITHUB_ENV" -e "GITHUB_STEP_SUMMARY" -e "GITHUB_STATE" -e "GITHUB_OUTPUT" -e "RUNNER_OS" -e "RUNNER_ARCH" -e "RUNNER_NAME" -e "RUNNER_ENVIRONMENT" -e "RUNNER_TOOL_CACHE" -e "RUNNER_TEMP" -e "RUNNER_WORKSPACE" -e "ACTIONS_RUNTIME_URL" -e "ACTIONS_RUNTIME_TOKEN" -e "ACTIONS_CACHE_URL" -e "ACTIONS_RESULTS_URL" -e GITHUB_ACTIONS=true -e CI=true -v "/var/run/docker.sock":"/var/run/docker.sock" -v "/home/runner/work/_temp/_github_home":"/github/home" -v "/home/runner/work/_temp/_github_workflow":"/github/workflow" -v "/home/runner/work/_temp/_runner_file_commands":"/github/file_commands" -v "/home/runner/work/DevOps_practick/DevOps_practick":"/github/workspace" e9dfd6:c852384a3524454c9d77e2e9bf2fbae5
-📦 Deploying MyCoolApp to stage
-```
-
-`При необходимости прикрепитe сюда скриншоты
-![Название скриншота 1](ссылка на скриншот 1)`
-![Название скриншота 1](ссылка на скриншот 1)`
-![Название скриншота 1](ссылка на скриншот 1)`
----
-
-# Модуль "`GitLab CI/CD`" - `DOC-GHA-01 Автосборка Docker-образа по пушу`
-
- ### 🎯 Цель урока
-Как работает автосборка Docker-образа через GitHub Actions
----
-
- ## 📘 Теория (кратко)
-
-🔹 Общая идея:
-
-GitHub Actions позволяет запускать CI/CD-процессы при событиях в репозитории. В случае Docker-сборки — при каждом пуше GitHub может:
-	•	Проверить код
-	•	Собрать Docker-образ
-	•	Потестировать его
-	•	Отправить в DockerHub или другой реестр
-
-🔹 Основные компоненты:
-.github/workflows/*.ymlОписание пайплайна
-on: Триггер (например, push, pull_request)
-jobs: Список задач, которые выполняются
-runs-on: Указывает ОС runner-а (например, ubuntu-latest)
-steps: Последовательность шагов внутри job-а
-
-🔹 Как происходит сборка Docker-образа
-	1.	Получение кода — GitHub сам клонирует репозиторий.
-	2.	Установка Docker — runner использует Ubuntu с предустановленным Docker.
-	3.	Сборка образа — docker build -t имя .
-	4.	(опционально) Push — docker push требует логина в реестр (будет в следующем юните)
+В реальных проектах ты не хочешь запускать весь pipeline всегда. Например:
+	•	билд только в main
+	•	деплой — только при наличии тега
+	•	линтер — только в Merge Request
+
+Для этого используются условия.
 
 ⸻
 
-🔹 Что важно учитывать:
-	•	GitHub Actions не работает “по крону” сам по себе — нужны события: push, pull_request, workflow_dispatch (ручной запуск).
-	•	Runner’ы имеют ограничения по ресурсам (CPU, RAM) и времени выполнения (обычно 6 часов для public repo).
-	•	Переменные и секреты задаются в разделе Settings → Secrets репозитория.
-	•	GitHub Actions можно запускать вручную или автоматически, и это позволяет внедрить инфраструктуру как код даже на уровне CI.
+🔹 Устаревшие директивы: only и except (до GitLab 12.3)
+job:
+  script: echo Hello
+  only:
+    - main
+  except:
+    - tags
+  🔻 Минусы:
+	•	Маловыразительные
+	•	Не поддерживают сложную логику
+	•	Устаревают — лучше не использовать
+
+✅ Современный способ: rules
+job:
+  script: echo Hello
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main"'
+      when: always
+    - if: '$CI_COMMIT_TAG'
+      when: manual
+    - when: never
+    🔹 Что умеют rules:
+	•	Условные выражения (if)
+	•	Указание когда запускать: on_success, manual, never
+	•	Объединение по приоритету (срабатывает первое подходящее правило)
+
+🔍 Примеры
+
+🔸 Только в main:
+rules:
+  - if: '$CI_COMMIT_BRANCH == "main"'
+🔸 Только для тега:
+rules:
+  - if: '$CI_COMMIT_TAG'
+🔸 Merge Request:
+rules:
+  - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+🔸 Пропустить job:
+rules:
+  - when: never
 
 
  ## Ключевые команды:
-
 
 ---
 
 ### Задание
 
-1. Настрой автоматическую сборку Docker-образа при пуше в репозиторий.
-Workflow должен запускаться при любом коммите в ветку main.
-Цель — убедиться, что образ успешно собирается на CI, но не пушится в DockerHub (ещё рано).
+1. Добавь в .gitlab-ci.yml следующие условия:
+	•	build_app — запускается только в ветке main
+	•	test_app — запускается всегда
+	•	deploy_app — запускается только при наличии тега и вручную (manual)
 
-1. `Создай .github/workflows/docker-build.yml.`
+1. `Обнови текущий .gitlab-ci.yml, используя rules.`
+
+```
+
+```
+2. `Добавь необходимые блоки rules: в каждую job.`
+
+```
+
+```
+3. `Сделай коммит в main, убедись, что сработали только build_app и test_app.`
+
+```
+
+```
+4. `Создай тег (git tag v1.0 && git push origin v1.0) — проверь, появилась кнопка ручного запуска для deploy_app.`
+
+```
+image: node:18
+
+stages:
+  - build_app
+  - test_app
+  - deploy_app
+
+build_app:
+  stage: build_app
+  script: echo Hello
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main"'
+      when: always
+    - when: never
+
+test_app:
+  stage: test_app
+  script: echo Hello
+  rules:
+    - when: always
+
+deploy_app:
+  stage: deploy_app
+  script: echo Hello
+  rules:
+    - if: '$CI_COMMIT_TAG == "v1.0"'
+      when: always
+    - if: '$CI_COMMIT_TAG'
+      when: manual
+    - when: never
+
+```
+
+`При необходимости прикрепитe сюда скриншоты
+![Название скриншота 1](ссылка на скриншот 1)`
+![Название скриншота 1](ссылка на скриншот 1)`
+![Название скриншота 1](ссылка на скриншот 1)`
+---
+
+
+# Модуль "`GitLab CI/CD`" - `GLCI-05 Кэш и артефакты `
+
+ ### 🎯 Цель урока
+Кэширование и артефакты: ускорение и передача данных между job’ами
+
+---
+
+ ## 📘 Теория (кратко)
+
+В GitLab CI/CD ты можешь сохранять:
+	•	🗂 Кэш — чтобы избежать повторной установки зависимостей, ускорить job’ы.
+	•	📦 Артефакты — чтобы передать файлы между стадиями (например, результаты сборки).
+
+🔹 cache: — ускорение
+
+Кэш сохраняется на стороне runner’а и используется между job’ами и пайплайнами.
+cache:
+  key: ${CI_COMMIT_REF_SLUG}
+  paths:
+    - node_modules/
+key — определяет уникальность кэша (можно по ветке, ветке + lock-файлу, и т.д.)
+
+🔹 artifacts: — передача данных
+
+Артефакты передаются от job к job, но только если они в разных stages.
+build_app:
+  stage: build
+  script:
+    - npm run build
+  artifacts:
+    paths:
+      - dist/
+Затем в следующем этапе:
+deploy_app:
+  stage: deploy
+  script:
+    - ls dist/
+
+📦 Типы артефактов:
+paths: Указывает файлы/директории для сохранения
+expire_in: Время жизни (например, 1 day, 1 week)
+when: Условие (on_success, always, on_failure)
+reports: JUnit, coverage, performance и др
+
+🤔 Как они работают вместе?
+	•	cache: — для ускорения, работает даже между пайплайнами
+	•	artifacts: — для передачи результатов между job’ами в рамках одного pipeline
+
+🛠 Пример: сборка + деплой
+stages:
+  - build
+  - deploy
+
+build_app:
+  stage: build
+  script:
+    - npm ci
+    - npm run build
+  cache:
+    paths:
+      - node_modules/
+  artifacts:
+    paths:
+      - dist/
+
+deploy_app:
+  stage: deploy
+  script:
+    - ls dist/
+    - echo "Deploying app"
+
+ ## Конспект:
+ 🗂 cache:
+- Используется для ускорения job (зависимости, пакеты и т.д.)
+- Работает между job'ами и пайплайнами
+- Указывается через key + paths
+
+📦 artifacts:
+- Передают файлы между job'ами
+- Работают только между job'ами разных stage
+- Указываются через paths, expire_in, when
+
+---
+
+### Задание
+
+1. Обнови свой .gitlab-ci.yml, чтобы:
+	•	build_app кэшировал node_modules/
+	•	build_app сохранял папку dist/ как артефакт
+	•	deploy_app выводил содержимое dist/ (для проверки)
+
+1. `В build_app добавь: •	cache: на node_modules/ •	artifacts: на dist/`
+
+```
+
+```
+2. `В deploy_app — просто ls dist/`
+
+```
+
+```
+3. `Убедись, что: •	кэш сохраняется •	артефакты передаются •	dist/ видна в deploy_app`
+
+```
+image: node:18
+
+stages:
+  - build_app
+  - test_app
+  - deploy_app
+
+build_app:
+  stage: build_app
+  script:
+    - echo Hello
+    - npm ci
+  cache:
+    paths:
+      - node_modules/
+  artifacts:
+    paths:
+      - disk/
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main"'
+      when: always
+    - when: never
+
+test_app:
+  stage: test_app
+  script: echo Hello
+  rules:
+    - when: always
+
+deploy_app:
+  stage: deploy_app
+  script:
+    - echo Hello
+    - ls disk/
+
+```
+
+`При необходимости прикрепитe сюда скриншоты
+![Название скриншота 1](ссылка на скриншот 1)`
+![Название скриншота 1](ссылка на скриншот 1)`
+![Название скриншота 1](ссылка на скриншот 1)`
+---
+
+# Модуль "`GitLab CI/CD`" - `GLCI-06 Тесты на двух версиях Node.js параллельно`
+
+ ### 🎯 Цель урока
+Matrix jobs и параллельные job’ы в GitLab CI/CD
+---
+
+ ## 📘 Теория (кратко)
+
+🔹 Что такое parallel jobs?
+
+Это способ выполнять несколько job’ов одновременно, чтобы:
+	•	ускорить pipeline
+	•	тестировать параллельно
+	•	минимизировать дублирование кода
+
+🔸 Способы:
+
+1. Обычное распараллеливание
+
+Несколько job’ов с одинаковым stage, но разными задачами:
+test_node14:
+  stage: test
+  image: node:14
+  script: npm test
+
+test_node18:
+  stage: test
+  image: node:18
+  script: npm test
+▶️ Эти job’ы выполняются одновременно, потому что находятся в одном stage.
+
+2. Параметр parallel:
+tests:
+  stage: test
+  script: run_tests.sh
+  parallel: 4
+▶️ Создаст 4 одинаковых job с индексами от 0 до 3. Это удобно для разбиения по shard’ам (частям данных/тестов).
+
+Внутри job будет переменная $CI_NODE_INDEX.
+
+3. Matrix strategy (GitLab Premium / Ultimate)
+.test_template:
+  stage: test
+  script: npm test
+
+test_matrix:
+  extends: .test_template
+  parallel:
+    matrix:
+      - NODE_VERSION: [14, 16, 18]
+🔹 GitLab создаст 3 job:
+	•	с NODE_VERSION=14
+	•	с NODE_VERSION=16
+	•	с NODE_VERSION=18
+
+🧠 Используемые переменные:
+CI_NODE_TOTAL Общее количество parallel job’ов
+CI_NODE_INDEX Индекс текущего job’а
+NODE_VERSION Значение из matrix
+
+ ## Конспект:
+🟦 parallel:
+- Запускает N одинаковых job
+- Поддерживает переменные: CI_NODE_INDEX, CI_NODE_TOTAL
+
+🟧 matrix:
+- Создаёт job'ы с разными параметрами
+- Нужно использовать extends или шаблонную job
+
+💡 Параллельные job'ы → экономия времени + масштабируемость
+
+---
+
+### Задание
+
+1. Добавь в .gitlab-ci.yml job, который:
+	•	расширяет шаблонную job
+	•	запускает тесты с NODE_VERSION: 14 и NODE_VERSION: 18
+	•	использует parallel.matrix (если Premium недоступен — сделай два job вручную)
+
+1. `Добавь шаблонную job (например, .test_template)`
 
 ```
 touch .github/workflows/docker-build.yml
 ```
-2. `Укажи событие push в ветку main.`
+2. `Создай test_matrix job с matrix или два отдельных: test_node14, test_node18`
 
 ```
 
 ```
-3. `Добавь job на базе ubuntu-latest.`
+3. `Убедись, что в логах видно версию Node:`
 
 ```
+image: node:18
 
-```
-4. `Добавь step для сборки Docker-образа из Dockerfile в корне репозитория.`
+stages:
+  - build_app
+  - test_app
+  - deploy_app
 
-```
-nano .github/workflows/docker-build.yml
-name: Build Docker image
+build_app:
+  stage: build_app
+  script:
+    - echo Hello
+    - npm ci
+  cache:
+    paths:
+      - node_modules/
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main"'
+      when: always
+    - when: never
 
-on:
-  push:
-    branches:
-      - main
+test_app17:
+  stage: test_app
+  image: node:17
+  script: npm test
 
-jobs:
-  deploy:
-    runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+test_app18:
+  stage: test_app
+  image: node:18
+  script: npm test
 
-      - name: Build Docker image
-        run: docker build -t test-image:latest ./.github/actions/deploy
+deploy_app:
+  stage: deploy_app
+  script:
+    - echo Hello
 
-```
-
-5. `Убедись, что workflow проходит после коммита.`
-
-```
-Run ./.github/actions/deploy
-Building docker image
-/usr/bin/docker run --name ccc482fb2784ff45f69a94bb5eb091235c_985deb --label 0443cc --workdir /github/workspace --rm -e "HOME" -e "GITHUB_JOB" -e "GITHUB_REF" -e "GITHUB_SHA" -e "GITHUB_REPOSITORY" -e "GITHUB_REPOSITORY_OWNER" -e "GITHUB_REPOSITORY_OWNER_ID" -e "GITHUB_RUN_ID" -e "GITHUB_RUN_NUMBER" -e "GITHUB_RETENTION_DAYS" -e "GITHUB_RUN_ATTEMPT" -e "GITHUB_ACTOR_ID" -e "GITHUB_ACTOR" -e "GITHUB_WORKFLOW" -e "GITHUB_HEAD_REF" -e "GITHUB_BASE_REF" -e "GITHUB_EVENT_NAME" -e "GITHUB_SERVER_URL" -e "GITHUB_API_URL" -e "GITHUB_GRAPHQL_URL" -e "GITHUB_REF_NAME" -e "GITHUB_REF_PROTECTED" -e "GITHUB_REF_TYPE" -e "GITHUB_WORKFLOW_REF" -e "GITHUB_WORKFLOW_SHA" -e "GITHUB_REPOSITORY_ID" -e "GITHUB_TRIGGERING_ACTOR" -e "GITHUB_WORKSPACE" -e "GITHUB_ACTION" -e "GITHUB_EVENT_PATH" -e "GITHUB_ACTION_REPOSITORY" -e "GITHUB_ACTION_REF" -e "GITHUB_PATH" -e "GITHUB_ENV" -e "GITHUB_STEP_SUMMARY" -e "GITHUB_STATE" -e "GITHUB_OUTPUT" -e "RUNNER_OS" -e "RUNNER_ARCH" -e "RUNNER_NAME" -e "RUNNER_ENVIRONMENT" -e "RUNNER_TOOL_CACHE" -e "RUNNER_TEMP" -e "RUNNER_WORKSPACE" -e "ACTIONS_RUNTIME_URL" -e "ACTIONS_RUNTIME_TOKEN" -e "ACTIONS_CACHE_URL" -e "ACTIONS_RESULTS_URL" -e GITHUB_ACTIONS=true -e CI=true -v "/var/run/docker.sock":"/var/run/docker.sock" -v "/home/runner/work/_temp/_github_home":"/github/home" -v "/home/runner/work/_temp/_github_workflow":"/github/workflow" -v "/home/runner/work/_temp/_runner_file_commands":"/github/file_commands" -v "/home/runner/work/DevOps_practick/DevOps_practick":"/github/workspace" 0443cc:c482fb2784ff45f69a94bb5eb091235c
-Hello from the deploy action!
 ```
 
 `При необходимости прикрепитe сюда скриншоты
@@ -1029,46 +983,52 @@ Hello from the deploy action!
 ---
 
 
-# Модуль "`GitLab CI/CD`" - `DOC-GHA-03 Разделение build и push по шагам`
+# Модуль "`GitLab CI/CD`" - `GLCI-07 — Сборка и публикация Docker-образа в GitLab Registry`
 
  ### 🎯 Цель урока
-Зачем разделять build и push в GitHub Actions
-
+Интеграция с GitLab Container Registry
 ---
 
  ## 📘 Теория (кратко)
 
-🔹 Почему нельзя всё в одном шаге?
+🔹 Что такое GitLab Container Registry?
 
-Сборка и публикация — это разные стадии CI/CD:
-	•	build — можно кэшировать, использовать как артефакт, проверять на ошибки.
-	•	push — требует внешнего взаимодействия, секретов и даёт побочный эффект (меняет внешний реестр).
+Это встроенный Docker Registry, привязанный к каждому GitLab-проекту. Он позволяет:
+	•	хранить Docker-образы,
+	•	использовать их в пайплайнах и деплоях,
+	•	автоматизировать CI/CD-сборку и публикацию.
 
-Разделение даёт:
-	•	🧪 Гибкость: можно выполнять тесты между build и push.
-	•	🔒 Безопасность: push выполняется только при определённых условиях (например, из main, из PR с одобрением и т.д.).
-	•	💨 Кэширование и многопоточность: docker/build-push-action умеет собирать быстрее через buildx.
+📦 Работает по адресу:
+registry.gitlab.com/<namespace>/<project>
+или
+gitlab.example.com:5050/<namespace>/<project> — для self-hosted
 
-🔹 Используемые экшены:
-- uses: docker/setup-buildx-action@v3
-- uses: docker/login-action@v3
-- uses: docker/build-push-action@v5
+🔐 Аутентификация
 
-🔹 Стратегия:
-      - name: Build (only)
-        uses: docker/build-push-action@v5
-        with:
-          push: false
+GitLab автоматически предоставляет переменные:
+	•	$CI_REGISTRY — адрес Registry
+	•	$CI_REGISTRY_IMAGE — путь образа
+	•	$CI_REGISTRY_USER — логин (обычно = gitlab-ci-token)
+	•	$CI_REGISTRY_PASSWORD — временный токен
 
-      - name: Push (only)
-        uses: docker/build-push-action@v5
-        with:
-          push: true
-🔹 Пример сценария:
-	1.	Выполняем build → проверяем → если всё хорошо, push.
-	2.	Это удобно при pull request’ах: build делается, но push разрешён только в main.
+🛠 Стандартная схема CI-сборки:
+build_image:
+  stage: build
+  image: docker:latest
+  services:
+    - docker:dind
+  script:
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" "$CI_REGISTRY"
+    - docker build -t "$CI_REGISTRY_IMAGE:latest" .
+    - docker push "$CI_REGISTRY_IMAGE:latest"
+Важно: нужен docker:dind (Docker-in-Docker), чтобы запускать docker build внутри CI.
 
-
+📁 Dockerfile — минимальный
+FROM node:18
+WORKDIR /app
+COPY . .
+RUN npm ci
+CMD ["npm", "start"]
 
  ## Ключевые команды:
 
@@ -1076,77 +1036,12 @@ Hello from the deploy action!
 
 ### Задание
 
-1. Настрой .github/workflows/docker-release.yml, в котором:
-	•	При пуше в main происходит сборка образа,
-	•	Потом (в отдельном step-е) — публикация его в DockerHub.
+1.
 
-Оба шага должны быть чётко разделены, и между ними можно будет вставить шаг проверки или echo.
-
-1. `Создай workflow docker-release.yml.`
-
-```
-touch docker-release.yml
-```
-2. `Используй docker/setup-buildx-action для подготовки билдера.`
+1. ` `
 
 ```
 
-```
-3. `Первый шаг — build образа, но без пуша (push: false).`
-
-```
-
-```
-4. `Второй шаг — push образа в DockerHub, используй secrets.`
-
-```
-
-```
-5. `Теги: yourusername/appname:latest`
-
-```
-name: Docker Release
-
-on:
-  push:
-    branches:
-      - main  # только при пуше в main
-
-jobs:
-  docker-release:
-    name: 🐳 Build & Push Docker Image
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: 📥 Checkout repo
-        uses: actions/checkout@v3
-
-      - name: 🔧 Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-
-      - name: 🔐 Login to DockerHub
-        uses: docker/login-action@v3
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-
-      - name: 🛠️ Build Docker image
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          push: false
-          tags: yourusername/appname:latest
-          outputs: type=docker  # локальный образ для следующего шага
-
-      - name: ✅ Проверка после сборки
-        run: echo "Образ успешно собран. Переходим к публикации..."
-
-      - name: 📤 Push Docker image
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          push: true
-          tags: yourusername/appname:latest
 ```
 
 `При необходимости прикрепитe сюда скриншоты
@@ -1156,45 +1051,66 @@ jobs:
 ---
 
 
-# Модуль "`GitLab CI/CD`" - `GHA-01 — Введение в GitHub Actions`
+# Модуль "`GitLab CI/CD`" - `GLCI-08 Notifications и integration (Slack, etc)`
 
  ### 🎯 Цель урока
-Понять, как устроены GitHub Actions
+Уведомления и интеграции (Slack, Telegram, Discord и др.)
 
 ---
 
  ## 📘 Теория (кратко)
 
-📂 Где живёт CI?
+🔹 Зачем нужны уведомления?
 
-GitHub Actions читают YAML-файлы из каталога .github/workflows/.
-Каждый .yml в этой папке — это workflow, который выполняется по определённому событию (push, pull_request и т.д.)
+В реальной разработке pipeline:
+	•	ломаются (и об этом нужно знать),
+	•	успешно проходят (но можно фильтровать),
+	•	требуют ручного действия (например, manual deploy).
 
-🛠 Основная структура файла workflow:
-name: Имя воркфлоу
+Оповещения = реакция команды в реальном времени.
 
-on: событие_триггер
-jobs:
-  имя_джоба:
-    runs-on: runner
-    steps:
-      - name: шаг
-        run: команда
+⸻
 
-🔑 Ключевые элементы:
-name: Имя workflow (для читаемости в GitHub UI)
-on: Событие, при котором запускается workflow (push, pull_request, schedule, и др.)
-jobs: Логические блоки задач, которые могут запускаться параллельно или последовательно
-runs-on: Тип runner’а (обычно ubuntu-latest)
-steps: Последовательные шаги внутри job
-run: Shell-команда для выполнения
-uses: Использование стороннего действия (например, actions/checkout@v4)
+🔸 Поддерживаемые интеграции GitLab:
+	•	Slack
+	•	Microsoft Teams
+	•	Telegram (через Webhook)
+	•	Discord (через Webhook)
+	•	Mattermost
+	•	Email, Webhook, Prometheus, Sentry, PagerDuty и др.
 
-🧠 Как это работает:
-	•	GitHub Actions следит за событиями (on:).
-	•	При совпадении события (push, pull_request) — запускается workflow.
-	•	В jobs: описаны независимые блоки задач, исполняющиеся на runner-ах.
-	•	В steps: находятся конкретные действия: shell-команды или сторонние actions.
+🔧 Способы настроек
+
+✅ 1. Slack через GitLab UI (рекомендуется)
+	1.	Перейди в:
+Settings → Integrations → Slack notifications
+	2.	Настрой Webhook (из Slack → Apps → Incoming Webhooks)
+	3.	Выбери события:
+✅ Pipeline events, ✅ Job events
+
+🔹 GitLab будет автоматически отправлять сообщения по событиям CI/CD.
+
+✅ 2. Slack через Webhook в .gitlab-ci.yml (гибче)
+
+Если хочешь кастомное сообщение, используй curl:
+notify_slack:
+  stage: notify
+  script:
+    - curl -X POST -H 'Content-type: application/json' --data '{"text":"✅ Pipeline Succeeded!"}' $SLACK_WEBHOOK_URL
+  rules:
+    - if: '$CI_JOB_STATUS == "success"'
+🔐 SLACK_WEBHOOK_URL добавляется в GitLab → Settings → CI/CD → Variables (Masked)
+
+🧠 Полезные переменные
+CI_PIPELINE_STATUS
+Статус pipeline (success, failed)
+CI_JOB_STATUS
+Статус job
+CI_COMMIT_BRANCH
+Ветка
+CI_PROJECT_NAME
+Название
+
 
  ## Ключевые команды:1
 
@@ -1202,116 +1118,77 @@ uses: Использование стороннего действия (напр
 
 ### Задание
 
-1. Разверни минимальный workflow, который при каждом пуше:
-	•	Выполняет checkout репозитория
-	•	Выводит текущее время и приветствие в лог
+1. Сделай отдельную job notify_slack, которая:
+	•	использует Webhook
+	•	отправляет JSON-сообщение об успехе pipeline
+	•	работает только при success
 
-1. `Создай новую ветку gha-01-basic-workflow`
+1. `Добавь в GitLab: •	Settings → CI/CD → Variables •	Name: SLACK_WEBHOOK_URL •	Value: твой Slack Webhook (masked, protected — желательно)`
 ```
-git switch -c gha-01-basic-workflow
-Switched to a new branch 'gha-01-basic-workflow'
-```
-2. `В папке .github/workflows/ создай файл basic.yml`
-```
-mkdir .github/workflows/
-touch .github/workflows/basic.yml
-```
-3. `Опиши workflow по шаблону выше (используй run: и uses: шаги)`
-```
-`name: CI Pipeline
-
-on: [push]
-
-jobs:
-  build:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Print Hello and Date
-        run: |
-          echo "Привет! Сейчас: $(date '+%d.%m.%Y %H:%M')"
-```
-4. `Сделай git push — проверь, что workflow сработал`
 
 ```
-git add .
-git commit -m "new commit"
-[gha-01-basic-workflow 746985d] new commit
- 5 files changed, 1498 insertions(+), 940 deletions(-)
- create mode 100644 .github/ISSUE_TEMPLATE/workflows/basic.yml
- create mode 100644 GitHub/test copy.md
- delete mode 100644 GitHub/test.md
- create mode 100644 GitHub/ticket copy.md
- delete mode 100644 GitHub/ticket.md
-git push -u origin gha-01-basic-workflow
-Enumerating objects: 7, done.
-Counting objects: 100% (7/7), done.
-Delta compression using up to 10 threads
-Compressing objects: 100% (3/3), done.
-Writing objects: 100% (4/4), 408 bytes | 408.00 KiB/s, done.
-Total 4 (delta 1), reused 0 (delta 0), pack-reused 0
-remote: Resolving deltas: 100% (1/1), completed with 1 local object.
-To https://github.com/DavyRoy/DevOps_practick.git
-   746985d..c4ea227  gha-01-basic-workflow -> gha-01-basic-workflow
-branch 'gha-01-basic-workflow' set up to track 'origin/gha-01-basic-workflow'.
+2. `Добавь в .gitlab-ci.yml job:`
 ```
-5. `Перейди в GitHub → вкладка Actions → убедись в успешном выполнении`
 
 ```
-build
-succeeded 9 minutes ago in 4s
+3. `Результат`
+```
+image: node:18
 
-0s
-Current runner version: '2.323.0'
-Operating System
-Runner Image
-Runner Image Provisioner
-GITHUB_TOKEN Permissions
-Secret source: Actions
-Prepare workflow directory
-Prepare all required actions
-Getting action download info
-Download immutable action package 'actions/checkout@v4'
-Complete job name: build
-1s
-Run actions/checkout@v4
-Syncing repository: DavyRoy/DevOps_practick
-Getting Git version info
-Temporarily overriding HOME='/home/runner/work/_temp/4acc4139-13aa-4f28-850e-6c16ddc41bb1' before making global git config changes
-Adding repository directory to the temporary git global config as a safe directory
-/usr/bin/git config --global --add safe.directory /home/runner/work/DevOps_practick/DevOps_practick
-Deleting the contents of '/home/runner/work/DevOps_practick/DevOps_practick'
-Initializing the repository
-Disabling automatic garbage collection
-Setting up auth
-Fetching the repository
-Determining the checkout info
-/usr/bin/git sparse-checkout disable
-/usr/bin/git config --local --unset-all extensions.worktreeConfig
-Checking out the ref
-/usr/bin/git log -1 --format=%H
-c4ea2274a198f461fafb6ba5001ea85a6e87c526
-0s
-Run echo "Привет! Сейчас: $(date '+%d.%m.%Y %H:%M')"
-Привет! Сейчас: 15.05.2025 08:15
-0s
-Post job cleanup.
-/usr/bin/git version
-git version 2.49.0
-Temporarily overriding HOME='/home/runner/work/_temp/4f3e3cd8-aa84-4030-bbf1-3ad269c0bcd9' before making global git config changes
-Adding repository directory to the temporary git global config as a safe directory
-/usr/bin/git config --global --add safe.directory /home/runner/work/DevOps_practick/DevOps_practick
-/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
-/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
-/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
-http.https://github.com/.extraheader
-/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
-/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
-0s
-Cleaning up orphan processes
+stages:
+  - build_app
+  - test_app
+  - deploy_app
+  - notify
+
+build_app:
+  stage: build_app
+  script:
+    - echo Hello
+    - npm ciloosadgdsg
+  cache:
+    paths:
+      - node_modules/
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main"'
+      when: always
+    - when: never
+
+test_app17:
+  stage: test_app
+  image: node:17
+  script: npm test
+    - echo Hello
+
+deploy_app:
+  stage: deploy_app
+  script:
+    - echo Hello
+
+notify_success:
+  stage: notify
+  script:
+    - |
+      MESSAGE="✅ УСПЕХ%0AПроект: *${CI_PROJECT_NAME}*%0AВетка: *${CI_COMMIT_BRANCH}*%0A[Пайплайн](${CI_PIPELINE_URL})"
+      curl -s -X POST "https://api.telegram.org/bot${TG_BOT_TOKEN}/sendMessage" \
+        -d chat_id="${TG_CHAT_ID}" \
+        -d text="${MESSAGE}" \
+        -d parse_mode=Markdown
+  when: on_success
+  allow_failure: false
+
+notify_failure:
+  stage: notify
+  script:
+    - |
+      MESSAGE="❌ ОШИБКА%0AПроект: *${CI_PROJECT_NAME}*%0AВетка: *${CI_COMMIT_BRANCH}*%0A[Пайплайн](${CI_PIPELINE_URL})"
+      curl -s -X POST "https://api.telegram.org/bot${TG_BOT_TOKEN}/sendMessage" \
+        -d chat_id="${TG_CHAT_ID}" \
+        -d text="${MESSAGE}" \
+        -d parse_mode=Markdown
+  when: on_failure
+  allow_failure: true
+
 ```
 
 
@@ -1323,65 +1200,788 @@ Cleaning up orphan processes
 
 
 
-# Модуль "`GitLab CI/CD`" - `GHA-02 Переменные, секреты и матрицы`
+# Модуль "`GitLab CI/CD`" - `GLCI-09 CI/CD variables: secret, protected`
 
  ### 🎯 Цель урока
-Переменные, секреты и матрицы
+CI/CD переменные: секретные, protected и file
 
 ---
 
  ## 📘 Теория (кратко)
 
-🔹 1. Переменные (env)
+🔹 Что такое переменные CI/CD?
 
-GitHub Actions поддерживает переменные окружения, которые можно определять:
-	•	На уровне workflow:
-env:
-  APP_ENV: production
+Это значения, которые можно использовать в .gitlab-ci.yml, чтобы:
+	•	скрыть секреты (токены, ключи, пароли)
+	•	задавать параметры окружения (например, NODE_ENV=production)
+	•	переиспользовать конфигурации между job’ами
 
-	•	Внутри job или step:
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    env:
-      BUILD_MODE: release
+📂 Где задаются?
 
-	•	Внутри конкретного step:
-      - name: Print mode
-        run: echo "$BUILD_MODE"
-        env:
-          BUILD_MODE: debug
-🔸 Также переменные можно переопределять на любом уровне.
+🔹 GitLab UI
+Settings → CI/CD → Variables
 
-🔐 2. Секреты (secrets)
-	•	Хранятся в Settings → Secrets вашего репозитория.
-	•	Доступны через ${{ secrets.MY_SECRET }}
+🔹 В .gitlab-ci.yml (не для секретов):
+variables:
+  NODE_ENV: production
+
+🔐 Типы переменных (по флагам)
+Protected Переменная доступна только в protected-ветках и тегах
+Masked Значение не видно в логах, даже при echo $TOKEN
+File Значение сохраняется как временный файл — удобно для ключей и конфигов
+
+🔐 Masked vs обычная переменная
+echo $TOKEN
+	•	Если Masked — ты увидишь *** в логе.
+	•	Если нет — токен попадёт в лог = утечка.
+
+📂 Protected branches и tags
+
+Если ты пометишь ветку как protected, то:
+	•	В ней работают только protected variables
+	•	Только разрешённые пользователи могут пушить
+
 Пример:
-      - name: Login to DockerHub
-        run: docker login -u ${{ secrets.DOCKER_USER }} -p ${{ secrets.DOCKER_PASS }}
-⚠️ Никогда не логируй секреты с помощью echo.
+	•	PROD_API_KEY — protected
+	•	Работает только в main, release/*, prod ветках
 
-🔁 3. Матрицы (matrix)
+📁 File-переменные
 
-Позволяют запускать job несколько раз с разными параметрами:
-jobs:
-  test:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node: [14, 16, 18]
-    steps:
-      - run: echo "Testing with Node.js ${{ matrix.node }}"
-📌 В этом примере:
-	•	job выполнится 3 раза
-	•	В каждой итерации matrix.node будет 14, 16 и 18
+Для случаев, где нужно физически записать файл (например, kubeconfig, service-account.json):
+deploy:
+  script:
+    - echo "$KUBECONFIG_CONTENT" > kubeconfig.yaml
+    - kubectl apply -f kubeconfig.yaml
+Если KUBECONFIG_CONTENT = File-переменная — GitLab сам создаст временный файл, и ты можешь его использовать как путь.
 
-Можно передавать несколько параметров:
-strategy:
-  matrix:
-    os: [ubuntu-latest, macos-latest]
-    version: [1.0, 2.0]
-👉 Будет 2×2 = 4 запусках job’а (все комбинации os + version)
+ ## Ключевые команды:
+
+
+---
+
+### Задание
+
+1.
+
+1. ` `
+
+```
+
+```
+
+`При необходимости прикрепитe сюда скриншоты
+![Название скриншота 1](ссылка на скриншот 1)`
+![Название скриншота 1](ссылка на скриншот 1)`
+![Название скриншота 1](ссылка на скриншот 1)`
+---
+
+
+# Модуль "`GitLab CI/CD`" - `GLCI-10 Deploy job: SSH, SCP, rsync`
+
+ ### 🎯 Цель урока
+Deploy job через SSH, SCP и rsync
+
+---
+
+ ## 📘 Теория (кратко)
+
+🔹 Когда нужен SSH-деплой?
+
+В реальных проектах:
+	•	нет Kubernetes или облака,
+	•	деплой происходит на VM или bare metal сервере,
+	•	нет доступа к CI Runner на проде.
+
+🔐 Тогда CI/CD деплой происходит по SSH.
+
+🔧 Способы деплоя с GitLab CI:
+SSH Выполнение команд на удалённом сервере
+SCP Копирование файлов
+rsync Копирование с оптимизацией и
+
+🔐 Как передать SSH-ключи?
+
+1. Создай SSH-ключ:
+ssh-keygen -t rsa -b 4096 -C "gitlab-ci"
+2. Добавь публичный ключ в ~/.ssh/authorized_keys на целевом сервере
+3. Добавь приватный ключ как переменную в GitLab:
+	•	SSH_PRIVATE_KEY (masked, protected)
+
+🛠 Подключение по SSH в .gitlab-ci.yml
+deploy_app:
+  stage: deploy
+  image: alpine:latest
+  before_script:
+    - apk add --no-cache openssh-client
+    - mkdir -p ~/.ssh
+    - echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+    - chmod 600 ~/.ssh/id_rsa
+    - ssh-keyscan -H $DEPLOY_HOST >> ~/.ssh/known_hosts
+  script:
+    - scp ./dist/* $DEPLOY_USER@$DEPLOY_HOST:/var/www/html/
+    - ssh $DEPLOY_USER@$DEPLOY_HOST 'sudo systemctl restart myapp'
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main"'
+
+🔑 Что ещё добавить в GitLab Variables:
+SSH_PRIVATE_KEY -----BEGIN RSA... File, masked, protected
+DEPLOY_USER ubuntu обычная
+DEPLOY_HOST 192.168.1.100 или prod.example.com обычная
+
+
+ ## Ключевые команды:
+
+
+---
+
+### Задание
+
+1.
+
+
+1. ` `
+
+```
+
+```
+
+`При необходимости прикрепитe сюда скриншоты
+![Название скриншота 1](ссылка на скриншот 1)`
+![Название скриншота 1](ссылка на скриншот 1)`
+![Название скриншота 1](ссылка на скриншот 1)`
+---
+
+# Модуль "`GitLab CI/CD`" - `GLCI-11 Manual jobs и environment`
+
+ ### 🎯 Цель урока
+Manual jobs и environments: контроль, staging и прод
+
+---
+
+ ## 📘 Теория (кратко)
+
+🔹 Manual job — запуск вручную
+
+Иногда нужно, чтобы job не запускалась автоматически, а только по кнопке:
+	•	ручной деплой на production,
+	•	одобрение QA,
+	•	запуск очистки или бэкапа.
+job_name:
+  script: ...
+  when: manual
+🔹 Можно комбинировать с allow_failure: true, чтобы она не ломала pipeline, если не запущена.
+
+🔹 Environments — окружения в GitLab
+
+GitLab позволяет вести трекинг деплоев в разные среды (например, dev, staging, prod).
+deploy_staging:
+  environment:
+    name: staging
+    url: https://staging.example.com
+📍 В GitLab появится вкладка Deployments, где видно:
+	•	кто деплоил,
+	•	когда,
+	•	на какое окружение,
+	•	commit SHA и pipeline.
+
+🔄 Смена окружения
+
+GitLab умеет:
+	•	показывать активную версию на staging/prod,
+	•	переключать между окружениями,
+	•	сравнивать состояния.
+
+🧠 Типовой пример:
+deploy_production:
+  stage: deploy
+  script:
+    - echo "Deploy to PROD"
+  environment:
+    name: production
+    url: https://prod.example.com
+  when: manual
+  only:
+    - main
+
+
+
+ ## Ключевые команды:
+
+---
+
+### Задание
+
+1. Создай job:
+	•	имя: deploy_staging
+	•	тип: manual
+	•	окружение: staging
+	•	URL: https://staging.example.com
+	•	команда: echo Deploy to STAGING
+
+
+1. `Добавь в .gitlab-ci.yml`
+
+```
+deploy_staging:
+  stage: deploy
+  script:
+    - echo "Deploy to STAGING"
+  when: manual
+  environment:
+    name: staging
+    url: https://staging.example.com
+  only:
+    - main
+```
+2. `Сделай push в main`
+
+```
+
+```
+3. `В UI появится кнопка “Play” в пайплайне`
+
+```
+
+```
+4. `Запусти job и проверь, что в Deployments → staging появилась запись`
+
+```
+
+```
+5. `Результат`
+
+```
+image: node:18
+
+stages:
+  - build_app
+  - test_app
+  - deploy
+  - notify
+
+build_app:
+  stage: build_app
+  script:
+    - echo Hello
+    - npm ci
+  cache:
+    paths:
+      - node_modules/
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main"'
+      when: always
+    - when: never
+
+test_app:
+  stage: test_app
+  image: node:17
+  script: npm test
+    - echo Hello
+
+deploy_staging:
+  stage: deploy
+  script:
+    - echo "Deploy to STAGING"
+  when: manual
+  environment:
+    name: staging
+    url: https://staging.example.com
+  only:
+    - main
+
+notify_success:
+  stage: notify
+  script:
+    - |
+      MESSAGE="✅ УСПЕХ%0AПроект: *${CI_PROJECT_NAME}*%0AВетка: *${CI_COMMIT_BRANCH}*%0A[Пайплайн](${CI_PIPELINE_URL})"
+      curl -s -X POST "https://api.telegram.org/bot${TG_BOT_TOKEN}/sendMessage" \
+        -d chat_id="${TG_CHAT_ID}" \
+        -d text="${MESSAGE}" \
+        -d parse_mode=Markdown
+  when: on_success
+  allow_failure: false
+
+notify_failure:
+  stage: notify
+  script:
+    - |
+      MESSAGE="❌ ОШИБКА%0AПроект: *${CI_PROJECT_NAME}*%0AВетка: *${CI_COMMIT_BRANCH}*%0A[Пайплайн](${CI_PIPELINE_URL})"
+      curl -s -X POST "https://api.telegram.org/bot${TG_BOT_TOKEN}/sendMessage" \
+        -d chat_id="${TG_CHAT_ID}" \
+        -d text="${MESSAGE}" \
+        -d parse_mode=Markdown
+  when: on_failure
+  allow_failure: true
+
+```
+
+`При необходимости прикрепитe сюда скриншоты
+![Название скриншота 1](ссылка на скриншот 1)`
+![Название скриншота 1](ссылка на скриншот 1)`
+![Название скриншота 1](ссылка на скриншот 1)`
+---
+
+
+# Модуль "`GitLab CI/CD`" - `GLCI-12 Review Apps и dynamic environments`
+
+ ### 🎯 Цель урока
+Review Apps и Dynamic Environments
+
+---
+
+ ## 📘 Теория (кратко)
+🔹 Что такое Review App?
+
+Review App — это временное окружение, которое GitLab создаёт на каждую ветку или Merge Request. Например:
+	•	MR feature/login создаёт review/feature-login с сайтом feature-login.example.com
+	•	После мержа — автоматически удаляется
+
+🧠 Это позволяет:
+	•	Тестировать каждую ветку изолированно
+	•	Демонстрировать изменения менеджеру или QA
+	•	Не держать всё в staging
+
+🔹 Что такое dynamic environment?
+
+Dynamic environment — это переменная часть имени окружения, которая зависит от ветки или MR.
+environment:
+  name: review/$CI_COMMIT_REF_SLUG
+  url: https://$CI_COMMIT_REF_SLUG.example.com
+📌 $CI_COMMIT_REF_SLUG = slug-версия имени ветки (feature/login → feature-login)
+
+🔁 Автоматическое удаление
+
+GitLab умеет удалять временные окружения:
+environment:
+  name: review/$CI_COMMIT_REF_SLUG
+  action: stop
+Job со action: stop можно триггерить по кнопке или автоматически в GitLab UI при закрытии MR.
+
+🧠 Пример: деплой на поддомен
+deploy_review:
+  stage: deploy
+  script:
+    - ./deploy.sh $CI_COMMIT_REF_SLUG
+  environment:
+    name: review/$CI_COMMIT_REF_SLUG
+    url: https://$CI_COMMIT_REF_SLUG.example.com
+  only:
+    - merge_requests
+
+ ## Ключевые команды:
+
+---
+
+### Задание
+
+1.
+
+1. ` `
+
+```
+
+```
+
+`При необходимости прикрепитe сюда скриншоты
+![Название скриншота 1](ссылка на скриншот 1)`
+![Название скриншота 1](ссылка на скриншот 1)`
+![Название скриншота 1](ссылка на скриншот 1)`
+---
+
+# Модуль "`GitLab CI/CD`" - `GLCI-13 Include, extends, `
+
+ ### 🎯 Цель урока
+Include, extends и templates в GitLab CI/CD
+---
+
+ ## 📘 Теория (кратко)
+
+🔹 Проблема
+
+Когда .gitlab-ci.yml разрастается, он становится:
+	•	нечитабельным,
+	•	неудобным для поддержки,
+	•	сложным для повторного использования.
+
+🧠 Решение: разбить на части и переиспользовать код.
+
+🔸 1. include: — подключение внешних .yml файлов
+include:
+  - local: 'ci/deploy.yml'
+  - project: 'group/other-project'
+    file: '/templates/test.yml'
+  - remote: 'https://example.com/gitlab-ci-template.yml'
+local Файл внутри текущего проекта
+project Файл из другого проекта
+remote Внешний URL
+template Официальные шаблоны GitLab (например, Docker, Go, Node.js
+
+🔸 2. extends: — переиспользование job-шаблонов
+Позволяет создать базовую job, а потом на её основе создавать другие:
+.default_test_template:
+  script:
+    - npm ci
+    - npm test
+  image: node:18
+
+unit_test:
+  extends: .default_test_template
+  stage: test
+🧠 Все поля script, image, before_script и т.д. унаследуются.
+
+🔸 3. default: — переопределение значений по умолчанию
+default:
+  image: node:18
+  before_script:
+    - npm ci
+Тогда в каждой job не нужно повторять это снова.
+
+✅ Пример большого пайплайна:
+include:
+  - local: 'ci/deploy.yml'
+  - remote: 'https://gitlab.com/templates/node-ci.yml'
+
+default:
+  image: node:18
+  before_script:
+    - npm ci
+
+.test_template:
+  script:
+    - npm test
+
+test_unit:
+  extends: .test_template
+  stage: test
+
+
+ ## Ключевые команды:
+
+
+---
+
+### Задание
+
+1. 	Вынеси job деплоя в файл ci/deploy.yml
+2.	Создай шаблон .test_template и используй его в unit_test
+3.	Добавь include: local: ci/deploy.yml
+
+1. `Файл 1: .gitlab-ci.yml`
+
+```
+include:
+  - local: 'ci/deploy.yml'
+
+default:
+  image: node:18
+
+.test_template:
+  script:
+    - npm test
+
+unit_test:
+  extends: .test_template
+  stage: test
+```
+2. `Файл 2: ci/deploy.yml`
+
+```
+deploy_prod:
+  stage: deploy
+  script:
+    - echo "Deploy to PROD"
+  only:
+    - main
+```
+
+
+`При необходимости прикрепитe сюда скриншоты
+![Название скриншота 1](ссылка на скриншот 1)`
+![Название скриншота 1](ссылка на скриншот 1)`
+![Название скриншота 1](ссылка на скриншот 1)`
+---
+
+
+# Модуль "`GitLab CI/CD`" - `GLCI-14 Мониторинг и отчёты в пайплайне`
+
+ ### 🎯 Цель урока
+Мониторинг и отчёты в GitLab CI/CD
+
+---
+
+ ## 📘 Теория (кратко)
+
+🔹 Зачем мониторинг внутри CI/CD?
+
+DevOps — это не только деплой. Это:
+	•	проверка качества: тесты, линт, покрытие,
+	•	сбор артефактов: HTML-отчёты, скриншоты,
+	•	визуализация результатов.
+
+🧠 GitLab CI поддерживает:
+	•	junit отчёты (unit-тесты)
+	•	coverage (покрытие кода)
+	•	HTML-отчёты (линтеры, тесты, сканеры)
+
+🔸 1. JUnit отчёты
+
+Формат: XML-файл junit.xml.
+Добавь в job:
+unit_tests:
+  script:
+    - npm test -- --reporters=jest-junit
+  artifacts:
+    reports:
+      junit: report.xml
+📊 Результаты появятся в GitLab UI → Tests → ✔/❌
+
+🔸 2. Покрытие кода (coverage:)
+
+GitLab умеет собирать и отображать % покрытия прямо в UI.
+unit_tests:
+  coverage: '/All files[^|]*\|[^|]*\s+([\d\.]+)/'
+Ты можешь:
+	•	задать регулярку,
+	•	видеть покрытие прямо в Merge Request,
+	•	добавить “fail if coverage < threshold”.
+
+🔸 3. HTML-отчёты
+
+Например, ESLint, Jest, Lighthouse, SAST — всё, что может сгенерировать HTML.
+lint_job:
+  script:
+    - npm run lint
+  artifacts:
+    paths:
+      - eslint-report.html
+    reports:
+      dotenv: eslint-report.html
+Или просто:
+  artifacts:
+    paths:
+      - coverage/
+GitLab отобразит это как доступный для скачивания артефакт.
+
+
+ ## Ключевые команды:
+
+---
+
+### Задание
+
+1.Добавь в pipeline:
+	•	unit_tests job
+	•	отчёт в формате JUnit (report.xml)
+	•	регулярку на coverage (вывод вида: Coverage: 84.2%)
+	•	HTML-отчёт из coverage/index.html
+
+1. `Убедись, что coverage выводится в логах.`
+
+```
+unit_tests:
+  stage: test
+  script:
+    - npm run test -- --coverage
+    - cp coverage/lcov-report/index.html coverage/index.html
+  coverage: '/Coverage:\s(\d+\.\d+)%/'
+  artifacts:
+    paths:
+      - coverage/index.html
+    reports:
+      junit: report.xml
+```
+2. `	Зайди в UI → Tests, Coverage, Download.`
+
+```
+image: node:18
+
+stages:
+  - build_app
+  - test_app
+  - deploy
+  - notify
+
+build_app:
+  stage: build_app
+  script:
+    - echo Hello
+    - npm ci
+  cache:
+    paths:
+      - node_modules/
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main"'
+      when: always
+    - when: never
+
+test_app:
+  stage: test_app
+  script:
+    - npm run test -- --coverage
+    - cp coverage/lcov-report/index.html coverage/index.html
+  coverage: '/Coverage:\s(\d+\.\d+)%/'
+  artifacts:
+    paths:
+      - coverage/index.html
+    reports:
+      junit: report.xml
+
+deploy_staging:
+  stage: deploy
+  script:
+    - echo "Deploy to STAGING"
+  when: manual
+  environment:
+    name: staging
+    url: https://staging.example.com
+  only:
+    - main
+
+notify_success:
+  stage: notify
+  script:
+    - |
+      MESSAGE="✅ УСПЕХ%0AПроект: *${CI_PROJECT_NAME}*%0AВетка: *${CI_COMMIT_BRANCH}*%0A[Пайплайн](${CI_PIPELINE_URL})"
+      curl -s -X POST "https://api.telegram.org/bot${TG_BOT_TOKEN}/sendMessage" \
+        -d chat_id="${TG_CHAT_ID}" \
+        -d text="${MESSAGE}" \
+        -d parse_mode=Markdown
+  when: on_success
+  allow_failure: false
+
+notify_failure:
+  stage: notify
+  script:
+    - |
+      MESSAGE="❌ ОШИБКА%0AПроект: *${CI_PROJECT_NAME}*%0AВетка: *${CI_COMMIT_BRANCH}*%0A[Пайплайн](${CI_PIPELINE_URL})"
+      curl -s -X POST "https://api.telegram.org/bot${TG_BOT_TOKEN}/sendMessage" \
+        -d chat_id="${TG_CHAT_ID}" \
+        -d text="${MESSAGE}" \
+        -d parse_mode=Markdown
+  when: on_failure
+  allow_failure: true
+
+```
+
+
+`При необходимости прикрепитe сюда скриншоты
+![Название скриншота 1](ссылка на скриншот 1)`
+![Название скриншота 1](ссылка на скриншот 1)`
+![Название скриншота 1](ссылка на скриншот 1)`
+---
+
+
+# Модуль "`GitLab CI/CD`" - `GLCI-15 CI/CD для монорепы`
+
+ ### 🎯 Цель урока
+CI/CD для монорепозитория (monorepo)
+
+---
+
+ ## 📘 Теория (кратко)
+
+🔹 Что такое монорепозиторий?
+
+Monorepo (монорепозиторий) — это один Git-репозиторий, в котором хранятся несколько приложений, сервисов или компонентов.
+
+Пример структуры:
+.
+├── services/
+│   ├── frontend/
+│   ├── backend/
+│   └── api-gateway/
+├── shared/
+│   └── utils/
+.gitlab-ci.yml
+
+🔸 Проблема
+
+При каждом коммите:
+	•	GitLab запускает весь пайплайн, даже если ты изменил только frontend/
+	•	Это медленно, неэффективно и дорого
+
+✅ Решения
+
+1. Использовать rules: changes:
+build_frontend:
+  script: cd services/frontend && npm run build
+  rules:
+    - changes:
+        - services/frontend/**/*
+🔹 GitLab сравнивает изменённые файлы, и запускает job только при наличии изменений.
+
+2. Использовать include-файлы для подмодулей
+
+Разделяй пайплайн на отдельные файлы:
+include:
+  - local: .gitlab-ci/frontend.yml
+  - local: .gitlab-ci/backend.yml
+Каждый файл содержит job’ы для соответствующего сервиса.
+
+3. Переиспользование шаблонов через extends
+
+Создай шаблон job’а и применяй к нужным модулям:
+.build_template:
+  script:
+    - npm ci
+    - npm run build
+
+build_backend:
+  extends: .build_template
+  rules:
+    - changes:
+        - services/backend/**/*
+
+💡 Best practices
+rules: changes: для избирательных запусков
+include: для разделения логики
+extends: для шаблонов
+
+
+ ## Ключевые команды:
+
+---
+
+### Задание
+
+1. Создай job:
+	•	build_frontend
+	•	Запускается ТОЛЬКО если изменён код в services/frontend/**
+	•	Выполняет: npm install && npm run build
+
+1. `Можно сделать такой же job для backend — повторить с другой директорией.`
+```
+build_frontend:
+  stage: build
+  script:
+    - cd services/frontend
+    - npm install
+    - npm run build
+  rules:
+    - changes:
+        - services/frontend/**/*
+```
+
+`При необходимости прикрепитe сюда скриншоты
+![Название скриншота 1](ссылка на скриншот 1)`
+![Название скриншота 1](ссылка на скриншот 1)`
+![Название скриншота 1](ссылка на скриншот 1)`
+---
+
+
+
+# Модуль "`GitLab CI/CD`" - `DOCKER-GLCI-01 Docker-образ: сборка и пуш в GitLab Registry`
+
+ ### 🎯 Цель урока
+Собрать Docker-образ приложения и автоматически запушить его в GitLab Container Registry с помощью .gitlab-ci.yml.
+
+---
+
+ ## 📂 Исходные условия:
+	•	Есть проект в GitLab с исходным кодом (можно заглушку).
+	•	Установлен и зарегистрирован GitLab Runner (shared или custom).
+	•	Docker доступен на runner’е (shell- или docker-executor с установленным Docker).
+	•	Приватный токен/логин не нужен, если используешь встроенный GitLab Registry (он работает по CI_REGISTRY, CI_REGISTRY_IMAGE, CI_JOB_TOKEN).
 
  ## Ключевые команды:
 
@@ -1398,70 +1998,77 @@ strategy:
 	•	Использует переменную APP_NAME
 	•	(по желанию) — используй секрет SUPER_SECRET (можешь создать фиктивный)
 
-1. `Создай новую ветку gha-02-matrix-env`
+1. `Добавь .gitlab-ci.yml, в котором: •	есть stage build •	job использует Docker •	билдит образ •	пушит его в registry.gitlab.com/<твой_юзер>/<твой_проект>:latest`
 
 ```
-git switch -c gha-02-matrix-env
-Switched to a new branch 'gha-02-matrix-env'
-```
-2. `Создай matrix.yml в .github/workflows/`
+image: node:18
 
-```
-touch .github/workflows/matrix.yml
-```
-3. `Определи: •	env: переменную APP_NAME •	matrix: стратегию с env: [dev, stage, prod]`
+stages:
+  - build_app
+  - test_app
+  - deploy
+  - notify
 
-```
-name: CI Pipeline
+build_app:
+  stage: build_app
+  image: docker:24.0.7
+  services:
+    - docker:24.0.7-dind
+  variables:
+    DOCKER_DRIVER: overlay2
+  before_script:
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_JOB_TOKEN" "$CI_REGISTRY"
+  script:
+    - docker build -t "$CI_REGISTRY_IMAGE:latest" .
+    - docker push "$CI_REGISTRY_IMAGE:latest"
 
-on: [push]
+test_app:
+  stage: test_app
+  script:
+    - npm run test -- --coverage
+    - cp coverage/lcov-report/index.html coverage/index.html
+  coverage: '/Coverage:\s(\d+\.\d+)%/'
+  artifacts:
+    paths:
+      - coverage/index.html
+    reports:
+      junit: report.xml
 
-env:
-  APP_NAME: MyCoolApp
+deploy_staging:
+  stage: deploy
+  script:
+    - echo "Deploy to STAGING"
+  when: manual
+  environment:
+    name: staging
+    url: https://staging.example.com
+  only:
+    - main
 
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        env: [dev, stage, prod]
+notify_success:
+  stage: notify
+  script:
+    - |
+      MESSAGE="✅ УСПЕХ%0AПроект: *${CI_PROJECT_NAME}*%0AВетка: *${CI_COMMIT_BRANCH}*%0A[Пайплайн](${CI_PIPELINE_URL})"
+      curl -s -X POST "https://api.telegram.org/bot${TG_BOT_TOKEN}/sendMessage" \
+        -d chat_id="${TG_CHAT_ID}" \
+        -d text="${MESSAGE}" \
+        -d parse_mode=Markdown
+  when: on_success
+  allow_failure: false
 
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+notify_failure:
+  stage: notify
+  script:
+    - |
+      MESSAGE="❌ ОШИБКА%0AПроект: *${CI_PROJECT_NAME}*%0AВетка: *${CI_COMMIT_BRANCH}*%0A[Пайплайн](${CI_PIPELINE_URL})"
+      curl -s -X POST "https://api.telegram.org/bot${TG_BOT_TOKEN}/sendMessage" \
+        -d chat_id="${TG_CHAT_ID}" \
+        -d text="${MESSAGE}" \
+        -d parse_mode=Markdown
+  when: on_failure
+  allow_failure: true
 
-      - name: Print Deploy
-        run: echo "Deploying $APP_NAME to ${{ matrix.env }}"
-
-      - name: Use secret
-        run: echo "Secret доступен"
-```
-4. `Сделай git push — проверь, что workflow сработал`
-
-```
- git push -u origin gha-02-matrix-env
-Enumerating objects: 9, done.
-Counting objects: 100% (9/9), done.
-Delta compression using up to 10 threads
-Compressing objects: 100% (5/5), done.
-Writing objects: 100% (5/5), 479 bytes | 479.00 KiB/s, done.
-Total 5 (delta 2), reused 0 (delta 0), pack-reused 0
-remote: Resolving deltas: 100% (2/2), completed with 2 local objects.
-To https://github.com/DavyRoy/DevOps_practick.git
-   f9d5ef2..ed49aa4  gha-02-matrix-env -> gha-02-matrix-env
-branch 'gha-02-matrix-env' set up to track 'origin/gha-02-matrix-env'.
-```
-5. `Перейди в GitHub → вкладка Actions → убедись в успешном выполнении`
-
-```
-Run echo "Deploying $APP_NAME to dev"
-Deploying MyCoolApp to dev
-
-Run echo "Deploying $APP_NAME to stage"
-Deploying MyCoolApp to stage
-
-Run echo "Deploying $APP_NAME to prod"
-Deploying MyCoolApp to prod
 
 ```
 
@@ -1472,41 +2079,16 @@ Deploying MyCoolApp to prod
 ---
 
 
-# Модуль "`GitLab CI/CD`" - `GHA-03 Основы job-стратегий и условий выполнения`
+# Модуль "`GitLab CI/CD`" - `DOCKER-GLCI-02 Автосборка по пушу в main`
 
  ### 🎯 Цель урока
-Основы job-стратегий и условий выполнения (strategy + if)
+Настроить CI/CD-процесс так, чтобы Docker-образ автоматически собирался и пушился в GitLab Registry при каждом коммите в ветку main.
 
 ---
 
- ## 📘 Теория (кратко)
-
-GitHub Actions поддерживает гибкое управление выполнением задач с помощью:
-
-📌 Условных операторов (if)
-
-Позволяют выполнять шаги или job’ы только при выполнении условий: if: github.ref == 'refs/heads/main'
-Примеры:
-if: success() Выполнить, если предыдущие шаги успешны (по умолчанию)
-if: failure() Выполнить, если предыдущие шаги завершились с ошибкой
-if: github.actor == 'DavyRoy' Только если запустил указанный пользователь
-if: matrix.env == 'prod' Выполнять шаг только для prod-окружения
-
-📌 Стратегия fail-fast и max-parallel
-
-strategy:
-  fail-fast: false - Останавливает все job’ы, если одна упала (true по умолчанию)
-  max-parallel: 2 - Число job’ов, выполняемых параллельно
-
-📌 Условие на шаг (step) vs job:
-
-jobs:
-  deploy:
-    if: github.ref == 'refs/heads/main' # условие на весь job
-    ...
-    steps:
-      - name: Only on prod
-        if: matrix.env == 'prod'
+ ## 📂 Исходные условия:
+	•	.gitlab-ci.yml уже содержит job по сборке Docker-образа (см. DOCKER-GLCI-01)
+	•	Проект размещён в GitLab, ветка main есть
 
 
  ## Ключевые команды:
@@ -1516,93 +2098,24 @@ jobs:
 
 ### Задание
 
-1. Создай workflow, который:
-	•	Запускается по push
-	•	Имеет матрицу окружений: dev, stage, prod
-	•	Выполняет:
-	•	echo "Деплой на ..." во всех
-	•	Дополнительный step только для prod с echo "!!! Production deploy !!!"
-	•	Добавь fail-fast: false
-	•	Установи max-parallel: 1
+1.
 
 
-1. `Создай новую ветку gha-03-conditional-prod`
+1. `1.	Ограничь запуск сборки только для ветки main в job’е build_app:
+🔹 Используй директиву:`
 
 ```
-git switch -c gha-03-conditional-prod
-Switched to a new branch 'gha-03-conditional-prod'
+rules:
+  - if: '$CI_COMMIT_BRANCH == "main"'
+    when: always
 ```
-2. `Файл .github/workflows/conditional.yml`
+2. `Результат`
 
 ```
 touch .github/workflows/conditional.yml
 
 ```
-3. `Используй matrix.env: [dev, stage, prod]`
 
-```
-
-```
-4. `Добавь: •	if: matrix.env == 'prod' для спец-шагов •	Параметры fail-fast, max-parallel в стратегии`
-
-```
-name: CI Pipeline
-
-on: [push]
-
-env:
-  APP_NAME: ConditionalAPP
-
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      max-parallel: 1
-      matrix:
-        env: [dev, stage, prod]
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Диплой всех окружений
-        run: echo "Диплой $APP_NAME на ${{ matrix.env }}"
-
-      - name: Only on prod
-        if: matrix.env == 'prod'
-        run: echo "!!! Production deploy !!!"
-```
-5. `Сделай git push — проверь, что workflow сработал`
-
-```
-git push -u origin gha-02-matrix-env
-Enumerating objects: 9, done.
-Counting objects: 100% (9/9), done.
-Delta compression using up to 10 threads
-Compressing objects: 100% (5/5), done.
-Writing objects: 100% (5/5), 479 bytes | 479.00 KiB/s, done.
-Total 5 (delta 2), reused 0 (delta 0), pack-reused 0
-remote: Resolving deltas: 100% (2/2), completed with 2 local objects.
-To https://github.com/DavyRoy/DevOps_practick.git
-   f9d5ef2..ed49aa4  gha-02-matrix-env -> gha-02-matrix-env
-branch 'gha-02-matrix-env' set up to track 'origin/gha-02-matrix-env'.
-```
-6. `Перейди в GitHub → вкладка Actions → убедись в успешном выполнении`
-
-```
-Run echo "Диплой $APP_NAME на dev"
-Диплой ConditionalAPP на dev
-
-Run echo "Диплой $APP_NAME на stage"
-Диплой ConditionalAPP на stage
-
-Run echo "Диплой $APP_NAME на prod"
-Диплой ConditionalAPP на prod
-0s
-Run echo "!!! Production deploy !!!"
-!!! Production deploy !!!
-```
 
 `При необходимости прикрепитe сюда скриншоты
 ![Название скриншота 1](ссылка на скриншот 1)`
@@ -1610,44 +2123,17 @@ Run echo "!!! Production deploy !!!"
 ![Название скриншота 1](ссылка на скриншот 1)`
 ---
 
-# Модуль "`GitLab CI/CD`" - `GHA-04 — CI-пайплайн: линтинг, тесты, артефакты`
+# Модуль "`GitLab CI/CD`" - `DOCKER-GLCI-03 — CI/CD с multi-stage Dockerfile`
 
  ### 🎯 Цель урока
-CI-пайплайн: линтинг, тесты, артефакты
+Оптимизировать Dockerfile проекта с помощью multi-stage build, а затем настроить .gitlab-ci.yml, чтобы он использовал этот новый, более эффективный процесс сборки и пуша образа.
 
 ---
 
- ## 📘 Теория (кратко)
-
-Цель любого CI-пайплайна — автоматическая проверка кода перед мержем или деплоем. Классическая структура пайплайна:
-	1.	Lint — проверка стиля (например, eslint, flake8, yamllint)
-	2.	Test — юнит-тесты, интеграционные тесты (pytest, jest, go test, и т.п.)
-	3.	Build / Артефакты — создание артефактов (например, бинарников, отчётов о тестах и пр.)
-
-📌 Как сохранять артефакты в GitHub Actions?
-- name: Save build artifacts
-  uses: actions/upload-artifact@v4
-  with:
-    name: my-artifacts
-    path: ./build/
-🔹 Файл или папка ./build/ будет доступна для скачивания из вкладки Artifacts в интерфейсе Actions.
-
-🛠 Пример CI:
-jobs:
-  lint:
-    steps:
-      - run: flake8 app/
-  test:
-    steps:
-      - run: pytest tests/
-  build:
-    steps:
-      - run: make build
-      - uses: actions/upload-artifact@v4
-        with:
-          name: binary
-          path: ./dist/
-
+ ## 📂 Исходные условия:
+	•	У тебя уже есть рабочий .gitlab-ci.yml и Dockerfile
+	•	Используется Node.js (судя по предыдущим job’ам)
+	•	Образ пушится в GitLab Registry
 
  ## Ключевые команды:
 
@@ -1655,853 +2141,99 @@ jobs:
 
 ### Задание
 
-1. Создай CI workflow, который:
-	•	Запускается при push в любую ветку
-	•	Делает:
-	•	Линтинг — проверь синтаксис *.yml файлов (например, yamllint)
-	•	Тест — симулируй тестирование (команда echo "Тесты пройдены")
-	•	Build — создай папку build/ с каким-то файлом (например, touch build/app.txt)
-	•	Загрузи build/ как артефакт
 
-1. `Ветка: gha-04-ci-pipeline`
+1. `Перепиши Dockerfile в формате multi-stage: •	Первый stage: сборка приложения (node install, npm run build) •	Второй stage: только финальные артефакты, например dist/, public/, без node_modules, кэша, etc. Пример (если фронтенд-приложение на Node):`
 
 ```
-git switch -c gha-04-ci-pipeline
-Switched to a new branch 'gha-04-ci-pipeline'
+# Stage 1: Build
+FROM node:18 AS builder
+WORKDIR /app
+COPY package*.json ./
+RUN npm ci
+COPY . .
+RUN npm run build
+
+# Stage 2: Runtime
+FROM nginx:alpine
+COPY --from=builder /app/dist /usr/share/nginx/html
 ```
-2. `Файл: .github/workflows/ci.yml`
-
-```
-touch .github/workflows/ci.yml
-```
-3. `Стадии: lint, test, build — как отдельные job, Используй upload-artifact только в job build, Линт — можешь установить yamllint (pip install yamllint) или сделать echo "Lint passed" — главное структура`
-
-```
----
-name: CI Pipeline
-
-on:
-  push:
-
-
-jobs:
-  lint:
-    name: Линтинг YAML файлов
-    runs-on: ubuntu-latest
-    steps:
-      - name: Клонируем код
-        uses: actions/checkout@v3
-
-      - name: Проверка синтаксиса YAML (симулированная)
-        run: |
-           sudo apt update
-           sudo apt install -y python3-pip
-           pip install yamllint
-           yamllint .
-
-  test:
-    name: Тестирование
-    runs-on: ubuntu-latest
-    needs: lint
-    steps:
-      - name: Клонируем код
-        uses: actions/checkout@v3
-
-      - name: Запускаем тесты (симуляция)
-        run: echo "Тесты пройдены"
-
-  build:
-    name: Сборка
-    runs-on: ubuntu-latest
-    needs: test
-    steps:
-      - name: Клонируем код
-        uses: actions/checkout@v3
-
-      - name: Создаём папку build/ и файл
-        run: |
-          mkdir -p build
-          echo "Hello from build" > build/app.txt
-
-      - name: Загружаем артефакт
-        uses: actions/upload-artifact@v4
-        with:
-          name: build-artifact
-          path: build/
+2. `Обнови .gitlab-ci.yml: •	Ничего принципиально менять не нужно, если docker build по-прежнему находит Dockerfile`
 
 ```
-4. `Сделай git push — проверь, что workflow сработал`
-
-```
-git push -u origin gha-04-ci-pipeline
-Enumerating objects: 26, done.
-Counting objects: 100% (26/26), done.
-Delta compression using up to 10 threads
-Compressing objects: 100% (13/13), done.
-Writing objects: 100% (14/14), 1.26 KiB | 1.26 MiB/s, done.
-Total 14 (delta 7), reused 0 (delta 0), pack-reused 0
-remote: Resolving deltas: 100% (7/7), completed with 7 local objects.
-To https://github.com/DavyRoy/DevOps_practick.git
-   b55b770..adaba9e  gha-04-ci-pipeline -> gha-04-ci-pipeline
-branch 'gha-04-ci-pipeline' set up to track 'origin/gha-04-ci-pipeline'.
-```
-5. `Перейди в GitHub → вкладка Actions → убедись в успешном выполнении`
-
-```
-Reading package lists...
-Building dependency tree...
-Reading state information...
-python3-pip is already the newest version (24.0+dfsg-1ubuntu1.1).
-0 upgraded, 0 newly installed, 0 to remove and 16 not upgraded.
-Defaulting to user installation because normal site-packages is not writeable
-Collecting yamllint
-  Downloading yamllint-1.37.1-py3-none-any.whl.metadata (4.3 kB)
-Collecting pathspec>=0.5.3 (from yamllint)
-  Downloading pathspec-0.12.1-py3-none-any.whl.metadata (21 kB)
-Requirement already satisfied: pyyaml in /usr/lib/python3/dist-packages (from yamllint) (6.0.1)
-Downloading yamllint-1.37.1-py3-none-any.whl (68 kB)
-   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 68.8/68.8 kB 9.4 MB/s eta 0:00:00
-Downloading pathspec-0.12.1-py3-none-any.whl (31 kB)
-Installing collected packages: pathspec, yamllint
-Successfully installed pathspec-0.12.1 yamllint-1.37.1
-./.github/workflows/matrix.yml
-
-./.github/workflows/ci.yml
-
-./.github/workflows/conditional.yml
-
-./.github/workflows/basic.yml
-
-Run echo "Тесты пройдены"
-Тесты пройдены
-
-Run mkdir -p build
-```
-
-`При необходимости прикрепитe сюда скриншоты
-![Название скриншота 1](ссылка на скриншот 1)`
-![Название скриншота 1](ссылка на скриншот 1)`
-![Название скриншота 1](ссылка на скриншот 1)`
----
-
-
-# Модуль "`GitLab CI/CD`" - `GHA-05 — Деплой и кастомные действия (actions)`
-
- ### 🎯 Цель урока
-Деплой и кастомные действия (actions)
-
----
-
- ## 📘 Теория (кратко)
-
-🔹 Деплой в CI/CD
-
-Под “деплоем” в GitHub Actions обычно понимается:
-	•	пуш в DockerHub / GitHub Container Registry
-	•	деплой в Kubernetes, облако, FTP, сервер и т.д.
-
-🧠 Сам деплой может быть:
-	•	Через обычный run: ...
-	•	Через сторонние готовые actions
-	•	Через кастомные actions, написанные под проект
-
-🔹 Готовые actions (из маркетплейса)
-
-Пример: деплой на FTP
-- name: Deploy via FTP
-  uses: SamKirkland/FTP-Deploy-Action@v4
-  with:
-    server: ftp.example.com
-    username: ${{ secrets.FTP_USER }}
-    password: ${{ secrets.FTP_PASS }}
-
-🔹 Кастомные actions (свои)
-
-Ты можешь создать свою action:
-	•	В формате Docker (исполняется в контейнере)
-	•	В формате JavaScript (исполняется прямо в раннере)
-
-📁 Структура:
-/my-action
-  └── action.yml
-  └── entrypoint.sh
-
-🧾 action.yml (пример shell-скрипта):
-name: Hello Action
-description: Prints Hello
-runs:
-  using: "docker"
-  image: "Dockerfile"
-
-🧾 Dockerfile:
-FROM alpine
-COPY entrypoint.sh /entrypoint.sh
-ENTRYPOINT ["/entrypoint.sh"]
-
-🧾 entrypoint.sh:
-#!/bin/sh
-echo "Hello from custom action!"
-
- ## Ключевые команды:
-
----
-
-### Задание
-
-1. Создай кастомную action на shell (через Docker), которая:
-	•	Выводит сообщение: 📦 Deploying $APP_NAME to $ENV
-
-Создай workflow, который:
-	•	Запускается по push
-	•	Передаёт в action переменные APP_NAME и ENV
-	•	Вызывает кастомную action из поддиректории .github/actions/deploy
-
-1. `Ветка: gha-05-custom-deploy`
-
-```
-git switch -c gha-05-custom-deploy
-Switched to a new branch 'gha-05-custom-deploy'
-```
-2. `Создай структуру`
-
-```
-.github/
-  workflows/ci-deploy.yml
-  actions/deploy/
-    Dockerfile
-    entrypoint.sh
-    action.yml
-```
-3. `Кастомная action должна принимать input-параметры: •	app_name •	env`
-
-```
-
-```
-4. `В workflow передай эти параметры в uses: ./github/actions/deploy`
-
-```
-.github/actions/deploy/entrypoint.sh
----
-#!/bin/sh
-echo "📦 Deploying $APP_NAME to $ENV"
-
- .github/actions/deploy/Dockerfile
- ---
- FROM alpine
-
-COPY entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
-
-ENTRYPOINT ["/entrypoint.sh"]
-
-.github/actions/deploy/action.yml
----
-name: Hello Deploy Action
-description: Кастомная action для вывода деплоя
-
-inputs:
-  app_name:
-    description: Название приложения
-    required: true
-  env:
-    description: Окружение
-    required: true
-
-runs:
-  using: "docker"
-  image: "Dockerfile"
-  env:
-    APP_NAME: ${{ inputs.app_name }}
-    ENV: ${{ inputs.env }}
-
- .github/workflows/ci-deploy.yml
- ---
- name: Deploy Workflow
-
-on:
-  push:
-
-jobs:
-  deploy:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Deploy via custom action
-        uses: ./github/actions/deploy
-        with:
-          app_name: MyCoolApp
-          env: stage
-```
-5. `Сделай git push — проверь, что workflow сработал`
-
-```
-git push -u origin gha-05-custom-deploy
-
-Enumerating objects: 7, done.
-Counting objects: 100% (7/7), done.
-Delta compression using up to 10 threads
-Compressing objects: 100% (4/4), done.
-Writing objects: 100% (4/4), 421 bytes | 421.00 KiB/s, done.
-Total 4 (delta 2), reused 0 (delta 0), pack-reused 0
-remote: Resolving deltas: 100% (2/2), completed with 2 local objects.
-To https://github.com/DavyRoy/DevOps_practick.git
-   9b7b60a..204ffc0  gha-05-custom-deploy -> gha-05-custom-deploy
-branch 'gha-05-custom-deploy' set up to track 'origin/gha-05-custom-deploy'.
-```
-6. `Перейди в GitHub → вкладка Actions → убедись в успешном выполнении`
-
-```
-Run ./.github/actions/deploy
-Building docker image
-/usr/bin/docker run --name e9dfd6c852384a3524454c9d77e2e9bf2fbae5_0e4e7c --label e9dfd6 --workdir /github/workspace --rm -e "INPUT_APP_NAME" -e "INPUT_ENV" -e "APP_NAME" -e "ENV" -e "HOME" -e "GITHUB_JOB" -e "GITHUB_REF" -e "GITHUB_SHA" -e "GITHUB_REPOSITORY" -e "GITHUB_REPOSITORY_OWNER" -e "GITHUB_REPOSITORY_OWNER_ID" -e "GITHUB_RUN_ID" -e "GITHUB_RUN_NUMBER" -e "GITHUB_RETENTION_DAYS" -e "GITHUB_RUN_ATTEMPT" -e "GITHUB_ACTOR_ID" -e "GITHUB_ACTOR" -e "GITHUB_WORKFLOW" -e "GITHUB_HEAD_REF" -e "GITHUB_BASE_REF" -e "GITHUB_EVENT_NAME" -e "GITHUB_SERVER_URL" -e "GITHUB_API_URL" -e "GITHUB_GRAPHQL_URL" -e "GITHUB_REF_NAME" -e "GITHUB_REF_PROTECTED" -e "GITHUB_REF_TYPE" -e "GITHUB_WORKFLOW_REF" -e "GITHUB_WORKFLOW_SHA" -e "GITHUB_REPOSITORY_ID" -e "GITHUB_TRIGGERING_ACTOR" -e "GITHUB_WORKSPACE" -e "GITHUB_ACTION" -e "GITHUB_EVENT_PATH" -e "GITHUB_ACTION_REPOSITORY" -e "GITHUB_ACTION_REF" -e "GITHUB_PATH" -e "GITHUB_ENV" -e "GITHUB_STEP_SUMMARY" -e "GITHUB_STATE" -e "GITHUB_OUTPUT" -e "RUNNER_OS" -e "RUNNER_ARCH" -e "RUNNER_NAME" -e "RUNNER_ENVIRONMENT" -e "RUNNER_TOOL_CACHE" -e "RUNNER_TEMP" -e "RUNNER_WORKSPACE" -e "ACTIONS_RUNTIME_URL" -e "ACTIONS_RUNTIME_TOKEN" -e "ACTIONS_CACHE_URL" -e "ACTIONS_RESULTS_URL" -e GITHUB_ACTIONS=true -e CI=true -v "/var/run/docker.sock":"/var/run/docker.sock" -v "/home/runner/work/_temp/_github_home":"/github/home" -v "/home/runner/work/_temp/_github_workflow":"/github/workflow" -v "/home/runner/work/_temp/_runner_file_commands":"/github/file_commands" -v "/home/runner/work/DevOps_practick/DevOps_practick":"/github/workspace" e9dfd6:c852384a3524454c9d77e2e9bf2fbae5
-📦 Deploying MyCoolApp to stage
-```
-
-`При необходимости прикрепитe сюда скриншоты
-![Название скриншота 1](ссылка на скриншот 1)`
-![Название скриншота 1](ссылка на скриншот 1)`
-![Название скриншота 1](ссылка на скриншот 1)`
----
-
-# Модуль "`GitLab CI/CD`" - `DOC-GHA-01 Автосборка Docker-образа по пушу`
-
- ### 🎯 Цель урока
-Как работает автосборка Docker-образа через GitHub Actions
----
-
- ## 📘 Теория (кратко)
-
-🔹 Общая идея:
-
-GitHub Actions позволяет запускать CI/CD-процессы при событиях в репозитории. В случае Docker-сборки — при каждом пуше GitHub может:
-	•	Проверить код
-	•	Собрать Docker-образ
-	•	Потестировать его
-	•	Отправить в DockerHub или другой реестр
-
-🔹 Основные компоненты:
-.github/workflows/*.ymlОписание пайплайна
-on: Триггер (например, push, pull_request)
-jobs: Список задач, которые выполняются
-runs-on: Указывает ОС runner-а (например, ubuntu-latest)
-steps: Последовательность шагов внутри job-а
-
-🔹 Как происходит сборка Docker-образа
-	1.	Получение кода — GitHub сам клонирует репозиторий.
-	2.	Установка Docker — runner использует Ubuntu с предустановленным Docker.
-	3.	Сборка образа — docker build -t имя .
-	4.	(опционально) Push — docker push требует логина в реестр (будет в следующем юните)
-
-⸻
-
-🔹 Что важно учитывать:
-	•	GitHub Actions не работает “по крону” сам по себе — нужны события: push, pull_request, workflow_dispatch (ручной запуск).
-	•	Runner’ы имеют ограничения по ресурсам (CPU, RAM) и времени выполнения (обычно 6 часов для public repo).
-	•	Переменные и секреты задаются в разделе Settings → Secrets репозитория.
-	•	GitHub Actions можно запускать вручную или автоматически, и это позволяет внедрить инфраструктуру как код даже на уровне CI.
-
-
- ## Ключевые команды:
-
-
----
-
-### Задание
-
-1. Настрой автоматическую сборку Docker-образа при пуше в репозиторий.
-Workflow должен запускаться при любом коммите в ветку main.
-Цель — убедиться, что образ успешно собирается на CI, но не пушится в DockerHub (ещё рано).
-
-1. `Создай .github/workflows/docker-build.yml.`
-
-```
-touch .github/workflows/docker-build.yml
-```
-2. `Укажи событие push в ветку main.`
-
-```
-
-```
-3. `Добавь job на базе ubuntu-latest.`
-
-```
-
-```
-4. `Добавь step для сборки Docker-образа из Dockerfile в корне репозитория.`
-
-```
-nano .github/workflows/docker-build.yml
-name: Build Docker image
-
-on:
-  push:
-    branches:
-      - main
-
-jobs:
-  deploy:
-    runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Build Docker image
-        run: docker build -t test-image:latest ./.github/actions/deploy
-
-```
-
-5. `Убедись, что workflow проходит после коммита.`
-
-```
-Run ./.github/actions/deploy
-Building docker image
-/usr/bin/docker run --name ccc482fb2784ff45f69a94bb5eb091235c_985deb --label 0443cc --workdir /github/workspace --rm -e "HOME" -e "GITHUB_JOB" -e "GITHUB_REF" -e "GITHUB_SHA" -e "GITHUB_REPOSITORY" -e "GITHUB_REPOSITORY_OWNER" -e "GITHUB_REPOSITORY_OWNER_ID" -e "GITHUB_RUN_ID" -e "GITHUB_RUN_NUMBER" -e "GITHUB_RETENTION_DAYS" -e "GITHUB_RUN_ATTEMPT" -e "GITHUB_ACTOR_ID" -e "GITHUB_ACTOR" -e "GITHUB_WORKFLOW" -e "GITHUB_HEAD_REF" -e "GITHUB_BASE_REF" -e "GITHUB_EVENT_NAME" -e "GITHUB_SERVER_URL" -e "GITHUB_API_URL" -e "GITHUB_GRAPHQL_URL" -e "GITHUB_REF_NAME" -e "GITHUB_REF_PROTECTED" -e "GITHUB_REF_TYPE" -e "GITHUB_WORKFLOW_REF" -e "GITHUB_WORKFLOW_SHA" -e "GITHUB_REPOSITORY_ID" -e "GITHUB_TRIGGERING_ACTOR" -e "GITHUB_WORKSPACE" -e "GITHUB_ACTION" -e "GITHUB_EVENT_PATH" -e "GITHUB_ACTION_REPOSITORY" -e "GITHUB_ACTION_REF" -e "GITHUB_PATH" -e "GITHUB_ENV" -e "GITHUB_STEP_SUMMARY" -e "GITHUB_STATE" -e "GITHUB_OUTPUT" -e "RUNNER_OS" -e "RUNNER_ARCH" -e "RUNNER_NAME" -e "RUNNER_ENVIRONMENT" -e "RUNNER_TOOL_CACHE" -e "RUNNER_TEMP" -e "RUNNER_WORKSPACE" -e "ACTIONS_RUNTIME_URL" -e "ACTIONS_RUNTIME_TOKEN" -e "ACTIONS_CACHE_URL" -e "ACTIONS_RESULTS_URL" -e GITHUB_ACTIONS=true -e CI=true -v "/var/run/docker.sock":"/var/run/docker.sock" -v "/home/runner/work/_temp/_github_home":"/github/home" -v "/home/runner/work/_temp/_github_workflow":"/github/workflow" -v "/home/runner/work/_temp/_runner_file_commands":"/github/file_commands" -v "/home/runner/work/DevOps_practick/DevOps_practick":"/github/workspace" 0443cc:c482fb2784ff45f69a94bb5eb091235c
-Hello from the deploy action!
-```
-
-`При необходимости прикрепитe сюда скриншоты
-![Название скриншота 1](ссылка на скриншот 1)`
-![Название скриншота 1](ссылка на скриншот 1)`
-![Название скриншота 1](ссылка на скриншот 1)`
----
-
-
-# Модуль "`GitLab CI/CD`" - `DOC-GHA-03 Разделение build и push по шагам`
-
- ### 🎯 Цель урока
-Зачем разделять build и push в GitHub Actions
-
----
-
- ## 📘 Теория (кратко)
-
-🔹 Почему нельзя всё в одном шаге?
-
-Сборка и публикация — это разные стадии CI/CD:
-	•	build — можно кэшировать, использовать как артефакт, проверять на ошибки.
-	•	push — требует внешнего взаимодействия, секретов и даёт побочный эффект (меняет внешний реестр).
-
-Разделение даёт:
-	•	🧪 Гибкость: можно выполнять тесты между build и push.
-	•	🔒 Безопасность: push выполняется только при определённых условиях (например, из main, из PR с одобрением и т.д.).
-	•	💨 Кэширование и многопоточность: docker/build-push-action умеет собирать быстрее через buildx.
-
-🔹 Используемые экшены:
-- uses: docker/setup-buildx-action@v3
-- uses: docker/login-action@v3
-- uses: docker/build-push-action@v5
-
-🔹 Стратегия:
-      - name: Build (only)
-        uses: docker/build-push-action@v5
-        with:
-          push: false
-
-      - name: Push (only)
-        uses: docker/build-push-action@v5
-        with:
-          push: true
-🔹 Пример сценария:
-	1.	Выполняем build → проверяем → если всё хорошо, push.
-	2.	Это удобно при pull request’ах: build делается, но push разрешён только в main.
-
-
-
- ## Ключевые команды:
-
----
-
-### Задание
-
-1. Настрой .github/workflows/docker-release.yml, в котором:
-	•	При пуше в main происходит сборка образа,
-	•	Потом (в отдельном step-е) — публикация его в DockerHub.
-
-Оба шага должны быть чётко разделены, и между ними можно будет вставить шаг проверки или echo.
-
-1. `Создай workflow docker-release.yml.`
-
-```
-touch docker-release.yml
-```
-2. `Используй docker/setup-buildx-action для подготовки билдера.`
-
-```
-
-```
-3. `Первый шаг — build образа, но без пуша (push: false).`
-
-```
-
-```
-4. `Второй шаг — push образа в DockerHub, используй secrets.`
-
-```
-
-```
-5. `Теги: yourusername/appname:latest`
-
-```
-name: Docker Release
-
-on:
-  push:
-    branches:
-      - main  # только при пуше в main
-
-jobs:
-  docker-release:
-    name: 🐳 Build & Push Docker Image
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: 📥 Checkout repo
-        uses: actions/checkout@v3
-
-      - name: 🔧 Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-
-      - name: 🔐 Login to DockerHub
-        uses: docker/login-action@v3
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-
-      - name: 🛠️ Build Docker image
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          push: false
-          tags: yourusername/appname:latest
-          outputs: type=docker  # локальный образ для следующего шага
-
-      - name: ✅ Проверка после сборки
-        run: echo "Образ успешно собран. Переходим к публикации..."
-
-      - name: 📤 Push Docker image
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          push: true
-          tags: yourusername/appname:latest
-```
-
-`При необходимости прикрепитe сюда скриншоты
-![Название скриншота 1](ссылка на скриншот 1)`
-![Название скриншота 1](ссылка на скриншот 1)`
-![Название скриншота 1](ссылка на скриншот 1)`
----
-
-
-# Модуль "`GitLab CI/CD`" - `GHA-01 — Введение в GitHub Actions`
-
- ### 🎯 Цель урока
-Понять, как устроены GitHub Actions
-
----
-
- ## 📘 Теория (кратко)
-
-📂 Где живёт CI?
-
-GitHub Actions читают YAML-файлы из каталога .github/workflows/.
-Каждый .yml в этой папке — это workflow, который выполняется по определённому событию (push, pull_request и т.д.)
-
-🛠 Основная структура файла workflow:
-name: Имя воркфлоу
-
-on: событие_триггер
-jobs:
-  имя_джоба:
-    runs-on: runner
-    steps:
-      - name: шаг
-        run: команда
-
-🔑 Ключевые элементы:
-name: Имя workflow (для читаемости в GitHub UI)
-on: Событие, при котором запускается workflow (push, pull_request, schedule, и др.)
-jobs: Логические блоки задач, которые могут запускаться параллельно или последовательно
-runs-on: Тип runner’а (обычно ubuntu-latest)
-steps: Последовательные шаги внутри job
-run: Shell-команда для выполнения
-uses: Использование стороннего действия (например, actions/checkout@v4)
-
-🧠 Как это работает:
-	•	GitHub Actions следит за событиями (on:).
-	•	При совпадении события (push, pull_request) — запускается workflow.
-	•	В jobs: описаны независимые блоки задач, исполняющиеся на runner-ах.
-	•	В steps: находятся конкретные действия: shell-команды или сторонние actions.
-
- ## Ключевые команды:1
-
----
-
-### Задание
-
-1. Разверни минимальный workflow, который при каждом пуше:
-	•	Выполняет checkout репозитория
-	•	Выводит текущее время и приветствие в лог
-
-1. `Создай новую ветку gha-01-basic-workflow`
-```
-git switch -c gha-01-basic-workflow
-Switched to a new branch 'gha-01-basic-workflow'
-```
-2. `В папке .github/workflows/ создай файл basic.yml`
-```
-mkdir .github/workflows/
-touch .github/workflows/basic.yml
-```
-3. `Опиши workflow по шаблону выше (используй run: и uses: шаги)`
-```
-`name: CI Pipeline
-
-on: [push]
-
-jobs:
-  build:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Print Hello and Date
-        run: |
-          echo "Привет! Сейчас: $(date '+%d.%m.%Y %H:%M')"
-```
-4. `Сделай git push — проверь, что workflow сработал`
-
-```
-git add .
-git commit -m "new commit"
-[gha-01-basic-workflow 746985d] new commit
- 5 files changed, 1498 insertions(+), 940 deletions(-)
- create mode 100644 .github/ISSUE_TEMPLATE/workflows/basic.yml
- create mode 100644 GitHub/test copy.md
- delete mode 100644 GitHub/test.md
- create mode 100644 GitHub/ticket copy.md
- delete mode 100644 GitHub/ticket.md
-git push -u origin gha-01-basic-workflow
-Enumerating objects: 7, done.
-Counting objects: 100% (7/7), done.
-Delta compression using up to 10 threads
-Compressing objects: 100% (3/3), done.
-Writing objects: 100% (4/4), 408 bytes | 408.00 KiB/s, done.
-Total 4 (delta 1), reused 0 (delta 0), pack-reused 0
-remote: Resolving deltas: 100% (1/1), completed with 1 local object.
-To https://github.com/DavyRoy/DevOps_practick.git
-   746985d..c4ea227  gha-01-basic-workflow -> gha-01-basic-workflow
-branch 'gha-01-basic-workflow' set up to track 'origin/gha-01-basic-workflow'.
-```
-5. `Перейди в GitHub → вкладка Actions → убедись в успешном выполнении`
-
-```
-build
-succeeded 9 minutes ago in 4s
-
-0s
-Current runner version: '2.323.0'
-Operating System
-Runner Image
-Runner Image Provisioner
-GITHUB_TOKEN Permissions
-Secret source: Actions
-Prepare workflow directory
-Prepare all required actions
-Getting action download info
-Download immutable action package 'actions/checkout@v4'
-Complete job name: build
-1s
-Run actions/checkout@v4
-Syncing repository: DavyRoy/DevOps_practick
-Getting Git version info
-Temporarily overriding HOME='/home/runner/work/_temp/4acc4139-13aa-4f28-850e-6c16ddc41bb1' before making global git config changes
-Adding repository directory to the temporary git global config as a safe directory
-/usr/bin/git config --global --add safe.directory /home/runner/work/DevOps_practick/DevOps_practick
-Deleting the contents of '/home/runner/work/DevOps_practick/DevOps_practick'
-Initializing the repository
-Disabling automatic garbage collection
-Setting up auth
-Fetching the repository
-Determining the checkout info
-/usr/bin/git sparse-checkout disable
-/usr/bin/git config --local --unset-all extensions.worktreeConfig
-Checking out the ref
-/usr/bin/git log -1 --format=%H
-c4ea2274a198f461fafb6ba5001ea85a6e87c526
-0s
-Run echo "Привет! Сейчас: $(date '+%d.%m.%Y %H:%M')"
-Привет! Сейчас: 15.05.2025 08:15
-0s
-Post job cleanup.
-/usr/bin/git version
-git version 2.49.0
-Temporarily overriding HOME='/home/runner/work/_temp/4f3e3cd8-aa84-4030-bbf1-3ad269c0bcd9' before making global git config changes
-Adding repository directory to the temporary git global config as a safe directory
-/usr/bin/git config --global --add safe.directory /home/runner/work/DevOps_practick/DevOps_practick
-/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
-/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
-/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
-http.https://github.com/.extraheader
-/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
-/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
-0s
-Cleaning up orphan processes
-```
-
-
-`При необходимости прикрепитe сюда скриншоты
-![Название скриншота 1](ссылка на скриншот 1)`
-![Название скриншота 1](ссылка на скриншот 1)`
-![Название скриншота 1](ссылка на скриншот 1)`
----
-
-
-
-# Модуль "`GitLab CI/CD`" - `GHA-02 Переменные, секреты и матрицы`
-
- ### 🎯 Цель урока
-Переменные, секреты и матрицы
-
----
-
- ## 📘 Теория (кратко)
-
-🔹 1. Переменные (env)
-
-GitHub Actions поддерживает переменные окружения, которые можно определять:
-	•	На уровне workflow:
-env:
-  APP_ENV: production
-
-	•	Внутри job или step:
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    env:
-      BUILD_MODE: release
-
-	•	Внутри конкретного step:
-      - name: Print mode
-        run: echo "$BUILD_MODE"
-        env:
-          BUILD_MODE: debug
-🔸 Также переменные можно переопределять на любом уровне.
-
-🔐 2. Секреты (secrets)
-	•	Хранятся в Settings → Secrets вашего репозитория.
-	•	Доступны через ${{ secrets.MY_SECRET }}
-Пример:
-      - name: Login to DockerHub
-        run: docker login -u ${{ secrets.DOCKER_USER }} -p ${{ secrets.DOCKER_PASS }}
-⚠️ Никогда не логируй секреты с помощью echo.
-
-🔁 3. Матрицы (matrix)
-
-Позволяют запускать job несколько раз с разными параметрами:
-jobs:
-  test:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node: [14, 16, 18]
-    steps:
-      - run: echo "Testing with Node.js ${{ matrix.node }}"
-📌 В этом примере:
-	•	job выполнится 3 раза
-	•	В каждой итерации matrix.node будет 14, 16 и 18
-
-Можно передавать несколько параметров:
-strategy:
-  matrix:
-    os: [ubuntu-latest, macos-latest]
-    version: [1.0, 2.0]
-👉 Будет 2×2 = 4 запусках job’а (все комбинации os + version)
-
- ## Ключевые команды:
-
-
----
-
-### Задание
-
-1. Создай новый workflow, который:
-	•	Запускается при push
-	•	Использует матрицу из 3-х параметров: "dev", "stage", "prod"
-	•	Для каждого варианта:
-	•	Печатает Текущий ENV: dev (и т.п.)
-	•	Использует переменную APP_NAME
-	•	(по желанию) — используй секрет SUPER_SECRET (можешь создать фиктивный)
-
-1. `Создай новую ветку gha-02-matrix-env`
-
-```
-git switch -c gha-02-matrix-env
-Switched to a new branch 'gha-02-matrix-env'
-```
-2. `Создай matrix.yml в .github/workflows/`
-
-```
-touch .github/workflows/matrix.yml
-```
-3. `Определи: •	env: переменную APP_NAME •	matrix: стратегию с env: [dev, stage, prod]`
-
-```
-name: CI Pipeline
-
-on: [push]
-
-env:
-  APP_NAME: MyCoolApp
-
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        env: [dev, stage, prod]
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Print Deploy
-        run: echo "Deploying $APP_NAME to ${{ matrix.env }}"
-
-      - name: Use secret
-        run: echo "Secret доступен"
-```
-4. `Сделай git push — проверь, что workflow сработал`
-
-```
- git push -u origin gha-02-matrix-env
-Enumerating objects: 9, done.
-Counting objects: 100% (9/9), done.
-Delta compression using up to 10 threads
-Compressing objects: 100% (5/5), done.
-Writing objects: 100% (5/5), 479 bytes | 479.00 KiB/s, done.
-Total 5 (delta 2), reused 0 (delta 0), pack-reused 0
-remote: Resolving deltas: 100% (2/2), completed with 2 local objects.
-To https://github.com/DavyRoy/DevOps_practick.git
-   f9d5ef2..ed49aa4  gha-02-matrix-env -> gha-02-matrix-env
-branch 'gha-02-matrix-env' set up to track 'origin/gha-02-matrix-env'.
-```
-5. `Перейди в GitHub → вкладка Actions → убедись в успешном выполнении`
-
-```
-Run echo "Deploying $APP_NAME to dev"
-Deploying MyCoolApp to dev
-
-Run echo "Deploying $APP_NAME to stage"
-Deploying MyCoolApp to stage
-
-Run echo "Deploying $APP_NAME to prod"
-Deploying MyCoolApp to prod
+image: node:18
+
+stages:
+  - build_app
+  - test_app
+  - deploy
+  - notify
+
+build_app:
+  stage: build_app
+  image: docker:24.0.7
+  services:
+    - docker:24.0.7-dind
+  variables:
+    DOCKER_DRIVER: overlay2
+  before_script:
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_JOB_TOKEN" "$CI_REGISTRY"
+  script:
+    - docker build -t "$CI_REGISTRY_IMAGE:latest" .
+    - docker push "$CI_REGISTRY_IMAGE:latest"
+  cache:
+    paths:
+      - node_modules/
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main"'
+      when: always
+    - when: never
+
+test_app:
+  stage: test_app
+  script:
+    - npm run test -- --coverage
+    - cp coverage/lcov-report/index.html coverage/index.html
+  coverage: '/Coverage:\s(\d+\.\d+)%/'
+  artifacts:
+    paths:
+      - coverage/index.html
+    reports:
+      junit: report.xml
+
+deploy_staging:
+  stage: deploy
+  script:
+    - echo "Deploy to STAGING"
+  when: manual
+  environment:
+    name: staging
+    url: https://staging.example.com
+  only:
+    - main
+
+notify_success:
+  stage: notify
+  script:
+    - |
+      MESSAGE="✅ УСПЕХ%0AПроект: *${CI_PROJECT_NAME}*%0AВетка: *${CI_COMMIT_BRANCH}*%0A[Пайплайн](${CI_PIPELINE_URL})"
+      curl -s -X POST "https://api.telegram.org/bot${TG_BOT_TOKEN}/sendMessage" \
+        -d chat_id="${TG_CHAT_ID}" \
+        -d text="${MESSAGE}" \
+        -d parse_mode=Markdown
+  when: on_success
+  allow_failure: false
+
+notify_failure:
+  stage: notify
+  script:
+    - |
+      MESSAGE="❌ ОШИБКА%0AПроект: *${CI_PROJECT_NAME}*%0AВетка: *${CI_COMMIT_BRANCH}*%0A[Пайплайн](${CI_PIPELINE_URL})"
+      curl -s -X POST "https://api.telegram.org/bot${TG_BOT_TOKEN}/sendMessage" \
+        -d chat_id="${TG_CHAT_ID}" \
+        -d text="${MESSAGE}" \
+        -d parse_mode=Markdown
+  when: on_failure
+  allow_failure: true
 
 ```
 
@@ -2512,1765 +2244,3 @@ Deploying MyCoolApp to prod
 ---
 
 
-# Модуль "`GitLab CI/CD`" - `GHA-03 Основы job-стратегий и условий выполнения`
-
- ### 🎯 Цель урока
-Основы job-стратегий и условий выполнения (strategy + if)
-
----
-
- ## 📘 Теория (кратко)
-
-GitHub Actions поддерживает гибкое управление выполнением задач с помощью:
-
-📌 Условных операторов (if)
-
-Позволяют выполнять шаги или job’ы только при выполнении условий: if: github.ref == 'refs/heads/main'
-Примеры:
-if: success() Выполнить, если предыдущие шаги успешны (по умолчанию)
-if: failure() Выполнить, если предыдущие шаги завершились с ошибкой
-if: github.actor == 'DavyRoy' Только если запустил указанный пользователь
-if: matrix.env == 'prod' Выполнять шаг только для prod-окружения
-
-📌 Стратегия fail-fast и max-parallel
-
-strategy:
-  fail-fast: false - Останавливает все job’ы, если одна упала (true по умолчанию)
-  max-parallel: 2 - Число job’ов, выполняемых параллельно
-
-📌 Условие на шаг (step) vs job:
-
-jobs:
-  deploy:
-    if: github.ref == 'refs/heads/main' # условие на весь job
-    ...
-    steps:
-      - name: Only on prod
-        if: matrix.env == 'prod'
-
-
- ## Ключевые команды:
-
-
----
-
-### Задание
-
-1. Создай workflow, который:
-	•	Запускается по push
-	•	Имеет матрицу окружений: dev, stage, prod
-	•	Выполняет:
-	•	echo "Деплой на ..." во всех
-	•	Дополнительный step только для prod с echo "!!! Production deploy !!!"
-	•	Добавь fail-fast: false
-	•	Установи max-parallel: 1
-
-
-1. `Создай новую ветку gha-03-conditional-prod`
-
-```
-git switch -c gha-03-conditional-prod
-Switched to a new branch 'gha-03-conditional-prod'
-```
-2. `Файл .github/workflows/conditional.yml`
-
-```
-touch .github/workflows/conditional.yml
-
-```
-3. `Используй matrix.env: [dev, stage, prod]`
-
-```
-
-```
-4. `Добавь: •	if: matrix.env == 'prod' для спец-шагов •	Параметры fail-fast, max-parallel в стратегии`
-
-```
-name: CI Pipeline
-
-on: [push]
-
-env:
-  APP_NAME: ConditionalAPP
-
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      max-parallel: 1
-      matrix:
-        env: [dev, stage, prod]
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Диплой всех окружений
-        run: echo "Диплой $APP_NAME на ${{ matrix.env }}"
-
-      - name: Only on prod
-        if: matrix.env == 'prod'
-        run: echo "!!! Production deploy !!!"
-```
-5. `Сделай git push — проверь, что workflow сработал`
-
-```
-git push -u origin gha-02-matrix-env
-Enumerating objects: 9, done.
-Counting objects: 100% (9/9), done.
-Delta compression using up to 10 threads
-Compressing objects: 100% (5/5), done.
-Writing objects: 100% (5/5), 479 bytes | 479.00 KiB/s, done.
-Total 5 (delta 2), reused 0 (delta 0), pack-reused 0
-remote: Resolving deltas: 100% (2/2), completed with 2 local objects.
-To https://github.com/DavyRoy/DevOps_practick.git
-   f9d5ef2..ed49aa4  gha-02-matrix-env -> gha-02-matrix-env
-branch 'gha-02-matrix-env' set up to track 'origin/gha-02-matrix-env'.
-```
-6. `Перейди в GitHub → вкладка Actions → убедись в успешном выполнении`
-
-```
-Run echo "Диплой $APP_NAME на dev"
-Диплой ConditionalAPP на dev
-
-Run echo "Диплой $APP_NAME на stage"
-Диплой ConditionalAPP на stage
-
-Run echo "Диплой $APP_NAME на prod"
-Диплой ConditionalAPP на prod
-0s
-Run echo "!!! Production deploy !!!"
-!!! Production deploy !!!
-```
-
-`При необходимости прикрепитe сюда скриншоты
-![Название скриншота 1](ссылка на скриншот 1)`
-![Название скриншота 1](ссылка на скриншот 1)`
-![Название скриншота 1](ссылка на скриншот 1)`
----
-
-# Модуль "`GitLab CI/CD`" - `GHA-04 — CI-пайплайн: линтинг, тесты, артефакты`
-
- ### 🎯 Цель урока
-CI-пайплайн: линтинг, тесты, артефакты
-
----
-
- ## 📘 Теория (кратко)
-
-Цель любого CI-пайплайна — автоматическая проверка кода перед мержем или деплоем. Классическая структура пайплайна:
-	1.	Lint — проверка стиля (например, eslint, flake8, yamllint)
-	2.	Test — юнит-тесты, интеграционные тесты (pytest, jest, go test, и т.п.)
-	3.	Build / Артефакты — создание артефактов (например, бинарников, отчётов о тестах и пр.)
-
-📌 Как сохранять артефакты в GitHub Actions?
-- name: Save build artifacts
-  uses: actions/upload-artifact@v4
-  with:
-    name: my-artifacts
-    path: ./build/
-🔹 Файл или папка ./build/ будет доступна для скачивания из вкладки Artifacts в интерфейсе Actions.
-
-🛠 Пример CI:
-jobs:
-  lint:
-    steps:
-      - run: flake8 app/
-  test:
-    steps:
-      - run: pytest tests/
-  build:
-    steps:
-      - run: make build
-      - uses: actions/upload-artifact@v4
-        with:
-          name: binary
-          path: ./dist/
-
-
- ## Ключевые команды:
-
----
-
-### Задание
-
-1. Создай CI workflow, который:
-	•	Запускается при push в любую ветку
-	•	Делает:
-	•	Линтинг — проверь синтаксис *.yml файлов (например, yamllint)
-	•	Тест — симулируй тестирование (команда echo "Тесты пройдены")
-	•	Build — создай папку build/ с каким-то файлом (например, touch build/app.txt)
-	•	Загрузи build/ как артефакт
-
-1. `Ветка: gha-04-ci-pipeline`
-
-```
-git switch -c gha-04-ci-pipeline
-Switched to a new branch 'gha-04-ci-pipeline'
-```
-2. `Файл: .github/workflows/ci.yml`
-
-```
-touch .github/workflows/ci.yml
-```
-3. `Стадии: lint, test, build — как отдельные job, Используй upload-artifact только в job build, Линт — можешь установить yamllint (pip install yamllint) или сделать echo "Lint passed" — главное структура`
-
-```
----
-name: CI Pipeline
-
-on:
-  push:
-
-
-jobs:
-  lint:
-    name: Линтинг YAML файлов
-    runs-on: ubuntu-latest
-    steps:
-      - name: Клонируем код
-        uses: actions/checkout@v3
-
-      - name: Проверка синтаксиса YAML (симулированная)
-        run: |
-           sudo apt update
-           sudo apt install -y python3-pip
-           pip install yamllint
-           yamllint .
-
-  test:
-    name: Тестирование
-    runs-on: ubuntu-latest
-    needs: lint
-    steps:
-      - name: Клонируем код
-        uses: actions/checkout@v3
-
-      - name: Запускаем тесты (симуляция)
-        run: echo "Тесты пройдены"
-
-  build:
-    name: Сборка
-    runs-on: ubuntu-latest
-    needs: test
-    steps:
-      - name: Клонируем код
-        uses: actions/checkout@v3
-
-      - name: Создаём папку build/ и файл
-        run: |
-          mkdir -p build
-          echo "Hello from build" > build/app.txt
-
-      - name: Загружаем артефакт
-        uses: actions/upload-artifact@v4
-        with:
-          name: build-artifact
-          path: build/
-
-```
-4. `Сделай git push — проверь, что workflow сработал`
-
-```
-git push -u origin gha-04-ci-pipeline
-Enumerating objects: 26, done.
-Counting objects: 100% (26/26), done.
-Delta compression using up to 10 threads
-Compressing objects: 100% (13/13), done.
-Writing objects: 100% (14/14), 1.26 KiB | 1.26 MiB/s, done.
-Total 14 (delta 7), reused 0 (delta 0), pack-reused 0
-remote: Resolving deltas: 100% (7/7), completed with 7 local objects.
-To https://github.com/DavyRoy/DevOps_practick.git
-   b55b770..adaba9e  gha-04-ci-pipeline -> gha-04-ci-pipeline
-branch 'gha-04-ci-pipeline' set up to track 'origin/gha-04-ci-pipeline'.
-```
-5. `Перейди в GitHub → вкладка Actions → убедись в успешном выполнении`
-
-```
-Reading package lists...
-Building dependency tree...
-Reading state information...
-python3-pip is already the newest version (24.0+dfsg-1ubuntu1.1).
-0 upgraded, 0 newly installed, 0 to remove and 16 not upgraded.
-Defaulting to user installation because normal site-packages is not writeable
-Collecting yamllint
-  Downloading yamllint-1.37.1-py3-none-any.whl.metadata (4.3 kB)
-Collecting pathspec>=0.5.3 (from yamllint)
-  Downloading pathspec-0.12.1-py3-none-any.whl.metadata (21 kB)
-Requirement already satisfied: pyyaml in /usr/lib/python3/dist-packages (from yamllint) (6.0.1)
-Downloading yamllint-1.37.1-py3-none-any.whl (68 kB)
-   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 68.8/68.8 kB 9.4 MB/s eta 0:00:00
-Downloading pathspec-0.12.1-py3-none-any.whl (31 kB)
-Installing collected packages: pathspec, yamllint
-Successfully installed pathspec-0.12.1 yamllint-1.37.1
-./.github/workflows/matrix.yml
-
-./.github/workflows/ci.yml
-
-./.github/workflows/conditional.yml
-
-./.github/workflows/basic.yml
-
-Run echo "Тесты пройдены"
-Тесты пройдены
-
-Run mkdir -p build
-```
-
-`При необходимости прикрепитe сюда скриншоты
-![Название скриншота 1](ссылка на скриншот 1)`
-![Название скриншота 1](ссылка на скриншот 1)`
-![Название скриншота 1](ссылка на скриншот 1)`
----
-
-
-# Модуль "`GitLab CI/CD`" - `GHA-05 — Деплой и кастомные действия (actions)`
-
- ### 🎯 Цель урока
-Деплой и кастомные действия (actions)
-
----
-
- ## 📘 Теория (кратко)
-
-🔹 Деплой в CI/CD
-
-Под “деплоем” в GitHub Actions обычно понимается:
-	•	пуш в DockerHub / GitHub Container Registry
-	•	деплой в Kubernetes, облако, FTP, сервер и т.д.
-
-🧠 Сам деплой может быть:
-	•	Через обычный run: ...
-	•	Через сторонние готовые actions
-	•	Через кастомные actions, написанные под проект
-
-🔹 Готовые actions (из маркетплейса)
-
-Пример: деплой на FTP
-- name: Deploy via FTP
-  uses: SamKirkland/FTP-Deploy-Action@v4
-  with:
-    server: ftp.example.com
-    username: ${{ secrets.FTP_USER }}
-    password: ${{ secrets.FTP_PASS }}
-
-🔹 Кастомные actions (свои)
-
-Ты можешь создать свою action:
-	•	В формате Docker (исполняется в контейнере)
-	•	В формате JavaScript (исполняется прямо в раннере)
-
-📁 Структура:
-/my-action
-  └── action.yml
-  └── entrypoint.sh
-
-🧾 action.yml (пример shell-скрипта):
-name: Hello Action
-description: Prints Hello
-runs:
-  using: "docker"
-  image: "Dockerfile"
-
-🧾 Dockerfile:
-FROM alpine
-COPY entrypoint.sh /entrypoint.sh
-ENTRYPOINT ["/entrypoint.sh"]
-
-🧾 entrypoint.sh:
-#!/bin/sh
-echo "Hello from custom action!"
-
- ## Ключевые команды:
-
----
-
-### Задание
-
-1. Создай кастомную action на shell (через Docker), которая:
-	•	Выводит сообщение: 📦 Deploying $APP_NAME to $ENV
-
-Создай workflow, который:
-	•	Запускается по push
-	•	Передаёт в action переменные APP_NAME и ENV
-	•	Вызывает кастомную action из поддиректории .github/actions/deploy
-
-1. `Ветка: gha-05-custom-deploy`
-
-```
-git switch -c gha-05-custom-deploy
-Switched to a new branch 'gha-05-custom-deploy'
-```
-2. `Создай структуру`
-
-```
-.github/
-  workflows/ci-deploy.yml
-  actions/deploy/
-    Dockerfile
-    entrypoint.sh
-    action.yml
-```
-3. `Кастомная action должна принимать input-параметры: •	app_name •	env`
-
-```
-
-```
-4. `В workflow передай эти параметры в uses: ./github/actions/deploy`
-
-```
-.github/actions/deploy/entrypoint.sh
----
-#!/bin/sh
-echo "📦 Deploying $APP_NAME to $ENV"
-
- .github/actions/deploy/Dockerfile
- ---
- FROM alpine
-
-COPY entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
-
-ENTRYPOINT ["/entrypoint.sh"]
-
-.github/actions/deploy/action.yml
----
-name: Hello Deploy Action
-description: Кастомная action для вывода деплоя
-
-inputs:
-  app_name:
-    description: Название приложения
-    required: true
-  env:
-    description: Окружение
-    required: true
-
-runs:
-  using: "docker"
-  image: "Dockerfile"
-  env:
-    APP_NAME: ${{ inputs.app_name }}
-    ENV: ${{ inputs.env }}
-
- .github/workflows/ci-deploy.yml
- ---
- name: Deploy Workflow
-
-on:
-  push:
-
-jobs:
-  deploy:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Deploy via custom action
-        uses: ./github/actions/deploy
-        with:
-          app_name: MyCoolApp
-          env: stage
-```
-5. `Сделай git push — проверь, что workflow сработал`
-
-```
-git push -u origin gha-05-custom-deploy
-
-Enumerating objects: 7, done.
-Counting objects: 100% (7/7), done.
-Delta compression using up to 10 threads
-Compressing objects: 100% (4/4), done.
-Writing objects: 100% (4/4), 421 bytes | 421.00 KiB/s, done.
-Total 4 (delta 2), reused 0 (delta 0), pack-reused 0
-remote: Resolving deltas: 100% (2/2), completed with 2 local objects.
-To https://github.com/DavyRoy/DevOps_practick.git
-   9b7b60a..204ffc0  gha-05-custom-deploy -> gha-05-custom-deploy
-branch 'gha-05-custom-deploy' set up to track 'origin/gha-05-custom-deploy'.
-```
-6. `Перейди в GitHub → вкладка Actions → убедись в успешном выполнении`
-
-```
-Run ./.github/actions/deploy
-Building docker image
-/usr/bin/docker run --name e9dfd6c852384a3524454c9d77e2e9bf2fbae5_0e4e7c --label e9dfd6 --workdir /github/workspace --rm -e "INPUT_APP_NAME" -e "INPUT_ENV" -e "APP_NAME" -e "ENV" -e "HOME" -e "GITHUB_JOB" -e "GITHUB_REF" -e "GITHUB_SHA" -e "GITHUB_REPOSITORY" -e "GITHUB_REPOSITORY_OWNER" -e "GITHUB_REPOSITORY_OWNER_ID" -e "GITHUB_RUN_ID" -e "GITHUB_RUN_NUMBER" -e "GITHUB_RETENTION_DAYS" -e "GITHUB_RUN_ATTEMPT" -e "GITHUB_ACTOR_ID" -e "GITHUB_ACTOR" -e "GITHUB_WORKFLOW" -e "GITHUB_HEAD_REF" -e "GITHUB_BASE_REF" -e "GITHUB_EVENT_NAME" -e "GITHUB_SERVER_URL" -e "GITHUB_API_URL" -e "GITHUB_GRAPHQL_URL" -e "GITHUB_REF_NAME" -e "GITHUB_REF_PROTECTED" -e "GITHUB_REF_TYPE" -e "GITHUB_WORKFLOW_REF" -e "GITHUB_WORKFLOW_SHA" -e "GITHUB_REPOSITORY_ID" -e "GITHUB_TRIGGERING_ACTOR" -e "GITHUB_WORKSPACE" -e "GITHUB_ACTION" -e "GITHUB_EVENT_PATH" -e "GITHUB_ACTION_REPOSITORY" -e "GITHUB_ACTION_REF" -e "GITHUB_PATH" -e "GITHUB_ENV" -e "GITHUB_STEP_SUMMARY" -e "GITHUB_STATE" -e "GITHUB_OUTPUT" -e "RUNNER_OS" -e "RUNNER_ARCH" -e "RUNNER_NAME" -e "RUNNER_ENVIRONMENT" -e "RUNNER_TOOL_CACHE" -e "RUNNER_TEMP" -e "RUNNER_WORKSPACE" -e "ACTIONS_RUNTIME_URL" -e "ACTIONS_RUNTIME_TOKEN" -e "ACTIONS_CACHE_URL" -e "ACTIONS_RESULTS_URL" -e GITHUB_ACTIONS=true -e CI=true -v "/var/run/docker.sock":"/var/run/docker.sock" -v "/home/runner/work/_temp/_github_home":"/github/home" -v "/home/runner/work/_temp/_github_workflow":"/github/workflow" -v "/home/runner/work/_temp/_runner_file_commands":"/github/file_commands" -v "/home/runner/work/DevOps_practick/DevOps_practick":"/github/workspace" e9dfd6:c852384a3524454c9d77e2e9bf2fbae5
-📦 Deploying MyCoolApp to stage
-```
-
-`При необходимости прикрепитe сюда скриншоты
-![Название скриншота 1](ссылка на скриншот 1)`
-![Название скриншота 1](ссылка на скриншот 1)`
-![Название скриншота 1](ссылка на скриншот 1)`
----
-
-# Модуль "`GitLab CI/CD`" - `DOC-GHA-01 Автосборка Docker-образа по пушу`
-
- ### 🎯 Цель урока
-Как работает автосборка Docker-образа через GitHub Actions
----
-
- ## 📘 Теория (кратко)
-
-🔹 Общая идея:
-
-GitHub Actions позволяет запускать CI/CD-процессы при событиях в репозитории. В случае Docker-сборки — при каждом пуше GitHub может:
-	•	Проверить код
-	•	Собрать Docker-образ
-	•	Потестировать его
-	•	Отправить в DockerHub или другой реестр
-
-🔹 Основные компоненты:
-.github/workflows/*.ymlОписание пайплайна
-on: Триггер (например, push, pull_request)
-jobs: Список задач, которые выполняются
-runs-on: Указывает ОС runner-а (например, ubuntu-latest)
-steps: Последовательность шагов внутри job-а
-
-🔹 Как происходит сборка Docker-образа
-	1.	Получение кода — GitHub сам клонирует репозиторий.
-	2.	Установка Docker — runner использует Ubuntu с предустановленным Docker.
-	3.	Сборка образа — docker build -t имя .
-	4.	(опционально) Push — docker push требует логина в реестр (будет в следующем юните)
-
-⸻
-
-🔹 Что важно учитывать:
-	•	GitHub Actions не работает “по крону” сам по себе — нужны события: push, pull_request, workflow_dispatch (ручной запуск).
-	•	Runner’ы имеют ограничения по ресурсам (CPU, RAM) и времени выполнения (обычно 6 часов для public repo).
-	•	Переменные и секреты задаются в разделе Settings → Secrets репозитория.
-	•	GitHub Actions можно запускать вручную или автоматически, и это позволяет внедрить инфраструктуру как код даже на уровне CI.
-
-
- ## Ключевые команды:
-
-
----
-
-### Задание
-
-1. Настрой автоматическую сборку Docker-образа при пуше в репозиторий.
-Workflow должен запускаться при любом коммите в ветку main.
-Цель — убедиться, что образ успешно собирается на CI, но не пушится в DockerHub (ещё рано).
-
-1. `Создай .github/workflows/docker-build.yml.`
-
-```
-touch .github/workflows/docker-build.yml
-```
-2. `Укажи событие push в ветку main.`
-
-```
-
-```
-3. `Добавь job на базе ubuntu-latest.`
-
-```
-
-```
-4. `Добавь step для сборки Docker-образа из Dockerfile в корне репозитория.`
-
-```
-nano .github/workflows/docker-build.yml
-name: Build Docker image
-
-on:
-  push:
-    branches:
-      - main
-
-jobs:
-  deploy:
-    runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Build Docker image
-        run: docker build -t test-image:latest ./.github/actions/deploy
-
-```
-
-5. `Убедись, что workflow проходит после коммита.`
-
-```
-Run ./.github/actions/deploy
-Building docker image
-/usr/bin/docker run --name ccc482fb2784ff45f69a94bb5eb091235c_985deb --label 0443cc --workdir /github/workspace --rm -e "HOME" -e "GITHUB_JOB" -e "GITHUB_REF" -e "GITHUB_SHA" -e "GITHUB_REPOSITORY" -e "GITHUB_REPOSITORY_OWNER" -e "GITHUB_REPOSITORY_OWNER_ID" -e "GITHUB_RUN_ID" -e "GITHUB_RUN_NUMBER" -e "GITHUB_RETENTION_DAYS" -e "GITHUB_RUN_ATTEMPT" -e "GITHUB_ACTOR_ID" -e "GITHUB_ACTOR" -e "GITHUB_WORKFLOW" -e "GITHUB_HEAD_REF" -e "GITHUB_BASE_REF" -e "GITHUB_EVENT_NAME" -e "GITHUB_SERVER_URL" -e "GITHUB_API_URL" -e "GITHUB_GRAPHQL_URL" -e "GITHUB_REF_NAME" -e "GITHUB_REF_PROTECTED" -e "GITHUB_REF_TYPE" -e "GITHUB_WORKFLOW_REF" -e "GITHUB_WORKFLOW_SHA" -e "GITHUB_REPOSITORY_ID" -e "GITHUB_TRIGGERING_ACTOR" -e "GITHUB_WORKSPACE" -e "GITHUB_ACTION" -e "GITHUB_EVENT_PATH" -e "GITHUB_ACTION_REPOSITORY" -e "GITHUB_ACTION_REF" -e "GITHUB_PATH" -e "GITHUB_ENV" -e "GITHUB_STEP_SUMMARY" -e "GITHUB_STATE" -e "GITHUB_OUTPUT" -e "RUNNER_OS" -e "RUNNER_ARCH" -e "RUNNER_NAME" -e "RUNNER_ENVIRONMENT" -e "RUNNER_TOOL_CACHE" -e "RUNNER_TEMP" -e "RUNNER_WORKSPACE" -e "ACTIONS_RUNTIME_URL" -e "ACTIONS_RUNTIME_TOKEN" -e "ACTIONS_CACHE_URL" -e "ACTIONS_RESULTS_URL" -e GITHUB_ACTIONS=true -e CI=true -v "/var/run/docker.sock":"/var/run/docker.sock" -v "/home/runner/work/_temp/_github_home":"/github/home" -v "/home/runner/work/_temp/_github_workflow":"/github/workflow" -v "/home/runner/work/_temp/_runner_file_commands":"/github/file_commands" -v "/home/runner/work/DevOps_practick/DevOps_practick":"/github/workspace" 0443cc:c482fb2784ff45f69a94bb5eb091235c
-Hello from the deploy action!
-```
-
-`При необходимости прикрепитe сюда скриншоты
-![Название скриншота 1](ссылка на скриншот 1)`
-![Название скриншота 1](ссылка на скриншот 1)`
-![Название скриншота 1](ссылка на скриншот 1)`
----
-
-
-# Модуль "`GitLab CI/CD`" - `DOC-GHA-03 Разделение build и push по шагам`
-
- ### 🎯 Цель урока
-Зачем разделять build и push в GitHub Actions
-
----
-
- ## 📘 Теория (кратко)
-
-🔹 Почему нельзя всё в одном шаге?
-
-Сборка и публикация — это разные стадии CI/CD:
-	•	build — можно кэшировать, использовать как артефакт, проверять на ошибки.
-	•	push — требует внешнего взаимодействия, секретов и даёт побочный эффект (меняет внешний реестр).
-
-Разделение даёт:
-	•	🧪 Гибкость: можно выполнять тесты между build и push.
-	•	🔒 Безопасность: push выполняется только при определённых условиях (например, из main, из PR с одобрением и т.д.).
-	•	💨 Кэширование и многопоточность: docker/build-push-action умеет собирать быстрее через buildx.
-
-🔹 Используемые экшены:
-- uses: docker/setup-buildx-action@v3
-- uses: docker/login-action@v3
-- uses: docker/build-push-action@v5
-
-🔹 Стратегия:
-      - name: Build (only)
-        uses: docker/build-push-action@v5
-        with:
-          push: false
-
-      - name: Push (only)
-        uses: docker/build-push-action@v5
-        with:
-          push: true
-🔹 Пример сценария:
-	1.	Выполняем build → проверяем → если всё хорошо, push.
-	2.	Это удобно при pull request’ах: build делается, но push разрешён только в main.
-
-
-
- ## Ключевые команды:
-
----
-
-### Задание
-
-1. Настрой .github/workflows/docker-release.yml, в котором:
-	•	При пуше в main происходит сборка образа,
-	•	Потом (в отдельном step-е) — публикация его в DockerHub.
-
-Оба шага должны быть чётко разделены, и между ними можно будет вставить шаг проверки или echo.
-
-1. `Создай workflow docker-release.yml.`
-
-```
-touch docker-release.yml
-```
-2. `Используй docker/setup-buildx-action для подготовки билдера.`
-
-```
-
-```
-3. `Первый шаг — build образа, но без пуша (push: false).`
-
-```
-
-```
-4. `Второй шаг — push образа в DockerHub, используй secrets.`
-
-```
-
-```
-5. `Теги: yourusername/appname:latest`
-
-```
-name: Docker Release
-
-on:
-  push:
-    branches:
-      - main  # только при пуше в main
-
-jobs:
-  docker-release:
-    name: 🐳 Build & Push Docker Image
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: 📥 Checkout repo
-        uses: actions/checkout@v3
-
-      - name: 🔧 Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-
-      - name: 🔐 Login to DockerHub
-        uses: docker/login-action@v3
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-
-      - name: 🛠️ Build Docker image
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          push: false
-          tags: yourusername/appname:latest
-          outputs: type=docker  # локальный образ для следующего шага
-
-      - name: ✅ Проверка после сборки
-        run: echo "Образ успешно собран. Переходим к публикации..."
-
-      - name: 📤 Push Docker image
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          push: true
-          tags: yourusername/appname:latest
-```
-
-`При необходимости прикрепитe сюда скриншоты
-![Название скриншота 1](ссылка на скриншот 1)`
-![Название скриншота 1](ссылка на скриншот 1)`
-![Название скриншота 1](ссылка на скриншот 1)`
----
-
-
-# Модуль "`GitLab CI/CD`" - `GHA-01 — Введение в GitHub Actions`
-
- ### 🎯 Цель урока
-Понять, как устроены GitHub Actions
-
----
-
- ## 📘 Теория (кратко)
-
-📂 Где живёт CI?
-
-GitHub Actions читают YAML-файлы из каталога .github/workflows/.
-Каждый .yml в этой папке — это workflow, который выполняется по определённому событию (push, pull_request и т.д.)
-
-🛠 Основная структура файла workflow:
-name: Имя воркфлоу
-
-on: событие_триггер
-jobs:
-  имя_джоба:
-    runs-on: runner
-    steps:
-      - name: шаг
-        run: команда
-
-🔑 Ключевые элементы:
-name: Имя workflow (для читаемости в GitHub UI)
-on: Событие, при котором запускается workflow (push, pull_request, schedule, и др.)
-jobs: Логические блоки задач, которые могут запускаться параллельно или последовательно
-runs-on: Тип runner’а (обычно ubuntu-latest)
-steps: Последовательные шаги внутри job
-run: Shell-команда для выполнения
-uses: Использование стороннего действия (например, actions/checkout@v4)
-
-🧠 Как это работает:
-	•	GitHub Actions следит за событиями (on:).
-	•	При совпадении события (push, pull_request) — запускается workflow.
-	•	В jobs: описаны независимые блоки задач, исполняющиеся на runner-ах.
-	•	В steps: находятся конкретные действия: shell-команды или сторонние actions.
-
- ## Ключевые команды:1
-
----
-
-### Задание
-
-1. Разверни минимальный workflow, который при каждом пуше:
-	•	Выполняет checkout репозитория
-	•	Выводит текущее время и приветствие в лог
-
-1. `Создай новую ветку gha-01-basic-workflow`
-```
-git switch -c gha-01-basic-workflow
-Switched to a new branch 'gha-01-basic-workflow'
-```
-2. `В папке .github/workflows/ создай файл basic.yml`
-```
-mkdir .github/workflows/
-touch .github/workflows/basic.yml
-```
-3. `Опиши workflow по шаблону выше (используй run: и uses: шаги)`
-```
-`name: CI Pipeline
-
-on: [push]
-
-jobs:
-  build:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Print Hello and Date
-        run: |
-          echo "Привет! Сейчас: $(date '+%d.%m.%Y %H:%M')"
-```
-4. `Сделай git push — проверь, что workflow сработал`
-
-```
-git add .
-git commit -m "new commit"
-[gha-01-basic-workflow 746985d] new commit
- 5 files changed, 1498 insertions(+), 940 deletions(-)
- create mode 100644 .github/ISSUE_TEMPLATE/workflows/basic.yml
- create mode 100644 GitHub/test copy.md
- delete mode 100644 GitHub/test.md
- create mode 100644 GitHub/ticket copy.md
- delete mode 100644 GitHub/ticket.md
-git push -u origin gha-01-basic-workflow
-Enumerating objects: 7, done.
-Counting objects: 100% (7/7), done.
-Delta compression using up to 10 threads
-Compressing objects: 100% (3/3), done.
-Writing objects: 100% (4/4), 408 bytes | 408.00 KiB/s, done.
-Total 4 (delta 1), reused 0 (delta 0), pack-reused 0
-remote: Resolving deltas: 100% (1/1), completed with 1 local object.
-To https://github.com/DavyRoy/DevOps_practick.git
-   746985d..c4ea227  gha-01-basic-workflow -> gha-01-basic-workflow
-branch 'gha-01-basic-workflow' set up to track 'origin/gha-01-basic-workflow'.
-```
-5. `Перейди в GitHub → вкладка Actions → убедись в успешном выполнении`
-
-```
-build
-succeeded 9 minutes ago in 4s
-
-0s
-Current runner version: '2.323.0'
-Operating System
-Runner Image
-Runner Image Provisioner
-GITHUB_TOKEN Permissions
-Secret source: Actions
-Prepare workflow directory
-Prepare all required actions
-Getting action download info
-Download immutable action package 'actions/checkout@v4'
-Complete job name: build
-1s
-Run actions/checkout@v4
-Syncing repository: DavyRoy/DevOps_practick
-Getting Git version info
-Temporarily overriding HOME='/home/runner/work/_temp/4acc4139-13aa-4f28-850e-6c16ddc41bb1' before making global git config changes
-Adding repository directory to the temporary git global config as a safe directory
-/usr/bin/git config --global --add safe.directory /home/runner/work/DevOps_practick/DevOps_practick
-Deleting the contents of '/home/runner/work/DevOps_practick/DevOps_practick'
-Initializing the repository
-Disabling automatic garbage collection
-Setting up auth
-Fetching the repository
-Determining the checkout info
-/usr/bin/git sparse-checkout disable
-/usr/bin/git config --local --unset-all extensions.worktreeConfig
-Checking out the ref
-/usr/bin/git log -1 --format=%H
-c4ea2274a198f461fafb6ba5001ea85a6e87c526
-0s
-Run echo "Привет! Сейчас: $(date '+%d.%m.%Y %H:%M')"
-Привет! Сейчас: 15.05.2025 08:15
-0s
-Post job cleanup.
-/usr/bin/git version
-git version 2.49.0
-Temporarily overriding HOME='/home/runner/work/_temp/4f3e3cd8-aa84-4030-bbf1-3ad269c0bcd9' before making global git config changes
-Adding repository directory to the temporary git global config as a safe directory
-/usr/bin/git config --global --add safe.directory /home/runner/work/DevOps_practick/DevOps_practick
-/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
-/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
-/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
-http.https://github.com/.extraheader
-/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
-/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
-0s
-Cleaning up orphan processes
-```
-
-
-`При необходимости прикрепитe сюда скриншоты
-![Название скриншота 1](ссылка на скриншот 1)`
-![Название скриншота 1](ссылка на скриншот 1)`
-![Название скриншота 1](ссылка на скриншот 1)`
----
-
-
-
-# Модуль "`GitLab CI/CD`" - `GHA-02 Переменные, секреты и матрицы`
-
- ### 🎯 Цель урока
-Переменные, секреты и матрицы
-
----
-
- ## 📘 Теория (кратко)
-
-🔹 1. Переменные (env)
-
-GitHub Actions поддерживает переменные окружения, которые можно определять:
-	•	На уровне workflow:
-env:
-  APP_ENV: production
-
-	•	Внутри job или step:
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    env:
-      BUILD_MODE: release
-
-	•	Внутри конкретного step:
-      - name: Print mode
-        run: echo "$BUILD_MODE"
-        env:
-          BUILD_MODE: debug
-🔸 Также переменные можно переопределять на любом уровне.
-
-🔐 2. Секреты (secrets)
-	•	Хранятся в Settings → Secrets вашего репозитория.
-	•	Доступны через ${{ secrets.MY_SECRET }}
-Пример:
-      - name: Login to DockerHub
-        run: docker login -u ${{ secrets.DOCKER_USER }} -p ${{ secrets.DOCKER_PASS }}
-⚠️ Никогда не логируй секреты с помощью echo.
-
-🔁 3. Матрицы (matrix)
-
-Позволяют запускать job несколько раз с разными параметрами:
-jobs:
-  test:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node: [14, 16, 18]
-    steps:
-      - run: echo "Testing with Node.js ${{ matrix.node }}"
-📌 В этом примере:
-	•	job выполнится 3 раза
-	•	В каждой итерации matrix.node будет 14, 16 и 18
-
-Можно передавать несколько параметров:
-strategy:
-  matrix:
-    os: [ubuntu-latest, macos-latest]
-    version: [1.0, 2.0]
-👉 Будет 2×2 = 4 запусках job’а (все комбинации os + version)
-
- ## Ключевые команды:
-
-
----
-
-### Задание
-
-1. Создай новый workflow, который:
-	•	Запускается при push
-	•	Использует матрицу из 3-х параметров: "dev", "stage", "prod"
-	•	Для каждого варианта:
-	•	Печатает Текущий ENV: dev (и т.п.)
-	•	Использует переменную APP_NAME
-	•	(по желанию) — используй секрет SUPER_SECRET (можешь создать фиктивный)
-
-1. `Создай новую ветку gha-02-matrix-env`
-
-```
-git switch -c gha-02-matrix-env
-Switched to a new branch 'gha-02-matrix-env'
-```
-2. `Создай matrix.yml в .github/workflows/`
-
-```
-touch .github/workflows/matrix.yml
-```
-3. `Определи: •	env: переменную APP_NAME •	matrix: стратегию с env: [dev, stage, prod]`
-
-```
-name: CI Pipeline
-
-on: [push]
-
-env:
-  APP_NAME: MyCoolApp
-
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        env: [dev, stage, prod]
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Print Deploy
-        run: echo "Deploying $APP_NAME to ${{ matrix.env }}"
-
-      - name: Use secret
-        run: echo "Secret доступен"
-```
-4. `Сделай git push — проверь, что workflow сработал`
-
-```
- git push -u origin gha-02-matrix-env
-Enumerating objects: 9, done.
-Counting objects: 100% (9/9), done.
-Delta compression using up to 10 threads
-Compressing objects: 100% (5/5), done.
-Writing objects: 100% (5/5), 479 bytes | 479.00 KiB/s, done.
-Total 5 (delta 2), reused 0 (delta 0), pack-reused 0
-remote: Resolving deltas: 100% (2/2), completed with 2 local objects.
-To https://github.com/DavyRoy/DevOps_practick.git
-   f9d5ef2..ed49aa4  gha-02-matrix-env -> gha-02-matrix-env
-branch 'gha-02-matrix-env' set up to track 'origin/gha-02-matrix-env'.
-```
-5. `Перейди в GitHub → вкладка Actions → убедись в успешном выполнении`
-
-```
-Run echo "Deploying $APP_NAME to dev"
-Deploying MyCoolApp to dev
-
-Run echo "Deploying $APP_NAME to stage"
-Deploying MyCoolApp to stage
-
-Run echo "Deploying $APP_NAME to prod"
-Deploying MyCoolApp to prod
-
-```
-
-`При необходимости прикрепитe сюда скриншоты
-![Название скриншота 1](ссылка на скриншот 1)`
-![Название скриншота 1](ссылка на скриншот 1)`
-![Название скриншота 1](ссылка на скриншот 1)`
----
-
-
-# Модуль "`GitLab CI/CD`" - `GHA-03 Основы job-стратегий и условий выполнения`
-
- ### 🎯 Цель урока
-Основы job-стратегий и условий выполнения (strategy + if)
-
----
-
- ## 📘 Теория (кратко)
-
-GitHub Actions поддерживает гибкое управление выполнением задач с помощью:
-
-📌 Условных операторов (if)
-
-Позволяют выполнять шаги или job’ы только при выполнении условий: if: github.ref == 'refs/heads/main'
-Примеры:
-if: success() Выполнить, если предыдущие шаги успешны (по умолчанию)
-if: failure() Выполнить, если предыдущие шаги завершились с ошибкой
-if: github.actor == 'DavyRoy' Только если запустил указанный пользователь
-if: matrix.env == 'prod' Выполнять шаг только для prod-окружения
-
-📌 Стратегия fail-fast и max-parallel
-
-strategy:
-  fail-fast: false - Останавливает все job’ы, если одна упала (true по умолчанию)
-  max-parallel: 2 - Число job’ов, выполняемых параллельно
-
-📌 Условие на шаг (step) vs job:
-
-jobs:
-  deploy:
-    if: github.ref == 'refs/heads/main' # условие на весь job
-    ...
-    steps:
-      - name: Only on prod
-        if: matrix.env == 'prod'
-
-
- ## Ключевые команды:
-
-
----
-
-### Задание
-
-1. Создай workflow, который:
-	•	Запускается по push
-	•	Имеет матрицу окружений: dev, stage, prod
-	•	Выполняет:
-	•	echo "Деплой на ..." во всех
-	•	Дополнительный step только для prod с echo "!!! Production deploy !!!"
-	•	Добавь fail-fast: false
-	•	Установи max-parallel: 1
-
-
-1. `Создай новую ветку gha-03-conditional-prod`
-
-```
-git switch -c gha-03-conditional-prod
-Switched to a new branch 'gha-03-conditional-prod'
-```
-2. `Файл .github/workflows/conditional.yml`
-
-```
-touch .github/workflows/conditional.yml
-
-```
-3. `Используй matrix.env: [dev, stage, prod]`
-
-```
-
-```
-4. `Добавь: •	if: matrix.env == 'prod' для спец-шагов •	Параметры fail-fast, max-parallel в стратегии`
-
-```
-name: CI Pipeline
-
-on: [push]
-
-env:
-  APP_NAME: ConditionalAPP
-
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      max-parallel: 1
-      matrix:
-        env: [dev, stage, prod]
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Диплой всех окружений
-        run: echo "Диплой $APP_NAME на ${{ matrix.env }}"
-
-      - name: Only on prod
-        if: matrix.env == 'prod'
-        run: echo "!!! Production deploy !!!"
-```
-5. `Сделай git push — проверь, что workflow сработал`
-
-```
-git push -u origin gha-02-matrix-env
-Enumerating objects: 9, done.
-Counting objects: 100% (9/9), done.
-Delta compression using up to 10 threads
-Compressing objects: 100% (5/5), done.
-Writing objects: 100% (5/5), 479 bytes | 479.00 KiB/s, done.
-Total 5 (delta 2), reused 0 (delta 0), pack-reused 0
-remote: Resolving deltas: 100% (2/2), completed with 2 local objects.
-To https://github.com/DavyRoy/DevOps_practick.git
-   f9d5ef2..ed49aa4  gha-02-matrix-env -> gha-02-matrix-env
-branch 'gha-02-matrix-env' set up to track 'origin/gha-02-matrix-env'.
-```
-6. `Перейди в GitHub → вкладка Actions → убедись в успешном выполнении`
-
-```
-Run echo "Диплой $APP_NAME на dev"
-Диплой ConditionalAPP на dev
-
-Run echo "Диплой $APP_NAME на stage"
-Диплой ConditionalAPP на stage
-
-Run echo "Диплой $APP_NAME на prod"
-Диплой ConditionalAPP на prod
-0s
-Run echo "!!! Production deploy !!!"
-!!! Production deploy !!!
-```
-
-`При необходимости прикрепитe сюда скриншоты
-![Название скриншота 1](ссылка на скриншот 1)`
-![Название скриншота 1](ссылка на скриншот 1)`
-![Название скриншота 1](ссылка на скриншот 1)`
----
-
-# Модуль "`GitLab CI/CD`" - `GHA-04 — CI-пайплайн: линтинг, тесты, артефакты`
-
- ### 🎯 Цель урока
-CI-пайплайн: линтинг, тесты, артефакты
-
----
-
- ## 📘 Теория (кратко)
-
-Цель любого CI-пайплайна — автоматическая проверка кода перед мержем или деплоем. Классическая структура пайплайна:
-	1.	Lint — проверка стиля (например, eslint, flake8, yamllint)
-	2.	Test — юнит-тесты, интеграционные тесты (pytest, jest, go test, и т.п.)
-	3.	Build / Артефакты — создание артефактов (например, бинарников, отчётов о тестах и пр.)
-
-📌 Как сохранять артефакты в GitHub Actions?
-- name: Save build artifacts
-  uses: actions/upload-artifact@v4
-  with:
-    name: my-artifacts
-    path: ./build/
-🔹 Файл или папка ./build/ будет доступна для скачивания из вкладки Artifacts в интерфейсе Actions.
-
-🛠 Пример CI:
-jobs:
-  lint:
-    steps:
-      - run: flake8 app/
-  test:
-    steps:
-      - run: pytest tests/
-  build:
-    steps:
-      - run: make build
-      - uses: actions/upload-artifact@v4
-        with:
-          name: binary
-          path: ./dist/
-
-
- ## Ключевые команды:
-
----
-
-### Задание
-
-1. Создай CI workflow, который:
-	•	Запускается при push в любую ветку
-	•	Делает:
-	•	Линтинг — проверь синтаксис *.yml файлов (например, yamllint)
-	•	Тест — симулируй тестирование (команда echo "Тесты пройдены")
-	•	Build — создай папку build/ с каким-то файлом (например, touch build/app.txt)
-	•	Загрузи build/ как артефакт
-
-1. `Ветка: gha-04-ci-pipeline`
-
-```
-git switch -c gha-04-ci-pipeline
-Switched to a new branch 'gha-04-ci-pipeline'
-```
-2. `Файл: .github/workflows/ci.yml`
-
-```
-touch .github/workflows/ci.yml
-```
-3. `Стадии: lint, test, build — как отдельные job, Используй upload-artifact только в job build, Линт — можешь установить yamllint (pip install yamllint) или сделать echo "Lint passed" — главное структура`
-
-```
----
-name: CI Pipeline
-
-on:
-  push:
-
-
-jobs:
-  lint:
-    name: Линтинг YAML файлов
-    runs-on: ubuntu-latest
-    steps:
-      - name: Клонируем код
-        uses: actions/checkout@v3
-
-      - name: Проверка синтаксиса YAML (симулированная)
-        run: |
-           sudo apt update
-           sudo apt install -y python3-pip
-           pip install yamllint
-           yamllint .
-
-  test:
-    name: Тестирование
-    runs-on: ubuntu-latest
-    needs: lint
-    steps:
-      - name: Клонируем код
-        uses: actions/checkout@v3
-
-      - name: Запускаем тесты (симуляция)
-        run: echo "Тесты пройдены"
-
-  build:
-    name: Сборка
-    runs-on: ubuntu-latest
-    needs: test
-    steps:
-      - name: Клонируем код
-        uses: actions/checkout@v3
-
-      - name: Создаём папку build/ и файл
-        run: |
-          mkdir -p build
-          echo "Hello from build" > build/app.txt
-
-      - name: Загружаем артефакт
-        uses: actions/upload-artifact@v4
-        with:
-          name: build-artifact
-          path: build/
-
-```
-4. `Сделай git push — проверь, что workflow сработал`
-
-```
-git push -u origin gha-04-ci-pipeline
-Enumerating objects: 26, done.
-Counting objects: 100% (26/26), done.
-Delta compression using up to 10 threads
-Compressing objects: 100% (13/13), done.
-Writing objects: 100% (14/14), 1.26 KiB | 1.26 MiB/s, done.
-Total 14 (delta 7), reused 0 (delta 0), pack-reused 0
-remote: Resolving deltas: 100% (7/7), completed with 7 local objects.
-To https://github.com/DavyRoy/DevOps_practick.git
-   b55b770..adaba9e  gha-04-ci-pipeline -> gha-04-ci-pipeline
-branch 'gha-04-ci-pipeline' set up to track 'origin/gha-04-ci-pipeline'.
-```
-5. `Перейди в GitHub → вкладка Actions → убедись в успешном выполнении`
-
-```
-Reading package lists...
-Building dependency tree...
-Reading state information...
-python3-pip is already the newest version (24.0+dfsg-1ubuntu1.1).
-0 upgraded, 0 newly installed, 0 to remove and 16 not upgraded.
-Defaulting to user installation because normal site-packages is not writeable
-Collecting yamllint
-  Downloading yamllint-1.37.1-py3-none-any.whl.metadata (4.3 kB)
-Collecting pathspec>=0.5.3 (from yamllint)
-  Downloading pathspec-0.12.1-py3-none-any.whl.metadata (21 kB)
-Requirement already satisfied: pyyaml in /usr/lib/python3/dist-packages (from yamllint) (6.0.1)
-Downloading yamllint-1.37.1-py3-none-any.whl (68 kB)
-   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 68.8/68.8 kB 9.4 MB/s eta 0:00:00
-Downloading pathspec-0.12.1-py3-none-any.whl (31 kB)
-Installing collected packages: pathspec, yamllint
-Successfully installed pathspec-0.12.1 yamllint-1.37.1
-./.github/workflows/matrix.yml
-
-./.github/workflows/ci.yml
-
-./.github/workflows/conditional.yml
-
-./.github/workflows/basic.yml
-
-Run echo "Тесты пройдены"
-Тесты пройдены
-
-Run mkdir -p build
-```
-
-`При необходимости прикрепитe сюда скриншоты
-![Название скриншота 1](ссылка на скриншот 1)`
-![Название скриншота 1](ссылка на скриншот 1)`
-![Название скриншота 1](ссылка на скриншот 1)`
----
-
-
-# Модуль "`GitLab CI/CD`" - `GHA-05 — Деплой и кастомные действия (actions)`
-
- ### 🎯 Цель урока
-Деплой и кастомные действия (actions)
-
----
-
- ## 📘 Теория (кратко)
-
-🔹 Деплой в CI/CD
-
-Под “деплоем” в GitHub Actions обычно понимается:
-	•	пуш в DockerHub / GitHub Container Registry
-	•	деплой в Kubernetes, облако, FTP, сервер и т.д.
-
-🧠 Сам деплой может быть:
-	•	Через обычный run: ...
-	•	Через сторонние готовые actions
-	•	Через кастомные actions, написанные под проект
-
-🔹 Готовые actions (из маркетплейса)
-
-Пример: деплой на FTP
-- name: Deploy via FTP
-  uses: SamKirkland/FTP-Deploy-Action@v4
-  with:
-    server: ftp.example.com
-    username: ${{ secrets.FTP_USER }}
-    password: ${{ secrets.FTP_PASS }}
-
-🔹 Кастомные actions (свои)
-
-Ты можешь создать свою action:
-	•	В формате Docker (исполняется в контейнере)
-	•	В формате JavaScript (исполняется прямо в раннере)
-
-📁 Структура:
-/my-action
-  └── action.yml
-  └── entrypoint.sh
-
-🧾 action.yml (пример shell-скрипта):
-name: Hello Action
-description: Prints Hello
-runs:
-  using: "docker"
-  image: "Dockerfile"
-
-🧾 Dockerfile:
-FROM alpine
-COPY entrypoint.sh /entrypoint.sh
-ENTRYPOINT ["/entrypoint.sh"]
-
-🧾 entrypoint.sh:
-#!/bin/sh
-echo "Hello from custom action!"
-
- ## Ключевые команды:
-
----
-
-### Задание
-
-1. Создай кастомную action на shell (через Docker), которая:
-	•	Выводит сообщение: 📦 Deploying $APP_NAME to $ENV
-
-Создай workflow, который:
-	•	Запускается по push
-	•	Передаёт в action переменные APP_NAME и ENV
-	•	Вызывает кастомную action из поддиректории .github/actions/deploy
-
-1. `Ветка: gha-05-custom-deploy`
-
-```
-git switch -c gha-05-custom-deploy
-Switched to a new branch 'gha-05-custom-deploy'
-```
-2. `Создай структуру`
-
-```
-.github/
-  workflows/ci-deploy.yml
-  actions/deploy/
-    Dockerfile
-    entrypoint.sh
-    action.yml
-```
-3. `Кастомная action должна принимать input-параметры: •	app_name •	env`
-
-```
-
-```
-4. `В workflow передай эти параметры в uses: ./github/actions/deploy`
-
-```
-.github/actions/deploy/entrypoint.sh
----
-#!/bin/sh
-echo "📦 Deploying $APP_NAME to $ENV"
-
- .github/actions/deploy/Dockerfile
- ---
- FROM alpine
-
-COPY entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
-
-ENTRYPOINT ["/entrypoint.sh"]
-
-.github/actions/deploy/action.yml
----
-name: Hello Deploy Action
-description: Кастомная action для вывода деплоя
-
-inputs:
-  app_name:
-    description: Название приложения
-    required: true
-  env:
-    description: Окружение
-    required: true
-
-runs:
-  using: "docker"
-  image: "Dockerfile"
-  env:
-    APP_NAME: ${{ inputs.app_name }}
-    ENV: ${{ inputs.env }}
-
- .github/workflows/ci-deploy.yml
- ---
- name: Deploy Workflow
-
-on:
-  push:
-
-jobs:
-  deploy:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Deploy via custom action
-        uses: ./github/actions/deploy
-        with:
-          app_name: MyCoolApp
-          env: stage
-```
-5. `Сделай git push — проверь, что workflow сработал`
-
-```
-git push -u origin gha-05-custom-deploy
-
-Enumerating objects: 7, done.
-Counting objects: 100% (7/7), done.
-Delta compression using up to 10 threads
-Compressing objects: 100% (4/4), done.
-Writing objects: 100% (4/4), 421 bytes | 421.00 KiB/s, done.
-Total 4 (delta 2), reused 0 (delta 0), pack-reused 0
-remote: Resolving deltas: 100% (2/2), completed with 2 local objects.
-To https://github.com/DavyRoy/DevOps_practick.git
-   9b7b60a..204ffc0  gha-05-custom-deploy -> gha-05-custom-deploy
-branch 'gha-05-custom-deploy' set up to track 'origin/gha-05-custom-deploy'.
-```
-6. `Перейди в GitHub → вкладка Actions → убедись в успешном выполнении`
-
-```
-Run ./.github/actions/deploy
-Building docker image
-/usr/bin/docker run --name e9dfd6c852384a3524454c9d77e2e9bf2fbae5_0e4e7c --label e9dfd6 --workdir /github/workspace --rm -e "INPUT_APP_NAME" -e "INPUT_ENV" -e "APP_NAME" -e "ENV" -e "HOME" -e "GITHUB_JOB" -e "GITHUB_REF" -e "GITHUB_SHA" -e "GITHUB_REPOSITORY" -e "GITHUB_REPOSITORY_OWNER" -e "GITHUB_REPOSITORY_OWNER_ID" -e "GITHUB_RUN_ID" -e "GITHUB_RUN_NUMBER" -e "GITHUB_RETENTION_DAYS" -e "GITHUB_RUN_ATTEMPT" -e "GITHUB_ACTOR_ID" -e "GITHUB_ACTOR" -e "GITHUB_WORKFLOW" -e "GITHUB_HEAD_REF" -e "GITHUB_BASE_REF" -e "GITHUB_EVENT_NAME" -e "GITHUB_SERVER_URL" -e "GITHUB_API_URL" -e "GITHUB_GRAPHQL_URL" -e "GITHUB_REF_NAME" -e "GITHUB_REF_PROTECTED" -e "GITHUB_REF_TYPE" -e "GITHUB_WORKFLOW_REF" -e "GITHUB_WORKFLOW_SHA" -e "GITHUB_REPOSITORY_ID" -e "GITHUB_TRIGGERING_ACTOR" -e "GITHUB_WORKSPACE" -e "GITHUB_ACTION" -e "GITHUB_EVENT_PATH" -e "GITHUB_ACTION_REPOSITORY" -e "GITHUB_ACTION_REF" -e "GITHUB_PATH" -e "GITHUB_ENV" -e "GITHUB_STEP_SUMMARY" -e "GITHUB_STATE" -e "GITHUB_OUTPUT" -e "RUNNER_OS" -e "RUNNER_ARCH" -e "RUNNER_NAME" -e "RUNNER_ENVIRONMENT" -e "RUNNER_TOOL_CACHE" -e "RUNNER_TEMP" -e "RUNNER_WORKSPACE" -e "ACTIONS_RUNTIME_URL" -e "ACTIONS_RUNTIME_TOKEN" -e "ACTIONS_CACHE_URL" -e "ACTIONS_RESULTS_URL" -e GITHUB_ACTIONS=true -e CI=true -v "/var/run/docker.sock":"/var/run/docker.sock" -v "/home/runner/work/_temp/_github_home":"/github/home" -v "/home/runner/work/_temp/_github_workflow":"/github/workflow" -v "/home/runner/work/_temp/_runner_file_commands":"/github/file_commands" -v "/home/runner/work/DevOps_practick/DevOps_practick":"/github/workspace" e9dfd6:c852384a3524454c9d77e2e9bf2fbae5
-📦 Deploying MyCoolApp to stage
-```
-
-`При необходимости прикрепитe сюда скриншоты
-![Название скриншота 1](ссылка на скриншот 1)`
-![Название скриншота 1](ссылка на скриншот 1)`
-![Название скриншота 1](ссылка на скриншот 1)`
----
-
-# Модуль "`GitLab CI/CD`" - `DOC-GHA-01 Автосборка Docker-образа по пушу`
-
- ### 🎯 Цель урока
-Как работает автосборка Docker-образа через GitHub Actions
----
-
- ## 📘 Теория (кратко)
-
-🔹 Общая идея:
-
-GitHub Actions позволяет запускать CI/CD-процессы при событиях в репозитории. В случае Docker-сборки — при каждом пуше GitHub может:
-	•	Проверить код
-	•	Собрать Docker-образ
-	•	Потестировать его
-	•	Отправить в DockerHub или другой реестр
-
-🔹 Основные компоненты:
-.github/workflows/*.ymlОписание пайплайна
-on: Триггер (например, push, pull_request)
-jobs: Список задач, которые выполняются
-runs-on: Указывает ОС runner-а (например, ubuntu-latest)
-steps: Последовательность шагов внутри job-а
-
-🔹 Как происходит сборка Docker-образа
-	1.	Получение кода — GitHub сам клонирует репозиторий.
-	2.	Установка Docker — runner использует Ubuntu с предустановленным Docker.
-	3.	Сборка образа — docker build -t имя .
-	4.	(опционально) Push — docker push требует логина в реестр (будет в следующем юните)
-
-⸻
-
-🔹 Что важно учитывать:
-	•	GitHub Actions не работает “по крону” сам по себе — нужны события: push, pull_request, workflow_dispatch (ручной запуск).
-	•	Runner’ы имеют ограничения по ресурсам (CPU, RAM) и времени выполнения (обычно 6 часов для public repo).
-	•	Переменные и секреты задаются в разделе Settings → Secrets репозитория.
-	•	GitHub Actions можно запускать вручную или автоматически, и это позволяет внедрить инфраструктуру как код даже на уровне CI.
-
-
- ## Ключевые команды:
-
-
----
-
-### Задание
-
-1. Настрой автоматическую сборку Docker-образа при пуше в репозиторий.
-Workflow должен запускаться при любом коммите в ветку main.
-Цель — убедиться, что образ успешно собирается на CI, но не пушится в DockerHub (ещё рано).
-
-1. `Создай .github/workflows/docker-build.yml.`
-
-```
-touch .github/workflows/docker-build.yml
-```
-2. `Укажи событие push в ветку main.`
-
-```
-
-```
-3. `Добавь job на базе ubuntu-latest.`
-
-```
-
-```
-4. `Добавь step для сборки Docker-образа из Dockerfile в корне репозитория.`
-
-```
-nano .github/workflows/docker-build.yml
-name: Build Docker image
-
-on:
-  push:
-    branches:
-      - main
-
-jobs:
-  deploy:
-    runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Build Docker image
-        run: docker build -t test-image:latest ./.github/actions/deploy
-
-```
-
-5. `Убедись, что workflow проходит после коммита.`
-
-```
-Run ./.github/actions/deploy
-Building docker image
-/usr/bin/docker run --name ccc482fb2784ff45f69a94bb5eb091235c_985deb --label 0443cc --workdir /github/workspace --rm -e "HOME" -e "GITHUB_JOB" -e "GITHUB_REF" -e "GITHUB_SHA" -e "GITHUB_REPOSITORY" -e "GITHUB_REPOSITORY_OWNER" -e "GITHUB_REPOSITORY_OWNER_ID" -e "GITHUB_RUN_ID" -e "GITHUB_RUN_NUMBER" -e "GITHUB_RETENTION_DAYS" -e "GITHUB_RUN_ATTEMPT" -e "GITHUB_ACTOR_ID" -e "GITHUB_ACTOR" -e "GITHUB_WORKFLOW" -e "GITHUB_HEAD_REF" -e "GITHUB_BASE_REF" -e "GITHUB_EVENT_NAME" -e "GITHUB_SERVER_URL" -e "GITHUB_API_URL" -e "GITHUB_GRAPHQL_URL" -e "GITHUB_REF_NAME" -e "GITHUB_REF_PROTECTED" -e "GITHUB_REF_TYPE" -e "GITHUB_WORKFLOW_REF" -e "GITHUB_WORKFLOW_SHA" -e "GITHUB_REPOSITORY_ID" -e "GITHUB_TRIGGERING_ACTOR" -e "GITHUB_WORKSPACE" -e "GITHUB_ACTION" -e "GITHUB_EVENT_PATH" -e "GITHUB_ACTION_REPOSITORY" -e "GITHUB_ACTION_REF" -e "GITHUB_PATH" -e "GITHUB_ENV" -e "GITHUB_STEP_SUMMARY" -e "GITHUB_STATE" -e "GITHUB_OUTPUT" -e "RUNNER_OS" -e "RUNNER_ARCH" -e "RUNNER_NAME" -e "RUNNER_ENVIRONMENT" -e "RUNNER_TOOL_CACHE" -e "RUNNER_TEMP" -e "RUNNER_WORKSPACE" -e "ACTIONS_RUNTIME_URL" -e "ACTIONS_RUNTIME_TOKEN" -e "ACTIONS_CACHE_URL" -e "ACTIONS_RESULTS_URL" -e GITHUB_ACTIONS=true -e CI=true -v "/var/run/docker.sock":"/var/run/docker.sock" -v "/home/runner/work/_temp/_github_home":"/github/home" -v "/home/runner/work/_temp/_github_workflow":"/github/workflow" -v "/home/runner/work/_temp/_runner_file_commands":"/github/file_commands" -v "/home/runner/work/DevOps_practick/DevOps_practick":"/github/workspace" 0443cc:c482fb2784ff45f69a94bb5eb091235c
-Hello from the deploy action!
-```
-
-`При необходимости прикрепитe сюда скриншоты
-![Название скриншота 1](ссылка на скриншот 1)`
-![Название скриншота 1](ссылка на скриншот 1)`
-![Название скриншота 1](ссылка на скриншот 1)`
----
-
-
-# Модуль "`GitLab CI/CD`" - `DOC-GHA-03 Разделение build и push по шагам`
-
- ### 🎯 Цель урока
-Зачем разделять build и push в GitHub Actions
-
----
-
- ## 📘 Теория (кратко)
-
-🔹 Почему нельзя всё в одном шаге?
-
-Сборка и публикация — это разные стадии CI/CD:
-	•	build — можно кэшировать, использовать как артефакт, проверять на ошибки.
-	•	push — требует внешнего взаимодействия, секретов и даёт побочный эффект (меняет внешний реестр).
-
-Разделение даёт:
-	•	🧪 Гибкость: можно выполнять тесты между build и push.
-	•	🔒 Безопасность: push выполняется только при определённых условиях (например, из main, из PR с одобрением и т.д.).
-	•	💨 Кэширование и многопоточность: docker/build-push-action умеет собирать быстрее через buildx.
-
-🔹 Используемые экшены:
-- uses: docker/setup-buildx-action@v3
-- uses: docker/login-action@v3
-- uses: docker/build-push-action@v5
-
-🔹 Стратегия:
-      - name: Build (only)
-        uses: docker/build-push-action@v5
-        with:
-          push: false
-
-      - name: Push (only)
-        uses: docker/build-push-action@v5
-        with:
-          push: true
-🔹 Пример сценария:
-	1.	Выполняем build → проверяем → если всё хорошо, push.
-	2.	Это удобно при pull request’ах: build делается, но push разрешён только в main.
-
-
-
- ## Ключевые команды:
-
----
-
-### Задание
-
-1. Настрой .github/workflows/docker-release.yml, в котором:
-	•	При пуше в main происходит сборка образа,
-	•	Потом (в отдельном step-е) — публикация его в DockerHub.
-
-Оба шага должны быть чётко разделены, и между ними можно будет вставить шаг проверки или echo.
-
-1. `Создай workflow docker-release.yml.`
-
-```
-touch docker-release.yml
-```
-2. `Используй docker/setup-buildx-action для подготовки билдера.`
-
-```
-
-```
-3. `Первый шаг — build образа, но без пуша (push: false).`
-
-```
-
-```
-4. `Второй шаг — push образа в DockerHub, используй secrets.`
-
-```
-
-```
-5. `Теги: yourusername/appname:latest`
-
-```
-name: Docker Release
-
-on:
-  push:
-    branches:
-      - main  # только при пуше в main
-
-jobs:
-  docker-release:
-    name: 🐳 Build & Push Docker Image
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: 📥 Checkout repo
-        uses: actions/checkout@v3
-
-      - name: 🔧 Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-
-      - name: 🔐 Login to DockerHub
-        uses: docker/login-action@v3
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-
-      - name: 🛠️ Build Docker image
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          push: false
-          tags: yourusername/appname:latest
-          outputs: type=docker  # локальный образ для следующего шага
-
-      - name: ✅ Проверка после сборки
-        run: echo "Образ успешно собран. Переходим к публикации..."
-
-      - name: 📤 Push Docker image
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          push: true
-          tags: yourusername/appname:latest
-```
-
-`При необходимости прикрепитe сюда скриншоты
-![Название скриншота 1](ссылка на скриншот 1)`
-![Название скриншота 1](ссылка на скриншот 1)`
-![Название скриншота 1](ссылка на скриншот 1)`
----
