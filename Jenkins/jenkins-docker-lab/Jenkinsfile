@@ -2,33 +2,20 @@ pipeline {
   agent any
 
   stages {
-    stage('Parallel QA') {
-      parallel {
-        stage('Unit Tests') {
-          steps {
-            echo 'Running unit tests...'
-            sleep 2
-          }
-        }
-        stage('Lint') {
-          steps {
-            echo 'Running linter...'
-            sleep 1
-          }
-        }
-        stage('Security Scan') {
-          steps {
-            echo 'Running security checks...'
-            sleep 3
-          }
-        }
-      }
-    }
-
     stage('Build') {
       steps {
-        echo 'All checks passed, building...'
+        sh '''
+          mkdir -p build
+          echo "This is a build artifact." > build/output.txt
+        '''
       }
+    }
+  }
+
+  post {
+    success {
+      archiveArtifacts artifacts: 'build/output.txt', fingerprint: true
+      echo 'Артефакт сохранён.'
     }
   }
 }
