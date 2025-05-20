@@ -448,152 +448,83 @@ post {} действия после билдов (success/failure/always)
 
 ### Задание
 
-1. Установи Docker (если не установлен)
-2. Запусти контейнер с NGINX на порту 8080
-3. Запусти контейнер с PostgreSQL
-4. Убедись, что контейнеры работают
-5. Останови и удали один из них
+1. Создай Jenkins Pipeline Job, который читает Jenkinsfile из репозитория.
 
-1. `Заполните здесь этапы выполнения, если требуется ....`
+
+1. `В своём репозитории (jenkins-docker-lab) создай новый файл: Jenkinsfile`
 
 ```
-Поле для вставки кода...
-....
-....
-....
-....
-```
-2. `Заполните здесь этапы выполнения, если требуется ....`
 
 ```
-Поле для вставки кода...
-....
-....
-....
-....
-```
-3. `Заполните здесь этапы выполнения, если требуется ....`
+2. `Напиши простой Declarative Pipeline:`
 
 ```
-Поле для вставки кода...
-....
-....
-....
-....
-```
-4. `Заполните здесь этапы выполнения, если требуется ....`
+pipeline {
+  agent any
 
+  stages {
+    stage('Hello') {
+      steps {
+        echo 'Hello from Declarative Pipeline!'
+      }
+    }
+  }
+}
 ```
-Поле для вставки кода...
-....
-....
-....
-....
-```
-5. `Заполните здесь этапы выполнения, если требуется ....`
+3. `В Jenkins: •	New Item → Pipeline → hello-pipeline-file •	Выбери: “Pipeline from SCM” •	Укажи Git URL и путь к Jenkinsfile`
 
 ```
-Поле для вставки кода...
-....
-....
-....
-....
-```
-6. `Заполните здесь этапы выполнения, если требуется ....`
 
 ```
-Поле для вставки кода...
-....
-....
-....
-....
-```
-
-`При необходимости прикрепитe сюда скриншоты
-![Название скриншота 1](ссылка на скриншот 1)`
-![Название скриншота 1](ссылка на скриншот 1)`
-![Название скриншота 1](ссылка на скриншот 1)`
----
-
-# Модуль "`Jenkins`" - `DOC-06 Volumes и управление данными`
-
- ### 🎯 Цель урока
-Научиться устанавливать Docker, запускать контейнеры, управлять ими и проверять их статус.
-
----
-
- ## 📘 Теория (кратко)
-
-Docker — это инструмент для контейнеризации, позволяющий упаковывать приложение и его зависимости в единый образ.
-
- ## Ключевые команды:
-
-- `docker run`, `docker ps`, `docker stop`, `docker rm`
-- `docker images`, `docker exec`
-
----
-
-### Задание
-
-1. Установи Docker (если не установлен)
-2. Запусти контейнер с NGINX на порту 8080
-3. Запусти контейнер с PostgreSQL
-4. Убедись, что контейнеры работают
-5. Останови и удали один из них
-
-1. `Заполните здесь этапы выполнения, если требуется ....`
+4. `Запусти сборку. Убедись, что pipeline работает, и выводит сообщение.`
 
 ```
-Поле для вставки кода...
-....
-....
-....
-....
-```
-2. `Заполните здесь этапы выполнения, если требуется ....`
+Started by user sergey
+Obtained Jenkins/jenkins-docker-lab/Jenkinsfile from git https://github.com/DavyRoy/DevOps_practick.git
+[Pipeline] Start of Pipeline
+[Pipeline] node
+Running on Jenkins in /var/jenkins_home/workspace/hello-pipeline-file
+[Pipeline] {
+[Pipeline] stage
+[Pipeline] { (Declarative: Checkout SCM)
+[Pipeline] checkout
+Selected Git installation does not exist. Using Default
+The recommended git tool is: NONE
+using credential GitHub
+Cloning the remote Git repository
+Cloning repository https://github.com/DavyRoy/DevOps_practick.git
+ > git init /var/jenkins_home/workspace/hello-pipeline-file # timeout=10
+Fetching upstream changes from https://github.com/DavyRoy/DevOps_practick.git
+ > git --version # timeout=10
+ > git --version # 'git version 2.39.5'
+using GIT_ASKPASS to set credentials GitHub Access Token
+ > git fetch --tags --force --progress -- https://github.com/DavyRoy/DevOps_practick.git +refs/heads/*:refs/remotes/origin/* # timeout=10
+ > git config remote.origin.url https://github.com/DavyRoy/DevOps_practick.git # timeout=10
+ > git config --add remote.origin.fetch +refs/heads/*:refs/remotes/origin/* # timeout=10
+Avoid second fetch
+ > git rev-parse refs/remotes/origin/main^{commit} # timeout=10
+Checking out Revision 49488f6040df68fddf22fc75a160fb627d4e7c44 (refs/remotes/origin/main)
+ > git config core.sparsecheckout # timeout=10
+ > git checkout -f 49488f6040df68fddf22fc75a160fb627d4e7c44 # timeout=10
+Commit message: "Jenkins 01"
+First time build. Skipping changelog.
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] stage
+[Pipeline] { (Hello)
+[Pipeline] echo
+Hello from Declarative Pipeline!
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] }
+[Pipeline] // node
+[Pipeline] End of Pipeline
+Finished: SUCCESS
 
-```
-Поле для вставки кода...
-....
-....
-....
-....
-```
-3. `Заполните здесь этапы выполнения, если требуется ....`
-
-```
-Поле для вставки кода...
-....
-....
-....
-....
-```
-4. `Заполните здесь этапы выполнения, если требуется ....`
-
-```
-Поле для вставки кода...
-....
-....
-....
-....
-```
-5. `Заполните здесь этапы выполнения, если требуется ....`
-
-```
-Поле для вставки кода...
-....
-....
-....
-....
-```
-6. `Заполните здесь этапы выполнения, если требуется ....`
-
-```
-Поле для вставки кода...
-....
-....
-....
-....
 ```
 
 `При необходимости прикрепитe сюда скриншоты
@@ -602,87 +533,281 @@ Docker — это инструмент для контейнеризации, п
 ![Название скриншота 1](ссылка на скриншот 1)`
 ---
 
-
-# Модуль "`Jenkins`" - `DOC-07 Сетевые режимы Docker`
+# Модуль "`Jenkins`" - `JEN-06: Jenkinsfile и Git — интеграция с репозиторием`
 
  ### 🎯 Цель урока
-Научиться устанавливать Docker, запускать контейнеры, управлять ими и проверять их статус.
+Git + Jenkins Pipeline
 
 ---
 
  ## 📘 Теория (кратко)
 
-Docker — это инструмент для контейнеризации, позволяющий упаковывать приложение и его зависимости в единый образ.
+🔹 Jenkinsfile в Git
+	•	Jenkins может брать pipeline напрямую из репозитория
+	•	Это делается через “Pipeline from SCM”
+	•	Jenkinsfile должен находиться в корне проекта или по указанному пути
 
- ## Ключевые команды:
+🔹 Способы подключения репозитория:
+HTTPS - https://github.com/user/repo.git - Доступен публично или через токен
+SSH - git@github.com:user/repo.git - Jenkins должен иметь SSH-ключ
+Private Repo (GitHub/GitLab) - Через Credentials - Токен или SSH-пара доступов
 
-- `docker run`, `docker ps`, `docker stop`, `docker rm`
-- `docker images`, `docker exec`
+🔹 Принцип работы:
+	1.	Jenkins проверяет Git-репозиторий
+	2.	Считывает Jenkinsfile
+	3.	Выполняет пайплайн
+	4.	(опционально) Триггер по вебхуку
+
+🔹 Credentials в Jenkins
+
+Если репозиторий приватный — Jenkins должен знать, как авторизоваться:
+	•	Manage Jenkins → Credentials
+	•	Добавить Username + Password (или Token)
+или
+SSH Key (если используешь git@)
+
+🔹 Пример Jenkinsfile из репозитория:
+pipeline {
+  agent any
+
+  stages {
+    stage('Git Checkout') {
+      steps {
+        checkout scm
+        echo 'Код успешно получен!'
+      }
+    }
+    stage('Build') {
+      steps {
+        sh 'echo "Сборка..."'
+      }
+    }
+  }
+}
+📌 checkout scm — встроенная команда, чтобы получить репозиторий, указанный в Pipeline Job.
+
+ ## Конспект:
+
+ 	•	Pipeline Job может подключаться к Git-репозиторию и использовать Jenkinsfile
+	•	Протоколы: HTTPS (удобно), SSH (надёжно)
+	•	Приватный репозиторий = нужны credentials
+	•	checkout scm — встроенная команда получения кода
+
 
 ---
 
 ### Задание
 
-1. Установи Docker (если не установлен)
-2. Запусти контейнер с NGINX на порту 8080
-3. Запусти контейнер с PostgreSQL
-4. Убедись, что контейнеры работают
-5. Останови и удали один из них
+1. Создай Jenkins Pipeline Job, который:
+	•	Подключается к GitHub-репозиторию
+	•	Считывает Jenkinsfile
+	•	Клонирует весь проект
+	•	Выполняет пайплайн с checkout scm
 
-1. `Заполните здесь этапы выполнения, если требуется ....`
 
-```
-Поле для вставки кода...
-....
-....
-....
-....
-```
-2. `Заполните здесь этапы выполнения, если требуется ....`
+1. `Убедись, что Jenkinsfile лежит в корне твоего проекта (ветка 06-git-integration)`
 
 ```
-Поле для вставки кода...
-....
-....
-....
-....
-```
-3. `Заполните здесь этапы выполнения, если требуется ....`
 
 ```
-Поле для вставки кода...
-....
-....
-....
-....
-```
-4. `Заполните здесь этапы выполнения, если требуется ....`
+
+2. `Пример Jenkinsfile`
 
 ```
-Поле для вставки кода...
-....
-....
-....
-....
+pipeline {
+  agent any
+
+  stages {
+    stage('Git') {
+      steps {
+        checkout scm
+        echo 'Репозиторий загружен.'
+      }
+    }
+    stage('Build') {
+      steps {
+        sh 'echo "CI выполняется..."'
+      }
+    }
+  }
+}
 ```
-5. `Заполните здесь этапы выполнения, если требуется ....`
+3. `В Jenkins: •	New Item → Pipeline → git-integration-pipeline •	Pipeline from SCM → Git •	Введи URL репозитория •	Укажи ветку 06-git-integration •	(если приватный — добавь credentials)`
 
 ```
-Поле для вставки кода...
-....
-....
-....
-....
-```
-6. `Заполните здесь этапы выполнения, если требуется ....`
 
 ```
-Поле для вставки кода...
-....
-....
-....
-....
+4. `Сохрани и запусти Job. Убедись, что код клонирован, Jenkinsfile исполнен`
+
 ```
+Started by user sergey
+Obtained Jenkins/06-git-integration/Jenkinsfile from git https://github.com/DavyRoy/DevOps_practick.git
+[Pipeline] Start of Pipeline
+[Pipeline] node
+Running on Jenkins in /var/jenkins_home/workspace/git-integration-pipeline
+[Pipeline] {
+[Pipeline] stage
+[Pipeline] { (Declarative: Checkout SCM)
+[Pipeline] checkout
+Selected Git installation does not exist. Using Default
+The recommended git tool is: NONE
+using credential GitHub
+Cloning the remote Git repository
+Cloning repository https://github.com/DavyRoy/DevOps_practick.git
+ > git init /var/jenkins_home/workspace/git-integration-pipeline # timeout=10
+Fetching upstream changes from https://github.com/DavyRoy/DevOps_practick.git
+ > git --version # timeout=10
+ > git --version # 'git version 2.39.5'
+using GIT_ASKPASS to set credentials GitHub Access Token
+ > git fetch --tags --force --progress -- https://github.com/DavyRoy/DevOps_practick.git +refs/heads/*:refs/remotes/origin/* # timeout=10
+ > git config remote.origin.url https://github.com/DavyRoy/DevOps_practick.git # timeout=10
+ > git config --add remote.origin.fetch +refs/heads/*:refs/remotes/origin/* # timeout=10
+Avoid second fetch
+ > git rev-parse refs/remotes/origin/06-git-integration^{commit} # timeout=10
+Checking out Revision 841bf3f3331b85ae3d148f5a4d99025313371ab4 (refs/remotes/origin/06-git-integration)
+ > git config core.sparsecheckout # timeout=10
+ > git checkout -f 841bf3f3331b85ae3d148f5a4d99025313371ab4 # timeout=10
+Commit message: "Jenkins 02"
+First time build. Skipping changelog.
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] stage
+[Pipeline] { (Git)
+[Pipeline] checkout
+Selected Git installation does not exist. Using Default
+The recommended git tool is: NONE
+using credential GitHub
+ > git rev-parse --resolve-git-dir /var/jenkins_home/workspace/git-integration-pipeline/.git # timeout=10
+Fetching changes from the remote Git repository
+ > git config remote.origin.url https://github.com/DavyRoy/DevOps_practick.git # timeout=10
+Fetching upstream changes from https://github.com/DavyRoy/DevOps_practick.git
+ > git --version # timeout=10
+ > git --version # 'git version 2.39.5'
+using GIT_ASKPASS to set credentials GitHub Access Token
+ > git fetch --tags --force --progress -- https://github.com/DavyRoy/DevOps_practick.git +refs/heads/*:refs/remotes/origin/* # timeout=10
+ > git rev-parse refs/remotes/origin/06-git-integration^{commit} # timeout=10
+Checking out Revision 841bf3f3331b85ae3d148f5a4d99025313371ab4 (refs/remotes/origin/06-git-integration)
+ > git config core.sparsecheckout # timeout=10
+ > git checkout -f 841bf3f3331b85ae3d148f5a4d99025313371ab4 # timeout=10
+Commit message: "Jenkins 02"
+[Pipeline] echo
+Репозиторий загружен.
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Build)
+[Pipeline] sh
++ echo CI выполняется...
+CI выполняется...
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] }
+[Pipeline] // node
+[Pipeline] End of Pipeline
+Finished: SUCCESS
+
+```
+
+
+`При необходимости прикрепитe сюда скриншоты
+![Название скриншота 1](ссылка на скриншот 1)`
+![Название скриншота 1](ссылка на скриншот 1)`
+![Название скриншота 1](ссылка на скриншот 1)`
+---
+
+
+# Модуль "`Jenkins`" - `JEN-07: Jenkins + Webhooks`
+
+ ### 🎯 Цель урока
+Как работают Webhooks
+
+---
+
+ ## 📘 Теория (кратко)
+
+🔹 Что такое webhook?
+
+Webhook — это механизм, при котором GitHub уведомляет Jenkins о событиях (push, pull request и др.) с помощью HTTP-запроса.
+
+🔹 Как Jenkins запускается через webhook?
+	1.	Разработчик делает git push
+	2.	GitHub отправляет HTTP POST на http://your-jenkins-host/github-webhook/
+	3.	Jenkins получает событие и запускает соответствующий Job
+
+🔹 Что нужно для webhook-интеграции:
+🧠 Jenkins Должен быть доступен по внешнему адресу или через ngrok
+🔐 Credentials Не нужны, если репозиторий публичный
+🔗 GitHub Указать URL webhook-а и включить события push
+🔁 Jenkins Job Должен использовать GitHub hook trigger for GITScm polling
+
+📘 Пример схемы:
+[GitHub Push]
+     ↓
+[Webhook → http://localhost:8080/github-webhook/]
+     ↓
+[Jenkins получает POST → триггерит pipeline]
+
+🔹 Локальный Jenkins? Используй ngrok:
+ngrok http 8080
+→ Получишь внешний адрес, например: https://a1b2c3d4.ngrok.io
+
+→ Укажи webhook: https://a1b2c3d4.ngrok.io/github-webhook/
+
+
+ ## Конспект:
+
+    •	Webhook — пуш-событие, запускающее билд
+	•	URL для webhook-а в Jenkins: /github-webhook/
+	•	Job должен использовать GitHub hook trigger
+	•	Локальный Jenkins = нужен ngrok или внешний сервер
+	•	GitHub → Settings → Webhooks → Add
+
+
+---
+
+### Задание
+
+1. Настрой автоматический запуск pipeline при каждом git push в GitHub-репозиторий.
+
+
+1. `Убедись, что твой Job использует Pipeline from SCM`
+
+```
+
+```
+2. `В настройках Job включи:`
+
+```
+Build Triggers → [x] GitHub hook trigger for GITScm polling
+```
+3. `Настрой доступность Jenkins:`
+
+```
+	•	Если Jenkins локальный:
+	1.	Установи ngrok
+	2.	Запусти: ngrok http 8080
+	3.	Получи URL: https://a1b2c3.ngrok.io
+```
+4. `На стороне GitHub:`
+
+```
+	1.	Перейди в Settings → Webhooks → Add webhook
+	2.	URL: https://your-ngrok/github-webhook/
+	3.	Content type: application/json
+	4.	Events: только Just the push event
+	5.	Нажми “Add webhook”
+```
+5. `Проверь`
+
+```
+	•	Сделай git push в нужную ветку (например 07-webhook)
+	•	Убедись, что Jenkins Job запустился без нажатия кнопки “Build Now”
+```
+
 
 `При необходимости прикрепитe сюда скриншоты
 ![Название скриншота 1](ссылка на скриншот 1)`
