@@ -2,9 +2,32 @@ pipeline {
   agent any
 
   stages {
-    stage('Hello') {
+    stage('Parallel QA') {
+      parallel {
+        stage('Unit Tests') {
+          steps {
+            echo 'Running unit tests...'
+            sleep 2
+          }
+        }
+        stage('Lint') {
+          steps {
+            echo 'Running linter...'
+            sleep 1
+          }
+        }
+        stage('Security Scan') {
+          steps {
+            echo 'Running security checks...'
+            sleep 3
+          }
+        }
+      }
+    }
+
+    stage('Build') {
       steps {
-        echo 'Hello from Declarative Pipeline!'
+        echo 'All checks passed, building...'
       }
     }
   }
