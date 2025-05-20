@@ -1,28 +1,46 @@
 pipeline {
     agent {
-      docker {
-        image 'docker:latest'
-        args '-v /var/run/docker.sock:/var/run/docker.sock'
-      }
+        docker {
+            image 'docker:24.0.7' // Явно указываем стабильную версию
+            args '-v /var/run/docker.sock:/var/run/docker.sock'
+        }
     }
+
     environment {
         DOCKER_CLI_EXPERIMENTAL = 'enabled'
     }
+
     stages {
         stage('Build Docker Image') {
             steps {
+                echo "🛠 Сборка образа myapp:latest"
                 sh 'docker build -t myapp:latest .'
             }
         }
+
         stage('Run Tests') {
             steps {
+                echo "🧪 Запуск тестов внутри контейнера"
+                // убедись, что в Dockerfile есть RUN chmod +x ./run-tests.sh
                 sh 'docker run --rm myapp:latest ./run-tests.sh'
             }
         }
+
         stage('Deploy') {
             steps {
-                sh 'docker run -d -p 80:80 myapp:latest'
+                echo "🚀 Запуск контейнера в фоне"
+                sh 'docker run -d -p 8080:80 --name myapp_container myapp:latest'
             }
+        }
+    }
+
+    post {
+        always {
+            echo "🧹 Очистка предыдущих контейнеров"
+            // предотвращаем конфликт портов при перезапусках
+            sh '''
+              docker ps -a --filter "name=myapp_container" --format "{{.ID}}" | xargs -r docker rm -f
+            '''
         }
     }
 }
