@@ -1,10 +1,42 @@
 pipeline {
   agent any
 
+  parameters {
+    string(name: 'TARGET_ENV', defaultValue: 'dev', description: 'Куда деплоим?')
+    booleanParam(name: 'RUN_TESTS', defaultValue: true, description: 'Запускать ли тесты?')
+  }
+
+  environment {
+    VERSION = "1.0.${BUILD_NUMBER}"
+  }
+
   stages {
-    stage('Hello') {
+    stage('Echo Params') {
       steps {
-        echo 'Hello from Declarative Pipeline!'
+        echo "TARGET_ENV = ${params.TARGET_ENV}"
+        echo "RUN_TESTS = ${params.RUN_TESTS}"
+        echo "VERSION = ${env.VERSION}"
+      }
+    }
+
+    stage('Test') {
+      when {
+        expression { return params.RUN_TESTS == true }
+      }
+      steps {
+        echo "Выполняем тесты..."
+      }
+    }
+
+    stage('Deploy') {
+      when {
+        allOf {
+          branch 'main'
+          environment name: 'TARGET_ENV', value: 'prod'
+        }
+      }
+      steps {
+        echo "Деплой в production!"
       }
     }
   }
