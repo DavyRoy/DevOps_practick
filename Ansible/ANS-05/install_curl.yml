@@ -1,0 +1,11 @@
+- name: Установка curl
+  hosts: web
+  become: true
+  vars:
+    package_name: curl
+  tasks:
+    - name: Установка curl
+      apt:
+        name: "{{ package_name }}"
+        state: present
+        update_cache: yes

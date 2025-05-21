@@ -1,0 +1,5 @@
+services:
+  - nginx
+  - docker
+  - sshd
+show_footer: true

@@ -1,0 +1,16 @@
+- name: Запуск переменных
+  hosts: web
+  become: true
+
+  tasks:
+    - name: Копировать файла
+      template:
+        src: index.html.j2
+        dest: /home/vagrant/index.html
+      notify: restart nginx
+
+  handlers:
+    - name: restart nginx
+      service:
+        name: nginx
+        state: restarted

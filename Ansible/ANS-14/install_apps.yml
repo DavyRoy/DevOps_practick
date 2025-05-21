@@ -1,0 +1,36 @@
+- name: Установка nginx и docker
+  hosts: web
+  become: true
+
+  tasks:
+    - name: Установка nginx
+      apt:
+        name: nginx
+        state: present
+
+    - name: Установка docker
+      apt:
+        name: docker.io
+        state: present
+
+    - name: Установка docker-compose
+      apt:
+        name: docker-compose
+        state: present
+
+    - name: Запуск и включение nginx
+      service:
+        name: nginx
+        state: started
+        enabled: true
+
+    - name: Запуск и включение docker
+      service:
+        name: docker
+        state: started
+        enabled: true
+
+    - name: Запустить контейнер hello-world
+      command: docker run hello-world
+      register: output
+      ignore_errors: true

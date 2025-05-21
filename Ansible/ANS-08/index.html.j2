@@ -1,0 +1,14 @@
+<html>
+  <body>
+    <h1>Hello from {{ inventory_hostname }}</h1>
+    <ul>
+    {% for service in services %}
+      <li>{{ service }}</li>
+    {% endfor %}
+    </ul>
+
+    {% if show_footer %}
+    <footer>Managed by Ansible — {{ ansible_date_time.date }}</footer>
+    {% endif %}
+  </body>
+</html>

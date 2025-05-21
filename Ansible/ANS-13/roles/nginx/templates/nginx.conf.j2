@@ -1,0 +1,6 @@
+server {
+    listen {{ nginx_port }};
+    location / {
+        return 200 'Hello from Ansible';
+    }
+}

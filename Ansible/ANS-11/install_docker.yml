@@ -1,0 +1,5 @@
+- name: Установка Docker через роль Galaxy
+  hosts: web
+  become: true
+  roles:
+    - geerlingguy.docker

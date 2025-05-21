@@ -1,0 +1,6 @@
+plugin: community.docker.docker_host
+strict: false
+compose:
+  ansible_host: docker_host
+  ansible_user: root
+  ansible_connection: docker

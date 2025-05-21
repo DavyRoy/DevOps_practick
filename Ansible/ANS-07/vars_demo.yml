@@ -1,0 +1,26 @@
+- name: Установка пакетов с использованием переменных
+  hosts: web
+  become: true
+
+  tasks:
+    - name: Установка пакетов
+      apt:
+        name: "{{ item }}"
+        state: present
+      loop:
+        - curl
+        - htop
+        - git
+      when: ansible_facts['os_factory'] == "Debian"
+
+    - name: Копировать файла
+      template:
+        src: motd.j2
+        dest: /etc/motd
+      notify: restart nginx
+
+  handlers:
+    - name: restart nginx
+      service:
+        name: nginx
+        state: restarted
