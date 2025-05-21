@@ -14,4 +14,4 @@ jobs:
         run: sudo apt update && sudo apt install -y ansible
 
       - name: Run playbook
-        run: ansible-playbook deploy.yml
+        run: ansible-playbook docker/Ansible/ANS-15/deploy.yml
