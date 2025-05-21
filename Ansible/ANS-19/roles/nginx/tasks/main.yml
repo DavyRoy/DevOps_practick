@@ -1,0 +1,19 @@
+#SPDX-License-Identifier: MIT-0
+---
+# tasks file for roles/nginx
+- name: Установка пакетов nginx
+  apt:
+    name: "{{ package_name }}"
+    state: present
+  when: ansible_os_family == "Debian"
+  tags:
+    - nginx
+    - install
+    - packages
+
+- name: Копировать конфиг nginx
+  template:
+    src: nginx.conf.j2
+    dest: /etc/nginx/sites-available/default
+  notify: restart nginx
+  tags: [config]

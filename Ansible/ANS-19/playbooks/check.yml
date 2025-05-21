@@ -1,0 +1,6 @@
+- name: Check playbook (dry-run)
+  hosts: all
+  become: true
+  tasks:
+    - name: Проверка доступности узлов
+      ping:

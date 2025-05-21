@@ -1,0 +1,13 @@
+- name: Установка nginx через роль
+  hosts: web
+  become: true
+  roles:
+    - role: nginx
+      tags: [install, config]
+  tasks:
+    - name: Проверка значение переменной
+      debug:
+        var: ansible_hostname
+    - name: Проверка значение переменной
+      pause:
+        prompt: "Проверить значение переменной ansible_hostname"

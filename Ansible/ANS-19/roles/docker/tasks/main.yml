@@ -1,0 +1,12 @@
+# roles/docker/tasks/main.yml
+- name: Установить Docker
+  apt:
+    name: docker.io
+    state: present
+    update_cache: yes
+  tags: [install]
+
+- name: Запустить тестовый контейнер
+  command: docker run {{ docker_test_image }}
+  ignore_errors: true
+  tags: [run, test]
