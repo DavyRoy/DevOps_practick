@@ -1,0 +1,14 @@
+- name: Настройкка веб-сервиса
+  hosts: web
+  become: true
+  tasks:
+    - name: Установка Nginx
+      apt:
+        name: nginx
+        state: present
+
+    - name: Запуск и включение Nginx
+      service:
+        name: nginx
+        state: started
+        enabled: true

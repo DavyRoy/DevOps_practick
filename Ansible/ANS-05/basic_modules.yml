@@ -1,0 +1,33 @@
+- name: Демонстрация модулей
+  hosts: web
+  become: true
+  tasks:
+    - name: Проверка соединения
+      ping:
+
+    - name: Вывод
+      command: uptime
+
+    - name: Вывод Home
+      shell: echo $HOME
+
+    - name: Копирование hello.txt
+      copy:
+        src: /Users/sergeylapshov/Documents/Devops/docker/Ansible/ANS-05/files/hello.txt
+        dest: /tmp/hello.txt
+
+    - name: Установка
+      apt:
+        name: curl
+        state: present
+        update_cache: yes
+
+    - name: Запуск сервиса NGINX
+      service:
+        name: nginx
+        state: started
+        enabled: true
+
+    - name: Вывод
+      debug:
+        msg: "Сценарий выполнен успешно"

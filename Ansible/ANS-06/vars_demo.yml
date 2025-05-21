@@ -1,0 +1,30 @@
+- name: Установка пакетов с использованием переменных
+  hosts: web
+  become: true
+  vars:
+    manual_package: nginx
+  vars_files:
+    - vars/main.yml
+
+  tasks:
+    - name: Установить пакет из переменной в vars (playbook)
+      apt:
+        name: "{{ manual_package }}"
+        state: present
+
+    - name: Установить пакет из group_vars
+      apt:
+        name: "{{ web_package }}"
+        state: present
+
+    - name: Установить пакет из vars_files
+      apt:
+        name: "{{ web2_package }}"
+        state: present
+
+    - name: Вывод всех переменных
+      debug:
+        msg: |
+          From vars: {{ manual_package }}
+          From group_vars: {{ web_package }}
+          From vars_file: {{ web2_package }}

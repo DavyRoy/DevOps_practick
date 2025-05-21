@@ -1,40 +1,43 @@
 pipeline {
-    agent {
-    docker {
-      image 'docker:24.0.7'
-      args '-v /var/run/docker.sock:/var/run/docker.sock'
-    }
+  agent any
+
+  parameters {
+    string(name: 'TARGET_ENV', defaultValue: 'dev', description: 'Куда деплоим?')
+    booleanParam(name: 'RUN_TESTS', defaultValue: true, description: 'Запускать ли тесты?')
   }
 
-    stages {
-        stage('Build Docker Image') {
-            steps {
-                sh 'docker build -t myapp:latest .'
-            }
-        }
+  environment {
+    VERSION = "1.0.${BUILD_NUMBER}"
+  }
 
-        stage('Run Tests') {
-            steps {
-                sh 'docker run --rm myapp:latest ./run-tests.sh'
-            }
-        }
-
-        stage('Deploy') {
-            steps {
-                sh '''
-                  docker rm -f myapp_container || true
-                  docker run -d --name myapp_container -p 8080:80 myapp:latest
-                '''
-            }
-        }
+  stages {
+    stage('Echo Params') {
+      steps {
+        echo "TARGET_ENV = ${params.TARGET_ENV}"
+        echo "RUN_TESTS = ${params.RUN_TESTS}"
+        echo "VERSION = ${env.VERSION}"
+      }
     }
 
-    post {
-        always {
-            script {
-                echo "🧹 Удаляем контейнер myapp_container если он был"
-                sh 'docker rm -f myapp_container || true'
-            }
-        }
+    stage('Test') {
+      when {
+        expression { return params.RUN_TESTS == true }
+      }
+      steps {
+        echo "Выполняем тесты..."
+      }
     }
+
+    stage('Deploy') {
+      when {
+        allOf {
+          branch 'main'
+          environment name: 'TARGET_ENV', value: 'prod'
+        }
+      }
+      steps {
+        echo "Деплой в production!"
+      }
+    }
+  }
 }
