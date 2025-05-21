@@ -1,0 +1,11 @@
+- name: Установка nginx через роль
+  hosts: web
+  become: true
+
+  tasks:
+    - name: Клонировать приложение
+      git:
+        repo: 'https://github.com/DavyRoy/DevOps_practick.git'
+        dest: /home/vagrant/app
+        version: main
+        force: yes
