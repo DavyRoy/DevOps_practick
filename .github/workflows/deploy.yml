@@ -13,6 +13,12 @@ jobs:
       - name: Install Ansible
         run: sudo apt update && sudo apt install -y ansible
 
+      - name: 📂 Добавить приватный ключ
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.ANSIBLE_SSH_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+
       - name: Подключение к серверу и запуск Ansible
         env:
           ANSIBLE_HOST_KEY_CHECKING: "False"
