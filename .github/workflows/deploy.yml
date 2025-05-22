@@ -17,7 +17,7 @@ jobs:
         env:
           ANSIBLE_HOST_KEY_CHECKING: "False"
         run: |
-          ansible-playbook deploy.yml --private-key .ssh/id_rsa
+          ansible-playbook Ansible/DOCKER-ANS-07/deploy.yml --private-key .ssh/id_rsa
 
       - name: 📬 Отправка уведомления в Telegram (успех)
         if: success()
