@@ -25,16 +25,20 @@ jobs:
         run: |
           ansible-playbook Ansible/DOCKER-ANS-07/deploy.yml --private-key .ssh/id_rsa
 
-      - name: 📬 Отправка уведомления в Telegram (успех)
+      - name: 📬 Telegram Notification (success)
         if: success()
         run: |
-          curl -s -X POST https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/sendMessage \
-            -d chat_id=${{ secrets.TELEGRAM_CHAT_ID }} \
-            -d text="✅ Деплой завершён успешно! (GitHub Actions + Ansible)"
+          MESSAGE="✅ УСПЕХ%0AПроект: *${{ github.event.repository.name }}*%0AВетка: *${{ github.ref_name }}*%0A[Пайплайн](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})"
+          curl -s -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/sendMessage" \
+            -d chat_id="${{ secrets.TELEGRAM_CHAT_ID }}" \
+            -d text="$MESSAGE" \
+            -d parse_mode=Markdown
 
-      - name: ⚠️ Уведомление в Telegram (ошибка)
+      - name: ⚠️ Telegram Notification (failure)
         if: failure()
         run: |
-          curl -s -X POST https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/sendMessage \
-            -d chat_id=${{ secrets.TELEGRAM_CHAT_ID }} \
-            -d text="❌ Ошибка в пайплайне! Проверь GitHub Actions."
+          MESSAGE="❌ ОШИБКА%0AПроект: *${{ github.event.repository.name }}*%0AВетка: *${{ github.ref_name }}*%0A[Пайплайн](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})"
+          curl -s -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/sendMessage" \
+            -d chat_id="${{ secrets.TELEGRAM_CHAT_ID }}" \
+            -d text="$MESSAGE" \
+            -d parse_mode=Markdown
