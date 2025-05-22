@@ -1,0 +1,33 @@
+- name: Установка контейнера ubuntu с nginx
+  hosts: web
+  become: true
+  tasks:
+    - name: Установка контейнера ubuntu + nginx
+      community.docker.docker_container:
+        name: ubuntu_nginx
+        image: ubuntu:22.04
+        state: started
+        published_ports:
+          - "8081:80"
+        command: sleep infinity
+        tty: true
+
+    - name: Установка nginx
+      community.docker.docker_container_exec:
+        container: ubuntu_nginx
+        command: bash -c "apt update && apt install -y nginx && service nginx start"
+        tty: true
+
+    - name: Копирование конфигурации nginx
+      copy:
+        src: /Users/sergeylapshov/Documents/Devops/docker/Ansible/DOCKER-ANS-04/nginx.conf
+        dest: /home/vagrant/ubuntu/nginx.conf
+
+    - name: Копирование конфигурации nginx в контейнер
+      ansible.builtin.shell: docker cp /home/vagrant/ubuntu/nginx.conf ubuntu_nginx:/etc/nginx/sites-available/default
+
+    - name: Проверка работы nginx
+      uri:
+        url: http://localhost:8081
+        return_content: yes
+      register: nginx_response

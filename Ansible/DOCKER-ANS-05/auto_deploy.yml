@@ -1,0 +1,4 @@
+- name: Клонировать приложение
+  ansible.builtin.git:
+    repo: "https://github.com/sergeylapshov/devops-demo-backend.git"
+    dest: /home/vagrant/app

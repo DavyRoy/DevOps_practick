@@ -1,0 +1,23 @@
+- name: Запуск контейнера nginx
+  hosts: web
+  become: true
+  tasks:
+    - name: Запуск контейнера nginx
+      community.docker.docker_container:
+        name: nginx
+        image: nginx:latest
+        state: started
+        restart_policy: always
+        published_ports:
+          - "8082:80"
+
+    - name: Проверка, что контейнер запущен
+      uri:
+        url: http://localhost:8082
+        return_content: yes
+      register: result
+      ignore_errors: yes
+
+    - name: Показать результат
+      debug:
+        var: result.content

@@ -1,0 +1,33 @@
+- name: Запуск контейнера docker-compose
+  hosts: web
+  become: true
+  tasks:
+
+    - name: Копирование файла docker-compose.yml на удаленный хост
+      ansible.builtin.copy:
+        src: /Users/sergeylapshov/Documents/Devops/docker/Ansible/DOCKER-ANS-03/docker-compose.yml
+        dest: /home/vagrant/ubuntu/docker-compose.yml
+
+    - name: Запуск контейнера с помощью docker-compose
+      community.docker.docker_compose_v2:
+        project_src: /home/vagrant/ubuntu
+        state: present
+        pull: always
+
+    - name: Проверка, что nginx запущен
+      uri:
+        url: http://localhost:8083
+        return_content: yes
+      register: result
+      ignore_errors: yes
+
+    - name: Проверка, что backend запущен
+      uri:
+        url: http://localhost:5678
+        return_content: yes
+      register: result
+      ignore_errors: yes
+
+    - name: Показать результат
+      debug:
+        var: result.content

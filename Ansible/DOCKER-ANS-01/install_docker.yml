@@ -1,0 +1,44 @@
+- name: Установка зависимостей
+  hosts: web
+  become: true
+  tasks:
+    - name: Установка необходимых пакетов
+      apt:
+        name: "{{ item }}"
+        state: present
+      loop:
+        - apt-transport-https
+        - ca-certificates
+        - curl
+        - gnupg
+        - lsb-release
+
+    - name: Добавление ключа GPG Docker
+      apt_key:
+        url: https://download.docker.com/linux/ubuntu/gpg
+        state: present
+
+    - name: Добавление репозитория Docker
+      apt_repository:
+        repo: deb https://download.docker.com/linux/ubuntu {{ ansible_lsb.codename }} stable
+        state: present
+
+    - name: Установка Docker и зависимостей
+      apt:
+        name:
+          - docker-ce
+          - docker-ce-cli
+          - containerd.io
+        state: present
+        update_cache: true
+
+    - name: Запуск и включение Docker
+      service:
+        name: docker
+        state: started
+        enabled: true
+
+    - name: Проверка версии Docker
+      command: docker --version
+      register: docker_version
+      changed_when: false

@@ -1,0 +1,11 @@
+version: '3.8'
+services:
+  web:
+    image: nginx
+    ports:
+      - "8083:80"
+  backend:
+    image: hashicorp/http-echo
+    command: ["-text=Hello from backend!"]
+    ports:
+      - "5678:5678"

@@ -269,3 +269,1230 @@ core/2.18/reference_appendices/interpreter_discovery.html for more information.
 2025-05-21 22:09:19,891 p=47086 u=sergeylapshov n=ansible INFO| skipping: no hosts matched
 2025-05-21 22:09:19,891 p=47086 u=sergeylapshov n=ansible INFO| PLAY RECAP *********************************************************************
 2025-05-21 22:09:19,891 p=47086 u=sergeylapshov n=ansible INFO| web1                       : ok=4    changed=2    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+2025-05-22 07:49:41,531 p=58127 u=sergeylapshov n=ansible INFO| PLAY [Установка зависимостей] *******************************************************************************************
+2025-05-22 07:49:41,538 p=58127 u=sergeylapshov n=ansible INFO| TASK [Gathering Facts] **************************************************************************************************
+2025-05-22 07:49:43,110 p=58127 u=sergeylapshov n=ansible WARNING| [WARNING]: Platform linux on host web1 is using the discovered Python interpreter at /usr/bin/python3.10, but future
+installation of another Python interpreter could change the meaning of that path. See https://docs.ansible.com/ansible-
+core/2.18/reference_appendices/interpreter_discovery.html for more information.
+
+2025-05-22 07:49:43,110 p=58127 u=sergeylapshov n=ansible INFO| ok: [web1]
+2025-05-22 07:49:43,114 p=58127 u=sergeylapshov n=ansible INFO| TASK [Установка необходимых пакетов] ************************************************************************************
+2025-05-22 07:49:49,738 p=58127 u=sergeylapshov n=ansible INFO| changed: [web1] => (item=apt-transport-https)
+2025-05-22 07:49:50,659 p=58127 u=sergeylapshov n=ansible INFO| ok: [web1] => (item=ca-certificates)
+2025-05-22 07:49:51,505 p=58127 u=sergeylapshov n=ansible INFO| ok: [web1] => (item=curl)
+2025-05-22 07:49:52,311 p=58127 u=sergeylapshov n=ansible INFO| ok: [web1] => (item=gnupg)
+2025-05-22 07:49:52,319 p=58127 u=sergeylapshov n=ansible INFO| TASK [Добавление ключа GPG Docker] **************************************************************************************
+2025-05-22 07:49:54,893 p=58127 u=sergeylapshov n=ansible INFO| changed: [web1]
+2025-05-22 07:49:54,899 p=58127 u=sergeylapshov n=ansible INFO| TASK [Добавление репозитория Docker] ************************************************************************************
+2025-05-22 07:51:06,893 p=58127 u=sergeylapshov n=ansible WARNING| [WARNING]: Failed to update cache after 1 due to W:https://download.docker.com/linux/ubuntu/dists/jammy/InRelease: Key
+is stored in legacy trusted.gpg keyring (/etc/apt/trusted.gpg), see the DEPRECATION section in apt-key(8) for details.,
+E:Release file for http://ports.ubuntu.com/ubuntu-ports/dists/jammy-updates/InRelease is not valid yet (invalid for
+another 9h 21min 0s). Updates for this repository will not be applied., E:Release file for
+http://ports.ubuntu.com/ubuntu-ports/dists/jammy-backports/InRelease is not valid yet (invalid for another 9h 24min
+18s). Updates for this repository will not be applied., E:Release file for http://ports.ubuntu.com/ubuntu-
+ports/dists/jammy-security/InRelease is not valid yet (invalid for another 9h 18min 24s). Updates for this repository
+will not be applied. retry, retrying
+
+2025-05-22 07:51:06,894 p=58127 u=sergeylapshov n=ansible WARNING| [WARNING]: Sleeping for 1 seconds, before attempting to update the cache again
+
+2025-05-22 07:51:06,895 p=58127 u=sergeylapshov n=ansible WARNING| [WARNING]: Failed to update cache after 2 due to W:https://download.docker.com/linux/ubuntu/dists/jammy/InRelease: Key
+is stored in legacy trusted.gpg keyring (/etc/apt/trusted.gpg), see the DEPRECATION section in apt-key(8) for details.,
+E:Release file for http://ports.ubuntu.com/ubuntu-ports/dists/jammy-updates/InRelease is not valid yet (invalid for
+another 9h 20min 51s). Updates for this repository will not be applied., E:Release file for
+http://ports.ubuntu.com/ubuntu-ports/dists/jammy-backports/InRelease is not valid yet (invalid for another 9h 24min 9s).
+Updates for this repository will not be applied., E:Release file for http://ports.ubuntu.com/ubuntu-ports/dists/jammy-
+security/InRelease is not valid yet (invalid for another 9h 18min 15s). Updates for this repository will not be applied.
+retry, retrying
+
+2025-05-22 07:51:06,895 p=58127 u=sergeylapshov n=ansible WARNING| [WARNING]: Sleeping for 2 seconds, before attempting to update the cache again
+
+2025-05-22 07:51:06,895 p=58127 u=sergeylapshov n=ansible WARNING| [WARNING]: Failed to update cache after 3 due to W:https://download.docker.com/linux/ubuntu/dists/jammy/InRelease: Key
+is stored in legacy trusted.gpg keyring (/etc/apt/trusted.gpg), see the DEPRECATION section in apt-key(8) for details.,
+E:Release file for http://ports.ubuntu.com/ubuntu-ports/dists/jammy-updates/InRelease is not valid yet (invalid for
+another 9h 20min 41s). Updates for this repository will not be applied., E:Release file for
+http://ports.ubuntu.com/ubuntu-ports/dists/jammy-backports/InRelease is not valid yet (invalid for another 9h 23min
+59s). Updates for this repository will not be applied., E:Release file for http://ports.ubuntu.com/ubuntu-
+ports/dists/jammy-security/InRelease is not valid yet (invalid for another 9h 18min 5s). Updates for this repository
+will not be applied. retry, retrying
+
+2025-05-22 07:51:06,895 p=58127 u=sergeylapshov n=ansible WARNING| [WARNING]: Sleeping for 4 seconds, before attempting to update the cache again
+
+2025-05-22 07:51:06,895 p=58127 u=sergeylapshov n=ansible WARNING| [WARNING]: Failed to update cache after 4 due to W:https://download.docker.com/linux/ubuntu/dists/jammy/InRelease: Key
+is stored in legacy trusted.gpg keyring (/etc/apt/trusted.gpg), see the DEPRECATION section in apt-key(8) for details.,
+E:Release file for http://ports.ubuntu.com/ubuntu-ports/dists/jammy-updates/InRelease is not valid yet (invalid for
+another 9h 20min 28s). Updates for this repository will not be applied., E:Release file for
+http://ports.ubuntu.com/ubuntu-ports/dists/jammy-backports/InRelease is not valid yet (invalid for another 9h 23min
+43s). Updates for this repository will not be applied., E:Release file for http://ports.ubuntu.com/ubuntu-
+ports/dists/jammy-security/InRelease is not valid yet (invalid for another 9h 17min 49s). Updates for this repository
+will not be applied. retry, retrying
+
+2025-05-22 07:51:06,895 p=58127 u=sergeylapshov n=ansible WARNING| [WARNING]: Sleeping for 8 seconds, before attempting to update the cache again
+
+2025-05-22 07:51:06,895 p=58127 u=sergeylapshov n=ansible WARNING| [WARNING]: Failed to update cache after 5 due to W:https://download.docker.com/linux/ubuntu/dists/jammy/InRelease: Key
+is stored in legacy trusted.gpg keyring (/etc/apt/trusted.gpg), see the DEPRECATION section in apt-key(8) for details.,
+E:Release file for http://ports.ubuntu.com/ubuntu-ports/dists/jammy-updates/InRelease is not valid yet (invalid for
+another 9h 20min 9s). Updates for this repository will not be applied., E:Release file for
+http://ports.ubuntu.com/ubuntu-ports/dists/jammy-backports/InRelease is not valid yet (invalid for another 9h 23min
+26s). Updates for this repository will not be applied., E:Release file for http://ports.ubuntu.com/ubuntu-
+ports/dists/jammy-security/InRelease is not valid yet (invalid for another 9h 17min 32s). Updates for this repository
+will not be applied. retry, retrying
+
+2025-05-22 07:51:06,895 p=58127 u=sergeylapshov n=ansible WARNING| [WARNING]: Sleeping for 12 seconds, before attempting to update the cache again
+
+2025-05-22 07:51:06,896 p=58127 u=sergeylapshov n=ansible INFO| fatal: [web1]: FAILED! => {"changed": false, "msg": "Failed to update apt cache after 5 retries: W:https://download.docker.com/linux/ubuntu/dists/jammy/InRelease: Key is stored in legacy trusted.gpg keyring (/etc/apt/trusted.gpg), see the DEPRECATION section in apt-key(8) for details., E:Release file for http://ports.ubuntu.com/ubuntu-ports/dists/jammy-updates/InRelease is not valid yet (invalid for another 9h 20min 9s). Updates for this repository will not be applied., E:Release file for http://ports.ubuntu.com/ubuntu-ports/dists/jammy-backports/InRelease is not valid yet (invalid for another 9h 23min 26s). Updates for this repository will not be applied., E:Release file for http://ports.ubuntu.com/ubuntu-ports/dists/jammy-security/InRelease is not valid yet (invalid for another 9h 17min 32s). Updates for this repository will not be applied."}
+2025-05-22 07:51:06,896 p=58127 u=sergeylapshov n=ansible INFO| PLAY RECAP **************************************************************************************************************
+2025-05-22 07:51:06,896 p=58127 u=sergeylapshov n=ansible INFO| web1                       : ok=3    changed=2    unreachable=0    failed=1    skipped=0    rescued=0    ignored=0   
+2025-05-22 07:52:24,484 p=58769 u=sergeylapshov n=ansible INFO| PLAY [Установка зависимостей] *******************************************************************************************
+2025-05-22 07:52:24,490 p=58769 u=sergeylapshov n=ansible INFO| TASK [Gathering Facts] **************************************************************************************************
+2025-05-22 07:52:25,969 p=58769 u=sergeylapshov n=ansible WARNING| [WARNING]: Platform linux on host web1 is using the discovered Python interpreter at /usr/bin/python3.10, but future
+installation of another Python interpreter could change the meaning of that path. See https://docs.ansible.com/ansible-
+core/2.18/reference_appendices/interpreter_discovery.html for more information.
+
+2025-05-22 07:52:25,969 p=58769 u=sergeylapshov n=ansible INFO| ok: [web1]
+2025-05-22 07:52:25,973 p=58769 u=sergeylapshov n=ansible INFO| TASK [Установка необходимых пакетов] ************************************************************************************
+2025-05-22 07:52:27,882 p=58769 u=sergeylapshov n=ansible INFO| ok: [web1] => (item=apt-transport-https)
+2025-05-22 07:52:28,761 p=58769 u=sergeylapshov n=ansible INFO| ok: [web1] => (item=ca-certificates)
+2025-05-22 07:52:29,596 p=58769 u=sergeylapshov n=ansible INFO| ok: [web1] => (item=curl)
+2025-05-22 07:52:30,421 p=58769 u=sergeylapshov n=ansible INFO| ok: [web1] => (item=gnupg)
+2025-05-22 07:52:30,429 p=58769 u=sergeylapshov n=ansible INFO| TASK [Добавление ключа GPG Docker] **************************************************************************************
+2025-05-22 07:52:32,475 p=58769 u=sergeylapshov n=ansible INFO| ok: [web1]
+2025-05-22 07:52:32,481 p=58769 u=sergeylapshov n=ansible INFO| TASK [Добавление репозитория Docker] ************************************************************************************
+2025-05-22 07:52:32,949 p=58769 u=sergeylapshov n=ansible INFO| An exception occurred during task execution. To see the full traceback, use -vvv. The error was: apt_pkg.Error: E:Malformed entry 1 in list file /etc/apt/sources.list.d/download_docker_com_linux_ubuntu.list (Component), E:The list of sources could not be read.
+2025-05-22 07:52:32,950 p=58769 u=sergeylapshov n=ansible INFO| fatal: [web1]: FAILED! => {"changed": false, "module_stderr": "Shared connection to 10.37.129.5 closed.\r\n", "module_stdout": "Traceback (most recent call last):\r\n  File \"/home/vagrant/.ansible/tmp/ansible-tmp-1747889552.511159-58846-137696193815004/AnsiballZ_apt_repository.py\", line 107, in <module>\r\n    _ansiballz_main()\r\n  File \"/home/vagrant/.ansible/tmp/ansible-tmp-1747889552.511159-58846-137696193815004/AnsiballZ_apt_repository.py\", line 99, in _ansiballz_main\r\n    invoke_module(zipped_mod, temp_path, ANSIBALLZ_PARAMS)\r\n  File \"/home/vagrant/.ansible/tmp/ansible-tmp-1747889552.511159-58846-137696193815004/AnsiballZ_apt_repository.py\", line 47, in invoke_module\r\n    runpy.run_module(mod_name='ansible.modules.apt_repository', init_globals=dict(_module_fqn='ansible.modules.apt_repository', _modlib_path=modlib_path),\r\n  File \"/usr/lib/python3.10/runpy.py\", line 224, in run_module\r\n    return _run_module_code(code, init_globals, run_name, mod_spec)\r\n  File \"/usr/lib/python3.10/runpy.py\", line 96, in _run_module_code\r\n    _run_code(code, mod_globals, init_globals,\r\n  File \"/usr/lib/python3.10/runpy.py\", line 86, in _run_code\r\n    exec(code, run_globals)\r\n  File \"/tmp/ansible_apt_repository_payload_yo13tdl9/ansible_apt_repository_payload.zip/ansible/modules/apt_repository.py\", line 782, in <module>\r\n  File \"/tmp/ansible_apt_repository_payload_yo13tdl9/ansible_apt_repository_payload.zip/ansible/modules/apt_repository.py\", line 748, in main\r\n  File \"/usr/lib/python3/dist-packages/apt/cache.py\", line 152, in __init__\r\n    self.open(progress)\r\n  File \"/usr/lib/python3/dist-packages/apt/cache.py\", line 214, in open\r\n    self._cache = apt_pkg.Cache(progress)\r\napt_pkg.Error: E:Malformed entry 1 in list file /etc/apt/sources.list.d/download_docker_com_linux_ubuntu.list (Component), E:The list of sources could not be read.\r\n", "msg": "MODULE FAILURE: No start of json char found\nSee stdout/stderr for the exact error", "rc": 1}
+2025-05-22 07:52:32,952 p=58769 u=sergeylapshov n=ansible INFO| PLAY RECAP **************************************************************************************************************
+2025-05-22 07:52:32,952 p=58769 u=sergeylapshov n=ansible INFO| web1                       : ok=3    changed=0    unreachable=0    failed=1    skipped=0    rescued=0    ignored=0   
+2025-05-22 07:52:53,373 p=59047 u=sergeylapshov n=ansible INFO| PLAY [Установка зависимостей] *******************************************************************************************
+2025-05-22 07:52:53,379 p=59047 u=sergeylapshov n=ansible INFO| TASK [Gathering Facts] **************************************************************************************************
+2025-05-22 07:52:54,498 p=59047 u=sergeylapshov n=ansible WARNING| [WARNING]: Platform linux on host web1 is using the discovered Python interpreter at /usr/bin/python3.10, but future
+installation of another Python interpreter could change the meaning of that path. See https://docs.ansible.com/ansible-
+core/2.18/reference_appendices/interpreter_discovery.html for more information.
+
+2025-05-22 07:52:54,498 p=59047 u=sergeylapshov n=ansible INFO| ok: [web1]
+2025-05-22 07:52:54,502 p=59047 u=sergeylapshov n=ansible INFO| TASK [Установка необходимых пакетов] ************************************************************************************
+2025-05-22 07:52:54,910 p=59047 u=sergeylapshov n=ansible INFO| failed: [web1] (item=apt-transport-https) => {"ansible_loop_var": "item", "changed": false, "item": "apt-transport-https", "msg": "E:Malformed entry 1 in list file /etc/apt/sources.list.d/download_docker_com_linux_ubuntu.list (Component), E:The list of sources could not be read."}
+2025-05-22 07:52:55,203 p=59047 u=sergeylapshov n=ansible INFO| failed: [web1] (item=ca-certificates) => {"ansible_loop_var": "item", "changed": false, "item": "ca-certificates", "msg": "E:Malformed entry 1 in list file /etc/apt/sources.list.d/download_docker_com_linux_ubuntu.list (Component), E:The list of sources could not be read."}
+2025-05-22 07:52:55,508 p=59047 u=sergeylapshov n=ansible INFO| failed: [web1] (item=curl) => {"ansible_loop_var": "item", "changed": false, "item": "curl", "msg": "E:Malformed entry 1 in list file /etc/apt/sources.list.d/download_docker_com_linux_ubuntu.list (Component), E:The list of sources could not be read."}
+2025-05-22 07:52:55,807 p=59047 u=sergeylapshov n=ansible INFO| failed: [web1] (item=gnupg) => {"ansible_loop_var": "item", "changed": false, "item": "gnupg", "msg": "E:Malformed entry 1 in list file /etc/apt/sources.list.d/download_docker_com_linux_ubuntu.list (Component), E:The list of sources could not be read."}
+2025-05-22 07:52:55,810 p=59047 u=sergeylapshov n=ansible INFO| PLAY RECAP **************************************************************************************************************
+2025-05-22 07:52:55,811 p=59047 u=sergeylapshov n=ansible INFO| web1                       : ok=1    changed=0    unreachable=0    failed=1    skipped=0    rescued=0    ignored=0   
+2025-05-22 07:53:16,117 p=59282 u=sergeylapshov n=ansible INFO| PLAY [Установка зависимостей] *******************************************************************************************
+2025-05-22 07:53:16,121 p=59282 u=sergeylapshov n=ansible INFO| TASK [Gathering Facts] **************************************************************************************************
+2025-05-22 07:53:17,238 p=59282 u=sergeylapshov n=ansible WARNING| [WARNING]: Platform linux on host web1 is using the discovered Python interpreter at /usr/bin/python3.10, but future
+installation of another Python interpreter could change the meaning of that path. See https://docs.ansible.com/ansible-
+core/2.18/reference_appendices/interpreter_discovery.html for more information.
+
+2025-05-22 07:53:17,238 p=59282 u=sergeylapshov n=ansible INFO| ok: [web1]
+2025-05-22 07:53:17,242 p=59282 u=sergeylapshov n=ansible INFO| TASK [Установка необходимых пакетов] ************************************************************************************
+2025-05-22 07:53:17,637 p=59282 u=sergeylapshov n=ansible INFO| failed: [web1] (item=apt-transport-https) => {"ansible_loop_var": "item", "changed": false, "item": "apt-transport-https", "msg": "E:Malformed entry 1 in list file /etc/apt/sources.list.d/download_docker_com_linux_ubuntu.list (Component), E:The list of sources could not be read."}
+2025-05-22 07:53:17,941 p=59282 u=sergeylapshov n=ansible INFO| failed: [web1] (item=ca-certificates) => {"ansible_loop_var": "item", "changed": false, "item": "ca-certificates", "msg": "E:Malformed entry 1 in list file /etc/apt/sources.list.d/download_docker_com_linux_ubuntu.list (Component), E:The list of sources could not be read."}
+2025-05-22 07:53:18,246 p=59282 u=sergeylapshov n=ansible INFO| failed: [web1] (item=curl) => {"ansible_loop_var": "item", "changed": false, "item": "curl", "msg": "E:Malformed entry 1 in list file /etc/apt/sources.list.d/download_docker_com_linux_ubuntu.list (Component), E:The list of sources could not be read."}
+2025-05-22 07:53:18,559 p=59282 u=sergeylapshov n=ansible INFO| failed: [web1] (item=gnupg) => {"ansible_loop_var": "item", "changed": false, "item": "gnupg", "msg": "E:Malformed entry 1 in list file /etc/apt/sources.list.d/download_docker_com_linux_ubuntu.list (Component), E:The list of sources could not be read."}
+2025-05-22 07:53:18,562 p=59282 u=sergeylapshov n=ansible INFO| PLAY RECAP **************************************************************************************************************
+2025-05-22 07:53:18,562 p=59282 u=sergeylapshov n=ansible INFO| web1                       : ok=1    changed=0    unreachable=0    failed=1    skipped=0    rescued=0    ignored=0   
+2025-05-22 07:53:58,844 p=59580 u=sergeylapshov n=ansible INFO| PLAY [Установка зависимостей] *******************************************************************************************
+2025-05-22 07:53:58,848 p=59580 u=sergeylapshov n=ansible INFO| TASK [Gathering Facts] **************************************************************************************************
+2025-05-22 07:53:59,953 p=59580 u=sergeylapshov n=ansible WARNING| [WARNING]: Platform linux on host web1 is using the discovered Python interpreter at /usr/bin/python3.10, but future
+installation of another Python interpreter could change the meaning of that path. See https://docs.ansible.com/ansible-
+core/2.18/reference_appendices/interpreter_discovery.html for more information.
+
+2025-05-22 07:53:59,953 p=59580 u=sergeylapshov n=ansible INFO| ok: [web1]
+2025-05-22 07:53:59,957 p=59580 u=sergeylapshov n=ansible INFO| TASK [Установка необходимых пакетов] ************************************************************************************
+2025-05-22 07:54:00,368 p=59580 u=sergeylapshov n=ansible INFO| failed: [web1] (item=apt-transport-https) => {"ansible_loop_var": "item", "changed": false, "item": "apt-transport-https", "msg": "E:Malformed entry 1 in list file /etc/apt/sources.list.d/download_docker_com_linux_ubuntu.list (Component), E:The list of sources could not be read."}
+2025-05-22 07:54:00,678 p=59580 u=sergeylapshov n=ansible INFO| failed: [web1] (item=ca-certificates) => {"ansible_loop_var": "item", "changed": false, "item": "ca-certificates", "msg": "E:Malformed entry 1 in list file /etc/apt/sources.list.d/download_docker_com_linux_ubuntu.list (Component), E:The list of sources could not be read."}
+2025-05-22 07:54:00,974 p=59580 u=sergeylapshov n=ansible INFO| failed: [web1] (item=curl) => {"ansible_loop_var": "item", "changed": false, "item": "curl", "msg": "E:Malformed entry 1 in list file /etc/apt/sources.list.d/download_docker_com_linux_ubuntu.list (Component), E:The list of sources could not be read."}
+2025-05-22 07:54:01,285 p=59580 u=sergeylapshov n=ansible INFO| failed: [web1] (item=gnupg) => {"ansible_loop_var": "item", "changed": false, "item": "gnupg", "msg": "E:Malformed entry 1 in list file /etc/apt/sources.list.d/download_docker_com_linux_ubuntu.list (Component), E:The list of sources could not be read."}
+2025-05-22 07:54:01,288 p=59580 u=sergeylapshov n=ansible INFO| PLAY RECAP **************************************************************************************************************
+2025-05-22 07:54:01,289 p=59580 u=sergeylapshov n=ansible INFO| web1                       : ok=1    changed=0    unreachable=0    failed=1    skipped=0    rescued=0    ignored=0   
+2025-05-22 07:54:32,114 p=59853 u=sergeylapshov n=ansible INFO| PLAY [Установка зависимостей] *******************************************************************************************
+2025-05-22 07:54:32,119 p=59853 u=sergeylapshov n=ansible INFO| TASK [Gathering Facts] **************************************************************************************************
+2025-05-22 07:54:33,233 p=59853 u=sergeylapshov n=ansible WARNING| [WARNING]: Platform linux on host web1 is using the discovered Python interpreter at /usr/bin/python3.10, but future
+installation of another Python interpreter could change the meaning of that path. See https://docs.ansible.com/ansible-
+core/2.18/reference_appendices/interpreter_discovery.html for more information.
+
+2025-05-22 07:54:33,234 p=59853 u=sergeylapshov n=ansible INFO| ok: [web1]
+2025-05-22 07:54:33,237 p=59853 u=sergeylapshov n=ansible INFO| TASK [Установка необходимых пакетов] ************************************************************************************
+2025-05-22 07:54:33,632 p=59853 u=sergeylapshov n=ansible INFO| failed: [web1] (item=apt-transport-https) => {"ansible_loop_var": "item", "changed": false, "item": "apt-transport-https", "msg": "E:Malformed entry 1 in list file /etc/apt/sources.list.d/download_docker_com_linux_ubuntu.list (Component), E:The list of sources could not be read."}
+2025-05-22 07:54:33,923 p=59853 u=sergeylapshov n=ansible INFO| failed: [web1] (item=ca-certificates) => {"ansible_loop_var": "item", "changed": false, "item": "ca-certificates", "msg": "E:Malformed entry 1 in list file /etc/apt/sources.list.d/download_docker_com_linux_ubuntu.list (Component), E:The list of sources could not be read."}
+2025-05-22 07:54:34,234 p=59853 u=sergeylapshov n=ansible INFO| failed: [web1] (item=curl) => {"ansible_loop_var": "item", "changed": false, "item": "curl", "msg": "E:Malformed entry 1 in list file /etc/apt/sources.list.d/download_docker_com_linux_ubuntu.list (Component), E:The list of sources could not be read."}
+2025-05-22 07:54:34,539 p=59853 u=sergeylapshov n=ansible INFO| failed: [web1] (item=gnupg) => {"ansible_loop_var": "item", "changed": false, "item": "gnupg", "msg": "E:Malformed entry 1 in list file /etc/apt/sources.list.d/download_docker_com_linux_ubuntu.list (Component), E:The list of sources could not be read."}
+2025-05-22 07:54:34,543 p=59853 u=sergeylapshov n=ansible INFO| PLAY RECAP **************************************************************************************************************
+2025-05-22 07:54:34,543 p=59853 u=sergeylapshov n=ansible INFO| web1                       : ok=1    changed=0    unreachable=0    failed=1    skipped=0    rescued=0    ignored=0   
+2025-05-22 07:55:04,130 p=60126 u=sergeylapshov n=ansible INFO| PLAY [Установка зависимостей] *******************************************************************************************
+2025-05-22 07:55:04,136 p=60126 u=sergeylapshov n=ansible INFO| TASK [Gathering Facts] **************************************************************************************************
+2025-05-22 07:55:05,262 p=60126 u=sergeylapshov n=ansible WARNING| [WARNING]: Platform linux on host web1 is using the discovered Python interpreter at /usr/bin/python3.10, but future
+installation of another Python interpreter could change the meaning of that path. See https://docs.ansible.com/ansible-
+core/2.18/reference_appendices/interpreter_discovery.html for more information.
+
+2025-05-22 07:55:05,262 p=60126 u=sergeylapshov n=ansible INFO| ok: [web1]
+2025-05-22 07:55:05,266 p=60126 u=sergeylapshov n=ansible INFO| TASK [Установка необходимых пакетов] ************************************************************************************
+2025-05-22 07:55:05,689 p=60126 u=sergeylapshov n=ansible INFO| failed: [web1] (item=apt-transport-https) => {"ansible_loop_var": "item", "changed": false, "item": "apt-transport-https", "msg": "E:Malformed entry 1 in list file /etc/apt/sources.list.d/download_docker_com_linux_ubuntu.list (Component), E:The list of sources could not be read."}
+2025-05-22 07:55:05,997 p=60126 u=sergeylapshov n=ansible INFO| failed: [web1] (item=ca-certificates) => {"ansible_loop_var": "item", "changed": false, "item": "ca-certificates", "msg": "E:Malformed entry 1 in list file /etc/apt/sources.list.d/download_docker_com_linux_ubuntu.list (Component), E:The list of sources could not be read."}
+2025-05-22 07:55:06,306 p=60126 u=sergeylapshov n=ansible INFO| failed: [web1] (item=curl) => {"ansible_loop_var": "item", "changed": false, "item": "curl", "msg": "E:Malformed entry 1 in list file /etc/apt/sources.list.d/download_docker_com_linux_ubuntu.list (Component), E:The list of sources could not be read."}
+2025-05-22 07:55:06,601 p=60126 u=sergeylapshov n=ansible INFO| failed: [web1] (item=gnupg) => {"ansible_loop_var": "item", "changed": false, "item": "gnupg", "msg": "E:Malformed entry 1 in list file /etc/apt/sources.list.d/download_docker_com_linux_ubuntu.list (Component), E:The list of sources could not be read."}
+2025-05-22 07:55:06,604 p=60126 u=sergeylapshov n=ansible INFO| PLAY RECAP **************************************************************************************************************
+2025-05-22 07:55:06,605 p=60126 u=sergeylapshov n=ansible INFO| web1                       : ok=1    changed=0    unreachable=0    failed=1    skipped=0    rescued=0    ignored=0   
+2025-05-22 07:55:19,771 p=60349 u=sergeylapshov n=ansible INFO| PLAY [Установка зависимостей] *******************************************************************************************
+2025-05-22 07:55:19,775 p=60349 u=sergeylapshov n=ansible INFO| TASK [Gathering Facts] **************************************************************************************************
+2025-05-22 07:55:20,876 p=60349 u=sergeylapshov n=ansible WARNING| [WARNING]: Platform linux on host web1 is using the discovered Python interpreter at /usr/bin/python3.10, but future
+installation of another Python interpreter could change the meaning of that path. See https://docs.ansible.com/ansible-
+core/2.18/reference_appendices/interpreter_discovery.html for more information.
+
+2025-05-22 07:55:20,876 p=60349 u=sergeylapshov n=ansible INFO| ok: [web1]
+2025-05-22 07:55:20,880 p=60349 u=sergeylapshov n=ansible INFO| TASK [Установка необходимых пакетов] ************************************************************************************
+2025-05-22 07:55:21,296 p=60349 u=sergeylapshov n=ansible INFO| failed: [web1] (item=apt-transport-https) => {"ansible_loop_var": "item", "changed": false, "item": "apt-transport-https", "msg": "E:Malformed entry 1 in list file /etc/apt/sources.list.d/download_docker_com_linux_ubuntu.list (Component), E:The list of sources could not be read."}
+2025-05-22 07:55:21,607 p=60349 u=sergeylapshov n=ansible INFO| failed: [web1] (item=ca-certificates) => {"ansible_loop_var": "item", "changed": false, "item": "ca-certificates", "msg": "E:Malformed entry 1 in list file /etc/apt/sources.list.d/download_docker_com_linux_ubuntu.list (Component), E:The list of sources could not be read."}
+2025-05-22 07:55:21,917 p=60349 u=sergeylapshov n=ansible INFO| failed: [web1] (item=curl) => {"ansible_loop_var": "item", "changed": false, "item": "curl", "msg": "E:Malformed entry 1 in list file /etc/apt/sources.list.d/download_docker_com_linux_ubuntu.list (Component), E:The list of sources could not be read."}
+2025-05-22 07:55:22,221 p=60349 u=sergeylapshov n=ansible INFO| failed: [web1] (item=gnupg) => {"ansible_loop_var": "item", "changed": false, "item": "gnupg", "msg": "E:Malformed entry 1 in list file /etc/apt/sources.list.d/download_docker_com_linux_ubuntu.list (Component), E:The list of sources could not be read."}
+2025-05-22 07:55:22,224 p=60349 u=sergeylapshov n=ansible INFO| PLAY RECAP **************************************************************************************************************
+2025-05-22 07:55:22,225 p=60349 u=sergeylapshov n=ansible INFO| web1                       : ok=1    changed=0    unreachable=0    failed=1    skipped=0    rescued=0    ignored=0   
+2025-05-22 07:57:52,355 p=60930 u=sergeylapshov n=ansible INFO| PLAY [Установка зависимостей] *******************************************************************************************
+2025-05-22 07:57:52,362 p=60930 u=sergeylapshov n=ansible INFO| TASK [Gathering Facts] **************************************************************************************************
+2025-05-22 07:57:53,975 p=60930 u=sergeylapshov n=ansible WARNING| [WARNING]: Platform linux on host web1 is using the discovered Python interpreter at /usr/bin/python3.10, but future
+installation of another Python interpreter could change the meaning of that path. See https://docs.ansible.com/ansible-
+core/2.18/reference_appendices/interpreter_discovery.html for more information.
+
+2025-05-22 07:57:53,975 p=60930 u=sergeylapshov n=ansible INFO| ok: [web1]
+2025-05-22 07:57:53,979 p=60930 u=sergeylapshov n=ansible INFO| TASK [Установка необходимых пакетов] ************************************************************************************
+2025-05-22 07:57:54,390 p=60930 u=sergeylapshov n=ansible INFO| failed: [web1] (item=apt-transport-https) => {"ansible_loop_var": "item", "changed": false, "item": "apt-transport-https", "msg": "E:Malformed entry 1 in list file /etc/apt/sources.list.d/download_docker_com_linux_ubuntu.list (Component), E:The list of sources could not be read."}
+2025-05-22 07:57:54,702 p=60930 u=sergeylapshov n=ansible INFO| failed: [web1] (item=ca-certificates) => {"ansible_loop_var": "item", "changed": false, "item": "ca-certificates", "msg": "E:Malformed entry 1 in list file /etc/apt/sources.list.d/download_docker_com_linux_ubuntu.list (Component), E:The list of sources could not be read."}
+2025-05-22 07:57:55,018 p=60930 u=sergeylapshov n=ansible INFO| failed: [web1] (item=curl) => {"ansible_loop_var": "item", "changed": false, "item": "curl", "msg": "E:Malformed entry 1 in list file /etc/apt/sources.list.d/download_docker_com_linux_ubuntu.list (Component), E:The list of sources could not be read."}
+2025-05-22 07:57:55,326 p=60930 u=sergeylapshov n=ansible INFO| failed: [web1] (item=gnupg) => {"ansible_loop_var": "item", "changed": false, "item": "gnupg", "msg": "E:Malformed entry 1 in list file /etc/apt/sources.list.d/download_docker_com_linux_ubuntu.list (Component), E:The list of sources could not be read."}
+2025-05-22 07:57:55,330 p=60930 u=sergeylapshov n=ansible INFO| PLAY RECAP **************************************************************************************************************
+2025-05-22 07:57:55,330 p=60930 u=sergeylapshov n=ansible INFO| web1                       : ok=1    changed=0    unreachable=0    failed=1    skipped=0    rescued=0    ignored=0   
+2025-05-22 07:59:24,980 p=61363 u=sergeylapshov n=ansible INFO| PLAY [Установка зависимостей] *******************************************************************************************
+2025-05-22 07:59:24,986 p=61363 u=sergeylapshov n=ansible INFO| TASK [Gathering Facts] **************************************************************************************************
+2025-05-22 07:59:26,423 p=61363 u=sergeylapshov n=ansible WARNING| [WARNING]: Platform linux on host web1 is using the discovered Python interpreter at /usr/bin/python3.10, but future
+installation of another Python interpreter could change the meaning of that path. See https://docs.ansible.com/ansible-
+core/2.18/reference_appendices/interpreter_discovery.html for more information.
+
+2025-05-22 07:59:26,423 p=61363 u=sergeylapshov n=ansible INFO| ok: [web1]
+2025-05-22 07:59:26,427 p=61363 u=sergeylapshov n=ansible INFO| TASK [Установка необходимых пакетов] ************************************************************************************
+2025-05-22 07:59:26,855 p=61363 u=sergeylapshov n=ansible INFO| failed: [web1] (item=apt-transport-https) => {"ansible_loop_var": "item", "changed": false, "item": "apt-transport-https", "msg": "E:Malformed entry 1 in list file /etc/apt/sources.list.d/download_docker_com_linux_ubuntu.list (Component), E:The list of sources could not be read."}
+2025-05-22 07:59:27,170 p=61363 u=sergeylapshov n=ansible INFO| failed: [web1] (item=ca-certificates) => {"ansible_loop_var": "item", "changed": false, "item": "ca-certificates", "msg": "E:Malformed entry 1 in list file /etc/apt/sources.list.d/download_docker_com_linux_ubuntu.list (Component), E:The list of sources could not be read."}
+2025-05-22 07:59:27,475 p=61363 u=sergeylapshov n=ansible INFO| failed: [web1] (item=curl) => {"ansible_loop_var": "item", "changed": false, "item": "curl", "msg": "E:Malformed entry 1 in list file /etc/apt/sources.list.d/download_docker_com_linux_ubuntu.list (Component), E:The list of sources could not be read."}
+2025-05-22 07:59:27,778 p=61363 u=sergeylapshov n=ansible INFO| failed: [web1] (item=gnupg) => {"ansible_loop_var": "item", "changed": false, "item": "gnupg", "msg": "E:Malformed entry 1 in list file /etc/apt/sources.list.d/download_docker_com_linux_ubuntu.list (Component), E:The list of sources could not be read."}
+2025-05-22 07:59:28,086 p=61363 u=sergeylapshov n=ansible INFO| failed: [web1] (item=lsb-release) => {"ansible_loop_var": "item", "changed": false, "item": "lsb-release", "msg": "E:Malformed entry 1 in list file /etc/apt/sources.list.d/download_docker_com_linux_ubuntu.list (Component), E:The list of sources could not be read."}
+2025-05-22 07:59:28,088 p=61363 u=sergeylapshov n=ansible INFO| PLAY RECAP **************************************************************************************************************
+2025-05-22 07:59:28,088 p=61363 u=sergeylapshov n=ansible INFO| web1                       : ok=1    changed=0    unreachable=0    failed=1    skipped=0    rescued=0    ignored=0   
+2025-05-22 07:59:47,239 p=61614 u=sergeylapshov n=ansible INFO| PLAY [Установка зависимостей] *******************************************************************************************
+2025-05-22 07:59:47,243 p=61614 u=sergeylapshov n=ansible INFO| TASK [Gathering Facts] **************************************************************************************************
+2025-05-22 07:59:48,329 p=61614 u=sergeylapshov n=ansible WARNING| [WARNING]: Platform linux on host web1 is using the discovered Python interpreter at /usr/bin/python3.10, but future
+installation of another Python interpreter could change the meaning of that path. See https://docs.ansible.com/ansible-
+core/2.18/reference_appendices/interpreter_discovery.html for more information.
+
+2025-05-22 07:59:48,329 p=61614 u=sergeylapshov n=ansible INFO| ok: [web1]
+2025-05-22 07:59:48,333 p=61614 u=sergeylapshov n=ansible INFO| TASK [Установка необходимых пакетов] ************************************************************************************
+2025-05-22 07:59:48,743 p=61614 u=sergeylapshov n=ansible INFO| failed: [web1] (item=apt-transport-https) => {"ansible_loop_var": "item", "changed": false, "item": "apt-transport-https", "msg": "E:Malformed entry 1 in list file /etc/apt/sources.list.d/download_docker_com_linux_ubuntu.list (Component), E:The list of sources could not be read."}
+2025-05-22 07:59:49,043 p=61614 u=sergeylapshov n=ansible INFO| failed: [web1] (item=ca-certificates) => {"ansible_loop_var": "item", "changed": false, "item": "ca-certificates", "msg": "E:Malformed entry 1 in list file /etc/apt/sources.list.d/download_docker_com_linux_ubuntu.list (Component), E:The list of sources could not be read."}
+2025-05-22 07:59:49,340 p=61614 u=sergeylapshov n=ansible INFO| failed: [web1] (item=curl) => {"ansible_loop_var": "item", "changed": false, "item": "curl", "msg": "E:Malformed entry 1 in list file /etc/apt/sources.list.d/download_docker_com_linux_ubuntu.list (Component), E:The list of sources could not be read."}
+2025-05-22 07:59:49,641 p=61614 u=sergeylapshov n=ansible INFO| failed: [web1] (item=gnupg) => {"ansible_loop_var": "item", "changed": false, "item": "gnupg", "msg": "E:Malformed entry 1 in list file /etc/apt/sources.list.d/download_docker_com_linux_ubuntu.list (Component), E:The list of sources could not be read."}
+2025-05-22 07:59:49,937 p=61614 u=sergeylapshov n=ansible INFO| failed: [web1] (item=lsb-release) => {"ansible_loop_var": "item", "changed": false, "item": "lsb-release", "msg": "E:Malformed entry 1 in list file /etc/apt/sources.list.d/download_docker_com_linux_ubuntu.list (Component), E:The list of sources could not be read."}
+2025-05-22 07:59:49,939 p=61614 u=sergeylapshov n=ansible INFO| PLAY RECAP **************************************************************************************************************
+2025-05-22 07:59:49,939 p=61614 u=sergeylapshov n=ansible INFO| web1                       : ok=1    changed=0    unreachable=0    failed=1    skipped=0    rescued=0    ignored=0   
+2025-05-22 08:00:23,531 p=61892 u=sergeylapshov n=ansible INFO| PLAY [Установка зависимостей] *******************************************************************************************
+2025-05-22 08:00:23,537 p=61892 u=sergeylapshov n=ansible INFO| TASK [Gathering Facts] **************************************************************************************************
+2025-05-22 08:00:24,641 p=61892 u=sergeylapshov n=ansible WARNING| [WARNING]: Platform linux on host web1 is using the discovered Python interpreter at /usr/bin/python3.10, but future
+installation of another Python interpreter could change the meaning of that path. See https://docs.ansible.com/ansible-
+core/2.18/reference_appendices/interpreter_discovery.html for more information.
+
+2025-05-22 08:00:24,641 p=61892 u=sergeylapshov n=ansible INFO| ok: [web1]
+2025-05-22 08:00:24,645 p=61892 u=sergeylapshov n=ansible INFO| TASK [Установка необходимых пакетов] ************************************************************************************
+2025-05-22 08:00:25,583 p=61892 u=sergeylapshov n=ansible INFO| ok: [web1] => (item=apt-transport-https)
+2025-05-22 08:00:26,419 p=61892 u=sergeylapshov n=ansible INFO| ok: [web1] => (item=ca-certificates)
+2025-05-22 08:00:27,217 p=61892 u=sergeylapshov n=ansible INFO| ok: [web1] => (item=curl)
+2025-05-22 08:00:27,964 p=61892 u=sergeylapshov n=ansible INFO| ok: [web1] => (item=gnupg)
+2025-05-22 08:00:28,788 p=61892 u=sergeylapshov n=ansible INFO| ok: [web1] => (item=lsb-release)
+2025-05-22 08:00:28,794 p=61892 u=sergeylapshov n=ansible INFO| TASK [Добавление ключа GPG Docker] **************************************************************************************
+2025-05-22 08:00:30,775 p=61892 u=sergeylapshov n=ansible INFO| ok: [web1]
+2025-05-22 08:00:30,779 p=61892 u=sergeylapshov n=ansible INFO| TASK [Добавление репозитория Docker] ************************************************************************************
+2025-05-22 08:01:40,852 p=61892 u=sergeylapshov n=ansible WARNING| [WARNING]: Failed to update cache after 1 due to W:https://download.docker.com/linux/ubuntu/dists/focal/InRelease: Key
+is stored in legacy trusted.gpg keyring (/etc/apt/trusted.gpg), see the DEPRECATION section in apt-key(8) for details.,
+E:Release file for http://ports.ubuntu.com/ubuntu-ports/dists/jammy-updates/InRelease is not valid yet (invalid for
+another 9h 10min 23s). Updates for this repository will not be applied., E:Release file for
+http://ports.ubuntu.com/ubuntu-ports/dists/jammy-backports/InRelease is not valid yet (invalid for another 9h 13min
+41s). Updates for this repository will not be applied., E:Release file for http://ports.ubuntu.com/ubuntu-
+ports/dists/jammy-security/InRelease is not valid yet (invalid for another 10h 6min 4s). Updates for this repository
+will not be applied. retry, retrying
+
+2025-05-22 08:01:40,852 p=61892 u=sergeylapshov n=ansible WARNING| [WARNING]: Sleeping for 1 seconds, before attempting to update the cache again
+
+2025-05-22 08:01:40,852 p=61892 u=sergeylapshov n=ansible WARNING| [WARNING]: Failed to update cache after 2 due to W:https://download.docker.com/linux/ubuntu/dists/focal/InRelease: Key
+is stored in legacy trusted.gpg keyring (/etc/apt/trusted.gpg), see the DEPRECATION section in apt-key(8) for details.,
+E:Release file for http://ports.ubuntu.com/ubuntu-ports/dists/jammy-security/InRelease is not valid yet (invalid for
+another 9h 7min 40s). Updates for this repository will not be applied., E:Release file for
+http://ports.ubuntu.com/ubuntu-ports/dists/jammy-updates/InRelease is not valid yet (invalid for another 9h 10min 13s).
+Updates for this repository will not be applied., E:Release file for http://ports.ubuntu.com/ubuntu-ports/dists/jammy-
+backports/InRelease is not valid yet (invalid for another 9h 13min 31s). Updates for this repository will not be
+applied. retry, retrying
+
+2025-05-22 08:01:40,853 p=61892 u=sergeylapshov n=ansible WARNING| [WARNING]: Sleeping for 2 seconds, before attempting to update the cache again
+
+2025-05-22 08:01:40,853 p=61892 u=sergeylapshov n=ansible WARNING| [WARNING]: Failed to update cache after 3 due to W:https://download.docker.com/linux/ubuntu/dists/focal/InRelease: Key
+is stored in legacy trusted.gpg keyring (/etc/apt/trusted.gpg), see the DEPRECATION section in apt-key(8) for details.,
+E:Release file for http://ports.ubuntu.com/ubuntu-ports/dists/jammy-security/InRelease is not valid yet (invalid for
+another 10h 5min 47s). Updates for this repository will not be applied., E:Release file for
+http://ports.ubuntu.com/ubuntu-ports/dists/jammy-updates/InRelease is not valid yet (invalid for another 9h 10min 3s).
+Updates for this repository will not be applied., E:Release file for http://ports.ubuntu.com/ubuntu-ports/dists/jammy-
+backports/InRelease is not valid yet (invalid for another 9h 13min 21s). Updates for this repository will not be
+applied. retry, retrying
+
+2025-05-22 08:01:40,853 p=61892 u=sergeylapshov n=ansible WARNING| [WARNING]: Sleeping for 4 seconds, before attempting to update the cache again
+
+2025-05-22 08:01:40,853 p=61892 u=sergeylapshov n=ansible WARNING| [WARNING]: Failed to update cache after 4 due to W:https://download.docker.com/linux/ubuntu/dists/focal/InRelease: Key
+is stored in legacy trusted.gpg keyring (/etc/apt/trusted.gpg), see the DEPRECATION section in apt-key(8) for details.,
+E:Release file for http://ports.ubuntu.com/ubuntu-ports/dists/jammy-updates/InRelease is not valid yet (invalid for
+another 9h 9min 51s). Updates for this repository will not be applied., E:Release file for
+http://ports.ubuntu.com/ubuntu-ports/dists/jammy-backports/InRelease is not valid yet (invalid for another 9h 13min 9s).
+Updates for this repository will not be applied., E:Release file for http://ports.ubuntu.com/ubuntu-ports/dists/jammy-
+security/InRelease is not valid yet (invalid for another 10h 5min 32s). Updates for this repository will not be applied.
+retry, retrying
+
+2025-05-22 08:01:40,853 p=61892 u=sergeylapshov n=ansible WARNING| [WARNING]: Sleeping for 8 seconds, before attempting to update the cache again
+
+2025-05-22 08:01:40,853 p=61892 u=sergeylapshov n=ansible WARNING| [WARNING]: Failed to update cache after 5 due to W:https://download.docker.com/linux/ubuntu/dists/focal/InRelease: Key
+is stored in legacy trusted.gpg keyring (/etc/apt/trusted.gpg), see the DEPRECATION section in apt-key(8) for details.,
+E:Release file for http://ports.ubuntu.com/ubuntu-ports/dists/jammy-updates/InRelease is not valid yet (invalid for
+another 9h 9min 35s). Updates for this repository will not be applied., E:Release file for
+http://ports.ubuntu.com/ubuntu-ports/dists/jammy-backports/InRelease is not valid yet (invalid for another 9h 12min
+53s). Updates for this repository will not be applied., E:Release file for http://ports.ubuntu.com/ubuntu-
+ports/dists/jammy-security/InRelease is not valid yet (invalid for another 10h 5min 16s). Updates for this repository
+will not be applied. retry, retrying
+
+2025-05-22 08:01:40,853 p=61892 u=sergeylapshov n=ansible WARNING| [WARNING]: Sleeping for 12 seconds, before attempting to update the cache again
+
+2025-05-22 08:01:40,853 p=61892 u=sergeylapshov n=ansible INFO| fatal: [web1]: FAILED! => {"changed": false, "msg": "Failed to update apt cache after 5 retries: W:https://download.docker.com/linux/ubuntu/dists/focal/InRelease: Key is stored in legacy trusted.gpg keyring (/etc/apt/trusted.gpg), see the DEPRECATION section in apt-key(8) for details., E:Release file for http://ports.ubuntu.com/ubuntu-ports/dists/jammy-updates/InRelease is not valid yet (invalid for another 9h 9min 35s). Updates for this repository will not be applied., E:Release file for http://ports.ubuntu.com/ubuntu-ports/dists/jammy-backports/InRelease is not valid yet (invalid for another 9h 12min 53s). Updates for this repository will not be applied., E:Release file for http://ports.ubuntu.com/ubuntu-ports/dists/jammy-security/InRelease is not valid yet (invalid for another 10h 5min 16s). Updates for this repository will not be applied."}
+2025-05-22 08:01:40,854 p=61892 u=sergeylapshov n=ansible INFO| PLAY RECAP **************************************************************************************************************
+2025-05-22 08:01:40,854 p=61892 u=sergeylapshov n=ansible INFO| web1                       : ok=3    changed=0    unreachable=0    failed=1    skipped=0    rescued=0    ignored=0   
+2025-05-22 08:04:07,720 p=62712 u=sergeylapshov n=ansible INFO| PLAY [Установка зависимостей] *******************************************************************************************
+2025-05-22 08:04:07,727 p=62712 u=sergeylapshov n=ansible INFO| TASK [Gathering Facts] **************************************************************************************************
+2025-05-22 08:04:09,221 p=62712 u=sergeylapshov n=ansible WARNING| [WARNING]: Platform linux on host web1 is using the discovered Python interpreter at /usr/bin/python3.10, but future
+installation of another Python interpreter could change the meaning of that path. See https://docs.ansible.com/ansible-
+core/2.18/reference_appendices/interpreter_discovery.html for more information.
+
+2025-05-22 08:04:09,221 p=62712 u=sergeylapshov n=ansible INFO| ok: [web1]
+2025-05-22 08:04:09,224 p=62712 u=sergeylapshov n=ansible INFO| TASK [Установка необходимых пакетов] ************************************************************************************
+2025-05-22 08:04:10,205 p=62712 u=sergeylapshov n=ansible INFO| ok: [web1] => (item=apt-transport-https)
+2025-05-22 08:04:11,058 p=62712 u=sergeylapshov n=ansible INFO| ok: [web1] => (item=ca-certificates)
+2025-05-22 08:04:11,906 p=62712 u=sergeylapshov n=ansible INFO| ok: [web1] => (item=curl)
+2025-05-22 08:04:12,754 p=62712 u=sergeylapshov n=ansible INFO| ok: [web1] => (item=gnupg)
+2025-05-22 08:04:13,585 p=62712 u=sergeylapshov n=ansible INFO| ok: [web1] => (item=lsb-release)
+2025-05-22 08:04:13,592 p=62712 u=sergeylapshov n=ansible INFO| TASK [Добавление ключа GPG Docker] **************************************************************************************
+2025-05-22 08:04:15,516 p=62712 u=sergeylapshov n=ansible INFO| ok: [web1]
+2025-05-22 08:04:15,522 p=62712 u=sergeylapshov n=ansible INFO| TASK [Добавление репозитория Docker] ************************************************************************************
+2025-05-22 08:04:29,687 p=62712 u=sergeylapshov n=ansible INFO| changed: [web1]
+2025-05-22 08:04:29,697 p=62712 u=sergeylapshov n=ansible INFO| TASK [Установка Docker и зависимостей] **********************************************************************************
+2025-05-22 08:04:35,573 p=62712 u=sergeylapshov n=ansible INFO| fatal: [web1]: FAILED! => {"changed": false, "msg": "No package matching 'docker-ce' is available"}
+2025-05-22 08:04:35,574 p=62712 u=sergeylapshov n=ansible INFO| PLAY RECAP **************************************************************************************************************
+2025-05-22 08:04:35,574 p=62712 u=sergeylapshov n=ansible INFO| web1                       : ok=4    changed=1    unreachable=0    failed=1    skipped=0    rescued=0    ignored=0   
+2025-05-22 08:05:48,632 p=63205 u=sergeylapshov n=ansible INFO| PLAY [Установка зависимостей] *******************************************************************************************
+2025-05-22 08:05:48,639 p=63205 u=sergeylapshov n=ansible INFO| TASK [Gathering Facts] **************************************************************************************************
+2025-05-22 08:05:50,117 p=63205 u=sergeylapshov n=ansible WARNING| [WARNING]: Platform linux on host web1 is using the discovered Python interpreter at /usr/bin/python3.10, but future
+installation of another Python interpreter could change the meaning of that path. See https://docs.ansible.com/ansible-
+core/2.18/reference_appendices/interpreter_discovery.html for more information.
+
+2025-05-22 08:05:50,117 p=63205 u=sergeylapshov n=ansible INFO| ok: [web1]
+2025-05-22 08:05:50,121 p=63205 u=sergeylapshov n=ansible INFO| TASK [Установка необходимых пакетов] ************************************************************************************
+2025-05-22 08:05:51,940 p=63205 u=sergeylapshov n=ansible INFO| ok: [web1] => (item=apt-transport-https)
+2025-05-22 08:05:52,796 p=63205 u=sergeylapshov n=ansible INFO| ok: [web1] => (item=ca-certificates)
+2025-05-22 08:05:53,666 p=63205 u=sergeylapshov n=ansible INFO| ok: [web1] => (item=curl)
+2025-05-22 08:05:54,496 p=63205 u=sergeylapshov n=ansible INFO| ok: [web1] => (item=gnupg)
+2025-05-22 08:05:55,338 p=63205 u=sergeylapshov n=ansible INFO| ok: [web1] => (item=lsb-release)
+2025-05-22 08:05:55,346 p=63205 u=sergeylapshov n=ansible INFO| TASK [Добавление ключа GPG Docker] **************************************************************************************
+2025-05-22 08:05:57,356 p=63205 u=sergeylapshov n=ansible INFO| ok: [web1]
+2025-05-22 08:05:57,363 p=63205 u=sergeylapshov n=ansible INFO| TASK [Добавление репозитория Docker] ************************************************************************************
+2025-05-22 08:06:03,022 p=63205 u=sergeylapshov n=ansible INFO| changed: [web1]
+2025-05-22 08:06:03,032 p=63205 u=sergeylapshov n=ansible INFO| TASK [Установка Docker и зависимостей] **********************************************************************************
+2025-05-22 08:06:40,794 p=63205 u=sergeylapshov n=ansible INFO| changed: [web1]
+2025-05-22 08:06:40,800 p=63205 u=sergeylapshov n=ansible INFO| TASK [Запуск и включение Docker] ****************************************************************************************
+2025-05-22 08:06:41,376 p=63205 u=sergeylapshov n=ansible INFO| ok: [web1]
+2025-05-22 08:06:41,381 p=63205 u=sergeylapshov n=ansible INFO| TASK [Проверка версии Docker] *******************************************************************************************
+2025-05-22 08:06:41,723 p=63205 u=sergeylapshov n=ansible INFO| ok: [web1]
+2025-05-22 08:06:41,724 p=63205 u=sergeylapshov n=ansible INFO| PLAY RECAP **************************************************************************************************************
+2025-05-22 08:06:41,724 p=63205 u=sergeylapshov n=ansible INFO| web1                       : ok=7    changed=2    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+2025-05-22 08:16:52,040 p=65559 u=sergeylapshov n=ansible INFO| Starting galaxy collection install process
+2025-05-22 08:16:52,188 p=65559 u=sergeylapshov n=ansible INFO| Nothing to do. All requested collections are already installed. If you want to reinstall them, consider using `--force`.
+2025-05-22 08:17:03,309 p=65750 u=sergeylapshov n=ansible INFO| Starting galaxy collection install process
+2025-05-22 08:17:03,407 p=65750 u=sergeylapshov n=ansible INFO| Process install dependency map
+2025-05-22 08:17:03,408 p=65750 u=sergeylapshov n=ansible INFO| |
+2025-05-22 08:17:03,513 p=65750 u=sergeylapshov n=ansible INFO| /
+2025-05-22 08:17:03,618 p=65750 u=sergeylapshov n=ansible INFO| -
+2025-05-22 08:17:03,719 p=65750 u=sergeylapshov n=ansible INFO| \
+2025-05-22 08:17:03,823 p=65750 u=sergeylapshov n=ansible INFO| |
+2025-05-22 08:17:03,928 p=65750 u=sergeylapshov n=ansible INFO| /
+2025-05-22 08:17:04,032 p=65750 u=sergeylapshov n=ansible INFO| -
+2025-05-22 08:17:04,137 p=65750 u=sergeylapshov n=ansible INFO| \
+2025-05-22 08:17:04,242 p=65750 u=sergeylapshov n=ansible INFO| |
+2025-05-22 08:17:04,347 p=65750 u=sergeylapshov n=ansible INFO| /
+2025-05-22 08:17:04,449 p=65750 u=sergeylapshov n=ansible INFO| -
+2025-05-22 08:17:04,550 p=65750 u=sergeylapshov n=ansible INFO| \
+2025-05-22 08:17:04,655 p=65750 u=sergeylapshov n=ansible INFO| |
+2025-05-22 08:17:04,756 p=65750 u=sergeylapshov n=ansible INFO| /
+2025-05-22 08:17:04,859 p=65750 u=sergeylapshov n=ansible INFO| -
+2025-05-22 08:17:04,963 p=65750 u=sergeylapshov n=ansible INFO| \
+2025-05-22 08:17:05,066 p=65750 u=sergeylapshov n=ansible INFO| |
+2025-05-22 08:17:05,171 p=65750 u=sergeylapshov n=ansible INFO| /
+2025-05-22 08:17:05,274 p=65750 u=sergeylapshov n=ansible INFO| -
+2025-05-22 08:17:05,374 p=65750 u=sergeylapshov n=ansible INFO| \
+2025-05-22 08:17:05,480 p=65750 u=sergeylapshov n=ansible INFO| |
+2025-05-22 08:17:05,582 p=65750 u=sergeylapshov n=ansible INFO| /
+2025-05-22 08:17:05,685 p=65750 u=sergeylapshov n=ansible INFO| -
+2025-05-22 08:17:05,790 p=65750 u=sergeylapshov n=ansible INFO| \
+2025-05-22 08:17:05,893 p=65750 u=sergeylapshov n=ansible INFO| |
+2025-05-22 08:17:05,999 p=65750 u=sergeylapshov n=ansible INFO| /
+2025-05-22 08:17:06,104 p=65750 u=sergeylapshov n=ansible INFO| -
+2025-05-22 08:17:06,209 p=65750 u=sergeylapshov n=ansible INFO| \
+2025-05-22 08:17:06,315 p=65750 u=sergeylapshov n=ansible INFO| |
+2025-05-22 08:17:06,416 p=65750 u=sergeylapshov n=ansible INFO| /
+2025-05-22 08:17:06,517 p=65750 u=sergeylapshov n=ansible INFO| -
+2025-05-22 08:17:06,623 p=65750 u=sergeylapshov n=ansible INFO| \
+2025-05-22 08:17:06,723 p=65750 u=sergeylapshov n=ansible INFO| |
+2025-05-22 08:17:06,828 p=65750 u=sergeylapshov n=ansible INFO| /
+2025-05-22 08:17:06,932 p=65750 u=sergeylapshov n=ansible INFO| -
+2025-05-22 08:17:07,037 p=65750 u=sergeylapshov n=ansible INFO| \
+2025-05-22 08:17:07,141 p=65750 u=sergeylapshov n=ansible INFO| |
+2025-05-22 08:17:07,244 p=65750 u=sergeylapshov n=ansible INFO| /
+2025-05-22 08:17:07,350 p=65750 u=sergeylapshov n=ansible INFO| -
+2025-05-22 08:17:07,454 p=65750 u=sergeylapshov n=ansible INFO| \
+2025-05-22 08:17:07,557 p=65750 u=sergeylapshov n=ansible INFO| |
+2025-05-22 08:17:07,663 p=65750 u=sergeylapshov n=ansible INFO| /
+2025-05-22 08:17:07,764 p=65750 u=sergeylapshov n=ansible INFO| -
+2025-05-22 08:17:07,868 p=65750 u=sergeylapshov n=ansible INFO| Starting collection install process
+2025-05-22 08:17:07,869 p=65750 u=sergeylapshov n=ansible INFO| |
+2025-05-22 08:17:07,874 p=65750 u=sergeylapshov n=ansible INFO| Downloading https://galaxy.ansible.com/api/v3/plugin/ansible/content/published/collections/artifacts/community-docker-4.6.0.tar.gz to /Users/sergeylapshov/.ansible/tmp/ansible-local-65750_utlj3g8/tmp0axgj2rr/community-docker-4.6.0-x8b3svj3
+2025-05-22 08:17:07,974 p=65750 u=sergeylapshov n=ansible INFO| /
+2025-05-22 08:17:08,077 p=65750 u=sergeylapshov n=ansible INFO| -
+2025-05-22 08:17:08,180 p=65750 u=sergeylapshov n=ansible INFO| \
+2025-05-22 08:17:08,284 p=65750 u=sergeylapshov n=ansible INFO| |
+2025-05-22 08:17:08,387 p=65750 u=sergeylapshov n=ansible INFO| /
+2025-05-22 08:17:08,493 p=65750 u=sergeylapshov n=ansible INFO| -
+2025-05-22 08:17:08,598 p=65750 u=sergeylapshov n=ansible INFO| \
+2025-05-22 08:17:08,701 p=65750 u=sergeylapshov n=ansible INFO| |
+2025-05-22 08:17:08,802 p=65750 u=sergeylapshov n=ansible INFO| /
+2025-05-22 08:17:08,904 p=65750 u=sergeylapshov n=ansible INFO| -
+2025-05-22 08:17:09,009 p=65750 u=sergeylapshov n=ansible INFO| \
+2025-05-22 08:17:09,114 p=65750 u=sergeylapshov n=ansible INFO| |
+2025-05-22 08:17:09,220 p=65750 u=sergeylapshov n=ansible INFO| /
+2025-05-22 08:17:09,324 p=65750 u=sergeylapshov n=ansible INFO| -
+2025-05-22 08:17:09,426 p=65750 u=sergeylapshov n=ansible INFO| \
+2025-05-22 08:17:09,530 p=65750 u=sergeylapshov n=ansible INFO| |
+2025-05-22 08:17:09,630 p=65750 u=sergeylapshov n=ansible INFO| /
+2025-05-22 08:17:09,735 p=65750 u=sergeylapshov n=ansible INFO| -
+2025-05-22 08:17:09,841 p=65750 u=sergeylapshov n=ansible INFO| \
+2025-05-22 08:17:09,946 p=65750 u=sergeylapshov n=ansible INFO| |
+2025-05-22 08:17:10,052 p=65750 u=sergeylapshov n=ansible INFO| /
+2025-05-22 08:17:10,152 p=65750 u=sergeylapshov n=ansible INFO| -
+2025-05-22 08:17:10,256 p=65750 u=sergeylapshov n=ansible INFO| \
+2025-05-22 08:17:10,358 p=65750 u=sergeylapshov n=ansible INFO| |
+2025-05-22 08:17:10,461 p=65750 u=sergeylapshov n=ansible INFO| /
+2025-05-22 08:17:10,566 p=65750 u=sergeylapshov n=ansible INFO| -
+2025-05-22 08:17:10,672 p=65750 u=sergeylapshov n=ansible INFO| \
+2025-05-22 08:17:10,774 p=65750 u=sergeylapshov n=ansible INFO| |
+2025-05-22 08:17:10,880 p=65750 u=sergeylapshov n=ansible INFO| /
+2025-05-22 08:17:10,985 p=65750 u=sergeylapshov n=ansible INFO| -
+2025-05-22 08:17:11,088 p=65750 u=sergeylapshov n=ansible INFO| \
+2025-05-22 08:17:11,190 p=65750 u=sergeylapshov n=ansible INFO| |
+2025-05-22 08:17:11,294 p=65750 u=sergeylapshov n=ansible INFO| /
+2025-05-22 08:17:11,395 p=65750 u=sergeylapshov n=ansible INFO| -
+2025-05-22 08:17:11,500 p=65750 u=sergeylapshov n=ansible INFO| \
+2025-05-22 08:17:11,601 p=65750 u=sergeylapshov n=ansible INFO| |
+2025-05-22 08:17:11,703 p=65750 u=sergeylapshov n=ansible INFO| /
+2025-05-22 08:17:11,809 p=65750 u=sergeylapshov n=ansible INFO| -
+2025-05-22 08:17:11,914 p=65750 u=sergeylapshov n=ansible INFO| \
+2025-05-22 08:17:12,019 p=65750 u=sergeylapshov n=ansible INFO| |
+2025-05-22 08:17:12,125 p=65750 u=sergeylapshov n=ansible INFO| /
+2025-05-22 08:17:12,228 p=65750 u=sergeylapshov n=ansible INFO| -
+2025-05-22 08:17:12,333 p=65750 u=sergeylapshov n=ansible INFO| \
+2025-05-22 08:17:12,437 p=65750 u=sergeylapshov n=ansible INFO| |
+2025-05-22 08:17:12,542 p=65750 u=sergeylapshov n=ansible INFO| /
+2025-05-22 08:17:12,644 p=65750 u=sergeylapshov n=ansible INFO| -
+2025-05-22 08:17:12,746 p=65750 u=sergeylapshov n=ansible INFO| \
+2025-05-22 08:17:12,847 p=65750 u=sergeylapshov n=ansible INFO| |
+2025-05-22 08:17:12,949 p=65750 u=sergeylapshov n=ansible INFO| /
+2025-05-22 08:17:13,054 p=65750 u=sergeylapshov n=ansible INFO| -
+2025-05-22 08:17:13,155 p=65750 u=sergeylapshov n=ansible INFO| \
+2025-05-22 08:17:13,258 p=65750 u=sergeylapshov n=ansible INFO| |
+2025-05-22 08:17:13,359 p=65750 u=sergeylapshov n=ansible INFO| /
+2025-05-22 08:17:13,463 p=65750 u=sergeylapshov n=ansible INFO| -
+2025-05-22 08:17:13,564 p=65750 u=sergeylapshov n=ansible INFO| \
+2025-05-22 08:17:13,665 p=65750 u=sergeylapshov n=ansible INFO| |
+2025-05-22 08:17:13,770 p=65750 u=sergeylapshov n=ansible INFO| /
+2025-05-22 08:17:13,872 p=65750 u=sergeylapshov n=ansible INFO| -
+2025-05-22 08:17:13,978 p=65750 u=sergeylapshov n=ansible INFO| \
+2025-05-22 08:17:14,082 p=65750 u=sergeylapshov n=ansible INFO| |
+2025-05-22 08:17:14,184 p=65750 u=sergeylapshov n=ansible INFO| /
+2025-05-22 08:17:14,289 p=65750 u=sergeylapshov n=ansible INFO| -
+2025-05-22 08:17:14,394 p=65750 u=sergeylapshov n=ansible INFO| \
+2025-05-22 08:17:14,496 p=65750 u=sergeylapshov n=ansible INFO| |
+2025-05-22 08:17:14,599 p=65750 u=sergeylapshov n=ansible INFO| /
+2025-05-22 08:17:14,701 p=65750 u=sergeylapshov n=ansible INFO| -
+2025-05-22 08:17:14,806 p=65750 u=sergeylapshov n=ansible INFO| \
+2025-05-22 08:17:14,911 p=65750 u=sergeylapshov n=ansible INFO| |
+2025-05-22 08:17:15,014 p=65750 u=sergeylapshov n=ansible INFO| /
+2025-05-22 08:17:15,118 p=65750 u=sergeylapshov n=ansible INFO| -
+2025-05-22 08:17:15,224 p=65750 u=sergeylapshov n=ansible INFO| \
+2025-05-22 08:17:15,326 p=65750 u=sergeylapshov n=ansible INFO| |
+2025-05-22 08:17:15,430 p=65750 u=sergeylapshov n=ansible INFO| /
+2025-05-22 08:17:15,536 p=65750 u=sergeylapshov n=ansible INFO| -
+2025-05-22 08:17:15,640 p=65750 u=sergeylapshov n=ansible INFO| \
+2025-05-22 08:17:15,741 p=65750 u=sergeylapshov n=ansible INFO| Installing 'community.docker:4.6.0' to '/Users/sergeylapshov/.ansible/collections/ansible_collections/community/docker'
+2025-05-22 08:17:15,741 p=65750 u=sergeylapshov n=ansible INFO| |
+2025-05-22 08:17:15,846 p=65750 u=sergeylapshov n=ansible INFO| /
+2025-05-22 08:17:15,947 p=65750 u=sergeylapshov n=ansible INFO| -
+2025-05-22 08:17:16,049 p=65750 u=sergeylapshov n=ansible INFO| \
+2025-05-22 08:17:16,153 p=65750 u=sergeylapshov n=ansible INFO| community.docker:4.6.0 was installed successfully
+2025-05-22 08:17:16,153 p=65750 u=sergeylapshov n=ansible INFO| 'community.library_inventory_filtering_v1:1.1.1' is already installed, skipping.
+2025-05-22 08:24:22,118 p=67163 u=sergeylapshov n=ansible INFO| PLAY [Запуск контейнера nginx] ******************************************************************************************
+2025-05-22 08:24:22,151 p=67163 u=sergeylapshov n=ansible INFO| TASK [Gathering Facts] **************************************************************************************************
+2025-05-22 08:24:23,868 p=67163 u=sergeylapshov n=ansible WARNING| [WARNING]: Platform linux on host web1 is using the discovered Python interpreter at /usr/bin/python3.10, but future
+installation of another Python interpreter could change the meaning of that path. See https://docs.ansible.com/ansible-
+core/2.18/reference_appendices/interpreter_discovery.html for more information.
+
+2025-05-22 08:24:23,869 p=67163 u=sergeylapshov n=ansible INFO| ok: [web1]
+2025-05-22 08:24:23,873 p=67163 u=sergeylapshov n=ansible INFO| TASK [Запуск контейнера nginx] ******************************************************************************************
+2025-05-22 08:24:23,886 p=67163 u=sergeylapshov n=ansible INFO| fatal: [web1]: FAILED! => {"msg": "The task includes an option with an undefined variable.. 'nginx_port' is undefined\n\nThe error appears to be in '/Users/sergeylapshov/Documents/Devops/docker/Ansible/DOCKER-ANS-02/run_nginx.yml': line 5, column 7, but may\nbe elsewhere in the file depending on the exact syntax problem.\n\nThe offending line appears to be:\n\n  tasks:\n    - name: Запуск контейнера nginx\n      ^ here\n"}
+2025-05-22 08:24:23,886 p=67163 u=sergeylapshov n=ansible INFO| PLAY RECAP **************************************************************************************************************
+2025-05-22 08:24:23,886 p=67163 u=sergeylapshov n=ansible INFO| web1                       : ok=1    changed=0    unreachable=0    failed=1    skipped=0    rescued=0    ignored=0   
+2025-05-22 08:24:50,941 p=67409 u=sergeylapshov n=ansible INFO| PLAY [Запуск контейнера nginx] ******************************************************************************************
+2025-05-22 08:24:50,971 p=67409 u=sergeylapshov n=ansible INFO| TASK [Gathering Facts] **************************************************************************************************
+2025-05-22 08:24:52,103 p=67409 u=sergeylapshov n=ansible WARNING| [WARNING]: Platform linux on host web1 is using the discovered Python interpreter at /usr/bin/python3.10, but future
+installation of another Python interpreter could change the meaning of that path. See https://docs.ansible.com/ansible-
+core/2.18/reference_appendices/interpreter_discovery.html for more information.
+
+2025-05-22 08:24:52,103 p=67409 u=sergeylapshov n=ansible INFO| ok: [web1]
+2025-05-22 08:24:52,107 p=67409 u=sergeylapshov n=ansible INFO| TASK [Запуск контейнера nginx] ******************************************************************************************
+2025-05-22 08:25:36,562 p=67409 u=sergeylapshov n=ansible INFO| changed: [web1]
+2025-05-22 08:25:36,564 p=67409 u=sergeylapshov n=ansible INFO| PLAY RECAP **************************************************************************************************************
+2025-05-22 08:25:36,564 p=67409 u=sergeylapshov n=ansible INFO| web1                       : ok=2    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+2025-05-22 08:30:14,326 p=68453 u=sergeylapshov n=ansible ERROR| ERROR! 'uri' is not a valid attribute for a Play
+
+The error appears to be in '/Users/sergeylapshov/Documents/Devops/docker/Ansible/DOCKER-ANS-02/run_nginx.yml': line 14, column 3, but may
+be elsewhere in the file depending on the exact syntax problem.
+
+The offending line appears to be:
+
+
+- name: Проверка, что контейнер запущен
+  ^ here
+
+2025-05-22 08:31:07,557 p=68742 u=sergeylapshov n=ansible INFO| PLAY [Запуск контейнера nginx] ******************************************************************************************
+2025-05-22 08:31:07,564 p=68742 u=sergeylapshov n=ansible INFO| TASK [Gathering Facts] **************************************************************************************************
+2025-05-22 08:31:09,231 p=68742 u=sergeylapshov n=ansible WARNING| [WARNING]: Platform linux on host web1 is using the discovered Python interpreter at /usr/bin/python3.10, but future
+installation of another Python interpreter could change the meaning of that path. See https://docs.ansible.com/ansible-
+core/2.18/reference_appendices/interpreter_discovery.html for more information.
+
+2025-05-22 08:31:09,232 p=68742 u=sergeylapshov n=ansible INFO| ok: [web1]
+2025-05-22 08:31:09,236 p=68742 u=sergeylapshov n=ansible INFO| TASK [Запуск контейнера nginx] ******************************************************************************************
+2025-05-22 08:31:09,796 p=68742 u=sergeylapshov n=ansible INFO| ok: [web1]
+2025-05-22 08:31:09,807 p=68742 u=sergeylapshov n=ansible INFO| TASK [Проверка, что контейнер запущен] **********************************************************************************
+2025-05-22 08:31:10,149 p=68742 u=sergeylapshov n=ansible INFO| ok: [web1]
+2025-05-22 08:31:10,154 p=68742 u=sergeylapshov n=ansible INFO| TASK [Показать результат] ***********************************************************************************************
+2025-05-22 08:31:10,170 p=68742 u=sergeylapshov n=ansible INFO| ok: [web1] => {
+    "result.content": "<!DOCTYPE html>\n<html>\n<head>\n<title>Welcome to nginx!</title>\n<style>\nhtml { color-scheme: light dark; }\nbody { width: 35em; margin: 0 auto;\nfont-family: Tahoma, Verdana, Arial, sans-serif; }\n</style>\n</head>\n<body>\n<h1>Welcome to nginx!</h1>\n<p>If you see this page, the nginx web server is successfully installed and\nworking. Further configuration is required.</p>\n\n<p>For online documentation and support please refer to\n<a href=\"http://nginx.org/\">nginx.org</a>.<br/>\nCommercial support is available at\n<a href=\"http://nginx.com/\">nginx.com</a>.</p>\n\n<p><em>Thank you for using nginx.</em></p>\n</body>\n</html>\n"
+}
+2025-05-22 08:31:10,170 p=68742 u=sergeylapshov n=ansible INFO| PLAY RECAP **************************************************************************************************************
+2025-05-22 08:31:10,170 p=68742 u=sergeylapshov n=ansible INFO| web1                       : ok=4    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+2025-05-22 08:48:46,078 p=72727 u=sergeylapshov n=ansible ERROR| ERROR! the playbook: run_nginx.yml could not be found
+2025-05-22 08:49:02,755 p=72913 u=sergeylapshov n=ansible ERROR| ERROR! [DEPRECATED]: community.docker.docker_compose has been removed. This module uses docker-compose v1, which is End of Life since July 2022. Please migrate to community.docker.docker_compose_v2. This feature was removed from community.docker in version 4.0.0. Please update your playbooks.
+
+The error appears to be in '/Users/sergeylapshov/Documents/Devops/docker/Ansible/DOCKER-ANS-03/deploy_compose.yml': line 15, column 7, but may
+be elsewhere in the file depending on the exact syntax problem.
+
+The offending line appears to be:
+
+
+    - name: Запуск контейнера с помощью docker-compose
+      ^ here
+
+2025-05-22 08:51:14,390 p=73441 u=sergeylapshov n=ansible ERROR| ERROR! [DEPRECATED]: community.docker.docker_compose has been removed. This module uses docker-compose v1, which is End of Life since July 2022. Please migrate to community.docker.docker_compose_v2. This feature was removed from community.docker in version 4.0.0. Please update your playbooks.
+
+The error appears to be in '/Users/sergeylapshov/Documents/Devops/docker/Ansible/DOCKER-ANS-03/deploy_compose.yml': line 15, column 7, but may
+be elsewhere in the file depending on the exact syntax problem.
+
+The offending line appears to be:
+
+
+    - name: Запуск контейнера с помощью docker-compose
+      ^ here
+
+2025-05-22 08:55:36,350 p=74300 u=sergeylapshov n=ansible INFO| PLAY [Запуск контейнера docker-compose] *********************************************************************************
+2025-05-22 08:55:36,356 p=74300 u=sergeylapshov n=ansible INFO| TASK [Gathering Facts] **************************************************************************************************
+2025-05-22 08:55:37,917 p=74300 u=sergeylapshov n=ansible WARNING| [WARNING]: Platform linux on host web1 is using the discovered Python interpreter at /usr/bin/python3.10, but future
+installation of another Python interpreter could change the meaning of that path. See https://docs.ansible.com/ansible-
+core/2.18/reference_appendices/interpreter_discovery.html for more information.
+
+2025-05-22 08:55:37,917 p=74300 u=sergeylapshov n=ansible INFO| ok: [web1]
+2025-05-22 08:55:37,921 p=74300 u=sergeylapshov n=ansible INFO| TASK [Установка docker-compose] *****************************************************************************************
+2025-05-22 08:55:55,184 p=74300 u=sergeylapshov n=ansible INFO| changed: [web1]
+2025-05-22 08:55:55,193 p=74300 u=sergeylapshov n=ansible INFO| TASK [Копирование файла docker-compose.yml на удаленный хост] ***********************************************************
+2025-05-22 08:55:55,241 p=74300 u=sergeylapshov n=ansible INFO| An exception occurred during task execution. To see the full traceback, use -vvv. The error was: If you are using a module and expect the file to exist on the remote, see the remote_src option
+2025-05-22 08:55:55,241 p=74300 u=sergeylapshov n=ansible INFO| fatal: [web1]: FAILED! => {"changed": false, "msg": "Could not find or access 'docker/Ansible/DOCKER-ANS-03/docker-compose.yml'\nSearched in:\n\t/Users/sergeylapshov/Documents/Devops/docker/Ansible/DOCKER-ANS-03/files/docker/Ansible/DOCKER-ANS-03/docker-compose.yml\n\t/Users/sergeylapshov/Documents/Devops/docker/Ansible/DOCKER-ANS-03/docker/Ansible/DOCKER-ANS-03/docker-compose.yml\n\t/Users/sergeylapshov/Documents/Devops/docker/Ansible/DOCKER-ANS-03/files/docker/Ansible/DOCKER-ANS-03/docker-compose.yml\n\t/Users/sergeylapshov/Documents/Devops/docker/Ansible/DOCKER-ANS-03/docker/Ansible/DOCKER-ANS-03/docker-compose.yml on the Ansible Controller.\nIf you are using a module and expect the file to exist on the remote, see the remote_src option"}
+2025-05-22 08:55:55,242 p=74300 u=sergeylapshov n=ansible INFO| PLAY RECAP **************************************************************************************************************
+2025-05-22 08:55:55,242 p=74300 u=sergeylapshov n=ansible INFO| web1                       : ok=2    changed=1    unreachable=0    failed=1    skipped=0    rescued=0    ignored=0   
+2025-05-22 08:56:19,758 p=74588 u=sergeylapshov n=ansible INFO| PLAY [Запуск контейнера docker-compose] *********************************************************************************
+2025-05-22 08:56:19,763 p=74588 u=sergeylapshov n=ansible INFO| TASK [Gathering Facts] **************************************************************************************************
+2025-05-22 08:56:20,909 p=74588 u=sergeylapshov n=ansible WARNING| [WARNING]: Platform linux on host web1 is using the discovered Python interpreter at /usr/bin/python3.10, but future
+installation of another Python interpreter could change the meaning of that path. See https://docs.ansible.com/ansible-
+core/2.18/reference_appendices/interpreter_discovery.html for more information.
+
+2025-05-22 08:56:20,909 p=74588 u=sergeylapshov n=ansible INFO| ok: [web1]
+2025-05-22 08:56:20,915 p=74588 u=sergeylapshov n=ansible INFO| TASK [Копирование файла docker-compose.yml на удаленный хост] ***********************************************************
+2025-05-22 08:56:20,992 p=74588 u=sergeylapshov n=ansible INFO| An exception occurred during task execution. To see the full traceback, use -vvv. The error was: If you are using a module and expect the file to exist on the remote, see the remote_src option
+2025-05-22 08:56:20,993 p=74588 u=sergeylapshov n=ansible INFO| fatal: [web1]: FAILED! => {"changed": false, "msg": "Could not find or access 'docker/Ansible/DOCKER-ANS-03/docker-compose.yml'\nSearched in:\n\t/Users/sergeylapshov/Documents/Devops/docker/Ansible/DOCKER-ANS-03/files/docker/Ansible/DOCKER-ANS-03/docker-compose.yml\n\t/Users/sergeylapshov/Documents/Devops/docker/Ansible/DOCKER-ANS-03/docker/Ansible/DOCKER-ANS-03/docker-compose.yml\n\t/Users/sergeylapshov/Documents/Devops/docker/Ansible/DOCKER-ANS-03/files/docker/Ansible/DOCKER-ANS-03/docker-compose.yml\n\t/Users/sergeylapshov/Documents/Devops/docker/Ansible/DOCKER-ANS-03/docker/Ansible/DOCKER-ANS-03/docker-compose.yml on the Ansible Controller.\nIf you are using a module and expect the file to exist on the remote, see the remote_src option"}
+2025-05-22 08:56:20,993 p=74588 u=sergeylapshov n=ansible INFO| PLAY RECAP **************************************************************************************************************
+2025-05-22 08:56:20,993 p=74588 u=sergeylapshov n=ansible INFO| web1                       : ok=1    changed=0    unreachable=0    failed=1    skipped=0    rescued=0    ignored=0   
+2025-05-22 08:56:48,559 p=74825 u=sergeylapshov n=ansible INFO| PLAY [Запуск контейнера docker-compose] *********************************************************************************
+2025-05-22 08:56:48,565 p=74825 u=sergeylapshov n=ansible INFO| TASK [Gathering Facts] **************************************************************************************************
+2025-05-22 08:56:49,705 p=74825 u=sergeylapshov n=ansible WARNING| [WARNING]: Platform linux on host web1 is using the discovered Python interpreter at /usr/bin/python3.10, but future
+installation of another Python interpreter could change the meaning of that path. See https://docs.ansible.com/ansible-
+core/2.18/reference_appendices/interpreter_discovery.html for more information.
+
+2025-05-22 08:56:49,706 p=74825 u=sergeylapshov n=ansible INFO| ok: [web1]
+2025-05-22 08:56:49,711 p=74825 u=sergeylapshov n=ansible INFO| TASK [Копирование файла docker-compose.yml на удаленный хост] ***********************************************************
+2025-05-22 08:56:50,265 p=74825 u=sergeylapshov n=ansible INFO| changed: [web1]
+2025-05-22 08:56:50,270 p=74825 u=sergeylapshov n=ansible INFO| TASK [Запуск контейнера с помощью docker-compose] ***********************************************************************
+2025-05-22 08:56:50,746 p=74825 u=sergeylapshov n=ansible INFO| fatal: [web1]: FAILED! => {"changed": false, "msg": "Unsupported parameters for (community.docker.docker_compose_v2) module: restarted. Supported parameters include: api_version, assume_yes, build, ca_path, check_files_existing, cli_context, client_cert, client_key, definition, dependencies, docker_cli, docker_host, env_files, files, ignore_build_events, profiles, project_name, project_src, pull, recreate, remove_images, remove_orphans, remove_volumes, renew_anon_volumes, scale, services, state, timeout, tls, tls_hostname, validate_certs, wait, wait_timeout (ca_cert, cacert_path, cert_path, docker_api_version, docker_url, key_path, tls_ca_cert, tls_client_cert, tls_client_key, tls_verify)."}
+2025-05-22 08:56:50,747 p=74825 u=sergeylapshov n=ansible INFO| PLAY RECAP **************************************************************************************************************
+2025-05-22 08:56:50,747 p=74825 u=sergeylapshov n=ansible INFO| web1                       : ok=2    changed=1    unreachable=0    failed=1    skipped=0    rescued=0    ignored=0   
+2025-05-22 08:58:26,401 p=75263 u=sergeylapshov n=ansible INFO| PLAY [Запуск контейнера docker-compose] *********************************************************************************
+2025-05-22 08:58:26,408 p=75263 u=sergeylapshov n=ansible INFO| TASK [Gathering Facts] **************************************************************************************************
+2025-05-22 08:58:27,885 p=75263 u=sergeylapshov n=ansible WARNING| [WARNING]: Platform linux on host web1 is using the discovered Python interpreter at /usr/bin/python3.10, but future
+installation of another Python interpreter could change the meaning of that path. See https://docs.ansible.com/ansible-
+core/2.18/reference_appendices/interpreter_discovery.html for more information.
+
+2025-05-22 08:58:27,886 p=75263 u=sergeylapshov n=ansible INFO| ok: [web1]
+2025-05-22 08:58:27,892 p=75263 u=sergeylapshov n=ansible INFO| TASK [Копирование файла docker-compose.yml на удаленный хост] ***********************************************************
+2025-05-22 08:58:28,443 p=75263 u=sergeylapshov n=ansible INFO| ok: [web1]
+2025-05-22 08:58:28,447 p=75263 u=sergeylapshov n=ansible INFO| TASK [Запуск контейнера с помощью docker-compose] ***********************************************************************
+2025-05-22 08:59:11,838 p=75263 u=sergeylapshov n=ansible WARNING| [WARNING]: Docker compose: unknown None: /home/vagrant/ubuntu/docker-compose.yml: the attribute `version` is obsolete,
+it will be ignored, please remove it to avoid potential confusion
+
+2025-05-22 08:59:11,839 p=75263 u=sergeylapshov n=ansible INFO| changed: [web1]
+2025-05-22 08:59:11,848 p=75263 u=sergeylapshov n=ansible INFO| TASK [Проверка, что nginx запущен] **************************************************************************************
+2025-05-22 08:59:12,191 p=75263 u=sergeylapshov n=ansible INFO| ok: [web1]
+2025-05-22 08:59:12,195 p=75263 u=sergeylapshov n=ansible INFO| TASK [Проверка, что backend запущен] ************************************************************************************
+2025-05-22 08:59:12,467 p=75263 u=sergeylapshov n=ansible INFO| ok: [web1]
+2025-05-22 08:59:12,473 p=75263 u=sergeylapshov n=ansible INFO| TASK [Показать результат] ***********************************************************************************************
+2025-05-22 08:59:12,489 p=75263 u=sergeylapshov n=ansible INFO| ok: [web1] => {
+    "result.content": "Hello from backend!\n"
+}
+2025-05-22 08:59:12,490 p=75263 u=sergeylapshov n=ansible INFO| PLAY RECAP **************************************************************************************************************
+2025-05-22 08:59:12,490 p=75263 u=sergeylapshov n=ansible INFO| web1                       : ok=6    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+2025-05-22 09:29:04,622 p=80912 u=sergeylapshov n=ansible ERROR| ERROR! couldn't resolve module/action 'community.docker.docker_copy'. This often indicates a misspelling, missing collection, or incorrect module path.
+
+The error appears to be in '/Users/sergeylapshov/Documents/Devops/docker/Ansible/DOCKER-ANS-04/ubuntu_nginx.yml': line 27, column 7, but may
+be elsewhere in the file depending on the exact syntax problem.
+
+The offending line appears to be:
+
+
+    - name: Копирование файлов в контейнер
+      ^ here
+
+2025-05-22 09:29:43,376 p=81154 u=sergeylapshov n=ansible ERROR| ERROR! couldn't resolve module/action 'community.docker.docker_cp'. This often indicates a misspelling, missing collection, or incorrect module path.
+
+The error appears to be in '/Users/sergeylapshov/Documents/Devops/docker/Ansible/DOCKER-ANS-04/ubuntu_nginx.yml': line 27, column 7, but may
+be elsewhere in the file depending on the exact syntax problem.
+
+The offending line appears to be:
+
+
+    - name: Копирование файлов в контейнер
+      ^ here
+
+2025-05-22 09:31:32,529 p=81603 u=sergeylapshov n=ansible WARNING| [WARNING]: Could not match supplied host pattern, ignoring: wec
+
+2025-05-22 09:31:32,530 p=81603 u=sergeylapshov n=ansible INFO| PLAY [Установка контейнера ubuntu с nginx] ******************************************************************************
+2025-05-22 09:31:32,530 p=81603 u=sergeylapshov n=ansible INFO| skipping: no hosts matched
+2025-05-22 09:31:32,530 p=81603 u=sergeylapshov n=ansible INFO| PLAY RECAP **************************************************************************************************************
+2025-05-22 09:31:54,998 p=81807 u=sergeylapshov n=ansible INFO| PLAY [Установка контейнера ubuntu с nginx] ******************************************************************************
+2025-05-22 09:31:55,030 p=81807 u=sergeylapshov n=ansible INFO| TASK [Gathering Facts] **************************************************************************************************
+2025-05-22 09:31:56,696 p=81807 u=sergeylapshov n=ansible WARNING| [WARNING]: Platform linux on host web1 is using the discovered Python interpreter at /usr/bin/python3.10, but future
+installation of another Python interpreter could change the meaning of that path. See https://docs.ansible.com/ansible-
+core/2.18/reference_appendices/interpreter_discovery.html for more information.
+
+2025-05-22 09:31:56,697 p=81807 u=sergeylapshov n=ansible INFO| ok: [web1]
+2025-05-22 09:31:56,701 p=81807 u=sergeylapshov n=ansible INFO| TASK [Установка контейнера ubuntu с nginx] ******************************************************************************
+2025-05-22 09:31:57,206 p=81807 u=sergeylapshov n=ansible INFO| fatal: [web1]: FAILED! => {"changed": false, "msg": "value of state must be one of: absent, present, stopped, restarted, got: started"}
+2025-05-22 09:31:57,207 p=81807 u=sergeylapshov n=ansible INFO| PLAY RECAP **************************************************************************************************************
+2025-05-22 09:31:57,207 p=81807 u=sergeylapshov n=ansible INFO| web1                       : ok=1    changed=0    unreachable=0    failed=1    skipped=0    rescued=0    ignored=0   
+2025-05-22 09:32:36,203 p=82077 u=sergeylapshov n=ansible INFO| PLAY [Установка контейнера ubuntu с nginx] ******************************************************************************
+2025-05-22 09:32:36,235 p=82077 u=sergeylapshov n=ansible INFO| TASK [Gathering Facts] **************************************************************************************************
+2025-05-22 09:32:37,405 p=82077 u=sergeylapshov n=ansible WARNING| [WARNING]: Platform linux on host web1 is using the discovered Python interpreter at /usr/bin/python3.10, but future
+installation of another Python interpreter could change the meaning of that path. See https://docs.ansible.com/ansible-
+core/2.18/reference_appendices/interpreter_discovery.html for more information.
+
+2025-05-22 09:32:37,405 p=82077 u=sergeylapshov n=ansible INFO| ok: [web1]
+2025-05-22 09:32:37,410 p=82077 u=sergeylapshov n=ansible INFO| TASK [Установка контейнера ubuntu] **************************************************************************************
+2025-05-22 09:32:58,093 p=82077 u=sergeylapshov n=ansible INFO| changed: [web1]
+2025-05-22 09:32:58,098 p=82077 u=sergeylapshov n=ansible INFO| TASK [Установка nginx] **************************************************************************************************
+2025-05-22 09:32:58,647 p=82077 u=sergeylapshov n=ansible INFO| fatal: [web1]: FAILED! => {"changed": false, "msg": "missing required arguments: container"}
+2025-05-22 09:32:58,648 p=82077 u=sergeylapshov n=ansible INFO| PLAY RECAP **************************************************************************************************************
+2025-05-22 09:32:58,648 p=82077 u=sergeylapshov n=ansible INFO| web1                       : ok=2    changed=1    unreachable=0    failed=1    skipped=0    rescued=0    ignored=0   
+2025-05-22 09:33:29,401 p=82391 u=sergeylapshov n=ansible INFO| PLAY [Установка контейнера ubuntu с nginx] ******************************************************************************
+2025-05-22 09:33:29,433 p=82391 u=sergeylapshov n=ansible INFO| TASK [Gathering Facts] **************************************************************************************************
+2025-05-22 09:33:30,623 p=82391 u=sergeylapshov n=ansible WARNING| [WARNING]: Platform linux on host web1 is using the discovered Python interpreter at /usr/bin/python3.10, but future
+installation of another Python interpreter could change the meaning of that path. See https://docs.ansible.com/ansible-
+core/2.18/reference_appendices/interpreter_discovery.html for more information.
+
+2025-05-22 09:33:30,624 p=82391 u=sergeylapshov n=ansible INFO| ok: [web1]
+2025-05-22 09:33:30,633 p=82391 u=sergeylapshov n=ansible INFO| TASK [Установка контейнера ubuntu] **************************************************************************************
+2025-05-22 09:33:31,249 p=82391 u=sergeylapshov n=ansible INFO| ok: [web1]
+2025-05-22 09:33:31,254 p=82391 u=sergeylapshov n=ansible INFO| TASK [Установка nginx] **************************************************************************************************
+2025-05-22 09:33:31,803 p=82391 u=sergeylapshov n=ansible INFO| fatal: [web1]: FAILED! => {"changed": false, "msg": "Unsupported parameters for (community.docker.docker_container_exec) module: name, state. Supported parameters include: api_version, argv, ca_path, chdir, client_cert, client_key, command, container, debug, detach, docker_host, env, stdin, stdin_add_newline, strip_empty_ends, timeout, tls, tls_hostname, tty, use_ssh_client, user, validate_certs (ca_cert, cacert_path, cert_path, docker_api_version, docker_url, key_path, tls_ca_cert, tls_client_cert, tls_client_key, tls_verify)."}
+2025-05-22 09:33:31,804 p=82391 u=sergeylapshov n=ansible INFO| PLAY RECAP **************************************************************************************************************
+2025-05-22 09:33:31,804 p=82391 u=sergeylapshov n=ansible INFO| web1                       : ok=2    changed=0    unreachable=0    failed=1    skipped=0    rescued=0    ignored=0   
+2025-05-22 09:35:14,177 p=82844 u=sergeylapshov n=ansible INFO| PLAY [Установка контейнера ubuntu с nginx] ******************************************************************************
+2025-05-22 09:35:14,210 p=82844 u=sergeylapshov n=ansible INFO| TASK [Gathering Facts] **************************************************************************************************
+2025-05-22 09:35:15,709 p=82844 u=sergeylapshov n=ansible WARNING| [WARNING]: Platform linux on host web1 is using the discovered Python interpreter at /usr/bin/python3.10, but future
+installation of another Python interpreter could change the meaning of that path. See https://docs.ansible.com/ansible-
+core/2.18/reference_appendices/interpreter_discovery.html for more information.
+
+2025-05-22 09:35:15,709 p=82844 u=sergeylapshov n=ansible INFO| ok: [web1]
+2025-05-22 09:35:15,717 p=82844 u=sergeylapshov n=ansible INFO| TASK [Установка контейнера ubuntu] **************************************************************************************
+2025-05-22 09:35:16,336 p=82844 u=sergeylapshov n=ansible INFO| ok: [web1]
+2025-05-22 09:35:16,340 p=82844 u=sergeylapshov n=ansible INFO| TASK [Запуск контейнера nginx] ******************************************************************************************
+2025-05-22 09:35:17,058 p=82844 u=sergeylapshov n=ansible INFO| changed: [web1]
+2025-05-22 09:35:17,064 p=82844 u=sergeylapshov n=ansible INFO| TASK [Копирование файлов в контейнер] ***********************************************************************************
+2025-05-22 09:35:17,647 p=82844 u=sergeylapshov n=ansible INFO| fatal: [web1]: FAILED! => {"changed": true, "rc": 1, "stderr": "cp: cannot stat '/Users/sergeylapshov/Documents/Devops/docker/Ansible/DOCKER-ANS-04/nginx.conf': No such file or directory", "stderr_lines": ["cp: cannot stat '/Users/sergeylapshov/Documents/Devops/docker/Ansible/DOCKER-ANS-04/nginx.conf': No such file or directory"], "stdout": "", "stdout_lines": []}
+2025-05-22 09:35:17,649 p=82844 u=sergeylapshov n=ansible INFO| PLAY RECAP **************************************************************************************************************
+2025-05-22 09:35:17,649 p=82844 u=sergeylapshov n=ansible INFO| web1                       : ok=3    changed=1    unreachable=0    failed=1    skipped=0    rescued=0    ignored=0   
+2025-05-22 09:38:04,603 p=83531 u=sergeylapshov n=ansible INFO| PLAY [Установка контейнера ubuntu с nginx] ******************************************************************************
+2025-05-22 09:38:04,610 p=83531 u=sergeylapshov n=ansible INFO| TASK [Gathering Facts] **************************************************************************************************
+2025-05-22 09:38:06,196 p=83531 u=sergeylapshov n=ansible WARNING| [WARNING]: Platform linux on host web1 is using the discovered Python interpreter at /usr/bin/python3.10, but future
+installation of another Python interpreter could change the meaning of that path. See https://docs.ansible.com/ansible-
+core/2.18/reference_appendices/interpreter_discovery.html for more information.
+
+2025-05-22 09:38:06,197 p=83531 u=sergeylapshov n=ansible INFO| ok: [web1]
+2025-05-22 09:38:06,201 p=83531 u=sergeylapshov n=ansible INFO| TASK [Установка контейнера ubuntu] **************************************************************************************
+2025-05-22 09:38:06,863 p=83531 u=sergeylapshov n=ansible INFO| ok: [web1]
+2025-05-22 09:38:06,871 p=83531 u=sergeylapshov n=ansible INFO| TASK [Запуск контейнера nginx] ******************************************************************************************
+2025-05-22 09:38:07,324 p=83531 u=sergeylapshov n=ansible INFO| ok: [web1]
+2025-05-22 09:38:07,331 p=83531 u=sergeylapshov n=ansible INFO| TASK [Копирование файла конфигурации nginx] *****************************************************************************
+2025-05-22 09:38:07,885 p=83531 u=sergeylapshov n=ansible INFO| changed: [web1]
+2025-05-22 09:38:07,890 p=83531 u=sergeylapshov n=ansible INFO| TASK [Копирование файлов в контейнер] ***********************************************************************************
+2025-05-22 09:38:08,460 p=83531 u=sergeylapshov n=ansible INFO| fatal: [web1]: FAILED! => {"changed": true, "rc": 1, "stderr": "cp: cannot stat '/home/vagrant/ubuntu/nginx.conf': No such file or directory", "stderr_lines": ["cp: cannot stat '/home/vagrant/ubuntu/nginx.conf': No such file or directory"], "stdout": "", "stdout_lines": []}
+2025-05-22 09:38:08,461 p=83531 u=sergeylapshov n=ansible INFO| PLAY RECAP **************************************************************************************************************
+2025-05-22 09:38:08,462 p=83531 u=sergeylapshov n=ansible INFO| web1                       : ok=4    changed=1    unreachable=0    failed=1    skipped=0    rescued=0    ignored=0   
+2025-05-22 09:39:39,695 p=84010 u=sergeylapshov n=ansible INFO| PLAY [Установка контейнера ubuntu с nginx] ******************************************************************************
+2025-05-22 09:39:39,701 p=84010 u=sergeylapshov n=ansible INFO| TASK [Gathering Facts] **************************************************************************************************
+2025-05-22 09:39:41,205 p=84010 u=sergeylapshov n=ansible WARNING| [WARNING]: Platform linux on host web1 is using the discovered Python interpreter at /usr/bin/python3.10, but future
+installation of another Python interpreter could change the meaning of that path. See https://docs.ansible.com/ansible-
+core/2.18/reference_appendices/interpreter_discovery.html for more information.
+
+2025-05-22 09:39:41,205 p=84010 u=sergeylapshov n=ansible INFO| ok: [web1]
+2025-05-22 09:39:41,209 p=84010 u=sergeylapshov n=ansible INFO| TASK [Установка контейнера ubuntu] **************************************************************************************
+2025-05-22 09:39:41,833 p=84010 u=sergeylapshov n=ansible INFO| ok: [web1]
+2025-05-22 09:39:41,842 p=84010 u=sergeylapshov n=ansible INFO| TASK [Запуск контейнера nginx] ******************************************************************************************
+2025-05-22 09:39:42,357 p=84010 u=sergeylapshov n=ansible INFO| ok: [web1]
+2025-05-22 09:39:42,364 p=84010 u=sergeylapshov n=ansible INFO| TASK [Копирование файла конфигурации nginx] *****************************************************************************
+2025-05-22 09:39:43,041 p=84010 u=sergeylapshov n=ansible INFO| ok: [web1]
+2025-05-22 09:39:43,047 p=84010 u=sergeylapshov n=ansible INFO| TASK [Копирование файлов в контейнер] ***********************************************************************************
+2025-05-22 09:39:44,002 p=84010 u=sergeylapshov n=ansible INFO| fatal: [web1]: FAILED! => {"changed": true, "rc": 1, "stderr": "cp: cannot stat '//home/vagrant/ubuntu/nginx.conf': No such file or directory", "stderr_lines": ["cp: cannot stat '//home/vagrant/ubuntu/nginx.conf': No such file or directory"], "stdout": "", "stdout_lines": []}
+2025-05-22 09:39:44,004 p=84010 u=sergeylapshov n=ansible INFO| PLAY RECAP **************************************************************************************************************
+2025-05-22 09:39:44,005 p=84010 u=sergeylapshov n=ansible INFO| web1                       : ok=4    changed=0    unreachable=0    failed=1    skipped=0    rescued=0    ignored=0   
+2025-05-22 09:40:07,766 p=84280 u=sergeylapshov n=ansible INFO| PLAY [Установка контейнера ubuntu с nginx] ******************************************************************************
+2025-05-22 09:40:07,773 p=84280 u=sergeylapshov n=ansible INFO| TASK [Gathering Facts] **************************************************************************************************
+2025-05-22 09:40:08,969 p=84280 u=sergeylapshov n=ansible WARNING| [WARNING]: Platform linux on host web1 is using the discovered Python interpreter at /usr/bin/python3.10, but future
+installation of another Python interpreter could change the meaning of that path. See https://docs.ansible.com/ansible-
+core/2.18/reference_appendices/interpreter_discovery.html for more information.
+
+2025-05-22 09:40:08,969 p=84280 u=sergeylapshov n=ansible INFO| ok: [web1]
+2025-05-22 09:40:08,974 p=84280 u=sergeylapshov n=ansible INFO| TASK [Установка контейнера ubuntu] **************************************************************************************
+2025-05-22 09:40:09,586 p=84280 u=sergeylapshov n=ansible INFO| ok: [web1]
+2025-05-22 09:40:09,594 p=84280 u=sergeylapshov n=ansible INFO| TASK [Запуск контейнера nginx] ******************************************************************************************
+2025-05-22 09:40:10,069 p=84280 u=sergeylapshov n=ansible INFO| ok: [web1]
+2025-05-22 09:40:10,076 p=84280 u=sergeylapshov n=ansible INFO| TASK [Копирование файла конфигурации nginx] *****************************************************************************
+2025-05-22 09:40:10,606 p=84280 u=sergeylapshov n=ansible INFO| ok: [web1]
+2025-05-22 09:40:10,610 p=84280 u=sergeylapshov n=ansible INFO| TASK [Копирование файлов в контейнер] ***********************************************************************************
+2025-05-22 09:40:11,178 p=84280 u=sergeylapshov n=ansible INFO| fatal: [web1]: FAILED! => {"changed": true, "rc": 1, "stderr": "cp: cannot stat '/home/vagrant/ubuntu/nginx.conf': No such file or directory", "stderr_lines": ["cp: cannot stat '/home/vagrant/ubuntu/nginx.conf': No such file or directory"], "stdout": "", "stdout_lines": []}
+2025-05-22 09:40:11,181 p=84280 u=sergeylapshov n=ansible INFO| PLAY RECAP **************************************************************************************************************
+2025-05-22 09:40:11,181 p=84280 u=sergeylapshov n=ansible INFO| web1                       : ok=4    changed=0    unreachable=0    failed=1    skipped=0    rescued=0    ignored=0   
+2025-05-22 09:40:52,537 p=84594 u=sergeylapshov n=ansible INFO| PLAY [Установка контейнера ubuntu с nginx] ******************************************************************************
+2025-05-22 09:40:52,544 p=84594 u=sergeylapshov n=ansible INFO| TASK [Gathering Facts] **************************************************************************************************
+2025-05-22 09:40:53,722 p=84594 u=sergeylapshov n=ansible WARNING| [WARNING]: Platform linux on host web1 is using the discovered Python interpreter at /usr/bin/python3.10, but future
+installation of another Python interpreter could change the meaning of that path. See https://docs.ansible.com/ansible-
+core/2.18/reference_appendices/interpreter_discovery.html for more information.
+
+2025-05-22 09:40:53,722 p=84594 u=sergeylapshov n=ansible INFO| ok: [web1]
+2025-05-22 09:40:53,727 p=84594 u=sergeylapshov n=ansible INFO| TASK [Установка контейнера ubuntu] **************************************************************************************
+2025-05-22 09:40:54,340 p=84594 u=sergeylapshov n=ansible INFO| ok: [web1]
+2025-05-22 09:40:54,350 p=84594 u=sergeylapshov n=ansible INFO| TASK [Запуск контейнера nginx] ******************************************************************************************
+2025-05-22 09:40:54,792 p=84594 u=sergeylapshov n=ansible INFO| ok: [web1]
+2025-05-22 09:40:54,799 p=84594 u=sergeylapshov n=ansible INFO| TASK [Копирование файла конфигурации nginx] *****************************************************************************
+2025-05-22 09:40:55,353 p=84594 u=sergeylapshov n=ansible INFO| ok: [web1]
+2025-05-22 09:40:55,357 p=84594 u=sergeylapshov n=ansible INFO| TASK [Копирование файлов в контейнер] ***********************************************************************************
+2025-05-22 09:40:55,914 p=84594 u=sergeylapshov n=ansible INFO| fatal: [web1]: FAILED! => {"changed": true, "rc": 1, "stderr": "cp: cannot stat '/home/vagrant/ubuntu/nginx.conf': No such file or directory", "stderr_lines": ["cp: cannot stat '/home/vagrant/ubuntu/nginx.conf': No such file or directory"], "stdout": "", "stdout_lines": []}
+2025-05-22 09:40:55,917 p=84594 u=sergeylapshov n=ansible INFO| PLAY RECAP **************************************************************************************************************
+2025-05-22 09:40:55,918 p=84594 u=sergeylapshov n=ansible INFO| web1                       : ok=4    changed=0    unreachable=0    failed=1    skipped=0    rescued=0    ignored=0   
+2025-05-22 09:41:30,951 p=84886 u=sergeylapshov n=ansible INFO| PLAY [Установка контейнера ubuntu с nginx] ******************************************************************************
+2025-05-22 09:41:30,956 p=84886 u=sergeylapshov n=ansible INFO| TASK [Gathering Facts] **************************************************************************************************
+2025-05-22 09:41:32,097 p=84886 u=sergeylapshov n=ansible WARNING| [WARNING]: Platform linux on host web1 is using the discovered Python interpreter at /usr/bin/python3.10, but future
+installation of another Python interpreter could change the meaning of that path. See https://docs.ansible.com/ansible-
+core/2.18/reference_appendices/interpreter_discovery.html for more information.
+
+2025-05-22 09:41:32,097 p=84886 u=sergeylapshov n=ansible INFO| ok: [web1]
+2025-05-22 09:41:32,101 p=84886 u=sergeylapshov n=ansible INFO| TASK [Установка контейнера ubuntu] **************************************************************************************
+2025-05-22 09:41:32,711 p=84886 u=sergeylapshov n=ansible INFO| ok: [web1]
+2025-05-22 09:41:32,719 p=84886 u=sergeylapshov n=ansible INFO| TASK [Запуск контейнера nginx] ******************************************************************************************
+2025-05-22 09:41:33,166 p=84886 u=sergeylapshov n=ansible INFO| ok: [web1]
+2025-05-22 09:41:33,172 p=84886 u=sergeylapshov n=ansible INFO| TASK [Копирование файла конфигурации nginx] *****************************************************************************
+2025-05-22 09:41:33,719 p=84886 u=sergeylapshov n=ansible INFO| ok: [web1]
+2025-05-22 09:41:33,725 p=84886 u=sergeylapshov n=ansible INFO| TASK [Копирование файлов в контейнер] ***********************************************************************************
+2025-05-22 09:41:34,042 p=84886 u=sergeylapshov n=ansible INFO| fatal: [web1]: FAILED! => {"changed": true, "cmd": "docker cp /home/vagrant/ubuntu/nginx.conf ubuntu_nginx:/etc/nginx/nginx.conf", "delta": "0:00:00.026816", "end": "2025-05-22 01:41:34.287834", "msg": "non-zero return code", "rc": 1, "start": "2025-05-22 01:41:34.261018", "stderr": "Error response from daemon: No such container: ubuntu_nginx", "stderr_lines": ["Error response from daemon: No such container: ubuntu_nginx"], "stdout": "", "stdout_lines": []}
+2025-05-22 09:41:34,043 p=84886 u=sergeylapshov n=ansible INFO| PLAY RECAP **************************************************************************************************************
+2025-05-22 09:41:34,043 p=84886 u=sergeylapshov n=ansible INFO| web1                       : ok=4    changed=0    unreachable=0    failed=1    skipped=0    rescued=0    ignored=0   
+2025-05-22 09:43:09,826 p=85343 u=sergeylapshov n=ansible INFO| PLAY [Установка контейнера ubuntu с nginx] ******************************************************************************
+2025-05-22 09:43:09,833 p=85343 u=sergeylapshov n=ansible INFO| TASK [Gathering Facts] **************************************************************************************************
+2025-05-22 09:43:11,320 p=85343 u=sergeylapshov n=ansible WARNING| [WARNING]: Platform linux on host web1 is using the discovered Python interpreter at /usr/bin/python3.10, but future
+installation of another Python interpreter could change the meaning of that path. See https://docs.ansible.com/ansible-
+core/2.18/reference_appendices/interpreter_discovery.html for more information.
+
+2025-05-22 09:43:11,320 p=85343 u=sergeylapshov n=ansible INFO| ok: [web1]
+2025-05-22 09:43:11,324 p=85343 u=sergeylapshov n=ansible INFO| TASK [Установка контейнера ubuntu] **************************************************************************************
+2025-05-22 09:43:12,111 p=85343 u=sergeylapshov n=ansible INFO| fatal: [web1]: FAILED! => {"changed": false, "msg": "Error starting container 116ec01cd5d9bc80a70ab40a23d0e67af8742dbd81025462b966a0e860e11596: 500 Server Error for http+docker://localhost/v1.49/containers/116ec01cd5d9bc80a70ab40a23d0e67af8742dbd81025462b966a0e860e11596/start: Internal Server Error (\"failed to set up container networking: driver failed programming external connectivity on endpoint ubuntu_nginx (a8e9cef7b6d82bcdea9e735d44e369a33e899dbf6cabc5ca15b8d97f77a47642): Bind for 0.0.0.0:8086 failed: port is already allocated\")"}
+2025-05-22 09:43:12,113 p=85343 u=sergeylapshov n=ansible INFO| PLAY RECAP **************************************************************************************************************
+2025-05-22 09:43:12,113 p=85343 u=sergeylapshov n=ansible INFO| web1                       : ok=1    changed=0    unreachable=0    failed=1    skipped=0    rescued=0    ignored=0   
+2025-05-22 09:43:57,539 p=85619 u=sergeylapshov n=ansible INFO| PLAY [Установка контейнера ubuntu с nginx] ******************************************************************************
+2025-05-22 09:43:57,545 p=85619 u=sergeylapshov n=ansible INFO| TASK [Gathering Facts] **************************************************************************************************
+2025-05-22 09:43:58,734 p=85619 u=sergeylapshov n=ansible WARNING| [WARNING]: Platform linux on host web1 is using the discovered Python interpreter at /usr/bin/python3.10, but future
+installation of another Python interpreter could change the meaning of that path. See https://docs.ansible.com/ansible-
+core/2.18/reference_appendices/interpreter_discovery.html for more information.
+
+2025-05-22 09:43:58,734 p=85619 u=sergeylapshov n=ansible INFO| ok: [web1]
+2025-05-22 09:43:58,739 p=85619 u=sergeylapshov n=ansible INFO| TASK [Установка контейнера ubuntu] **************************************************************************************
+2025-05-22 09:43:59,515 p=85619 u=sergeylapshov n=ansible INFO| fatal: [web1]: FAILED! => {"changed": false, "msg": "Error starting container 116ec01cd5d9bc80a70ab40a23d0e67af8742dbd81025462b966a0e860e11596: 500 Server Error for http+docker://localhost/v1.49/containers/116ec01cd5d9bc80a70ab40a23d0e67af8742dbd81025462b966a0e860e11596/start: Internal Server Error (\"failed to set up container networking: driver failed programming external connectivity on endpoint ubuntu_nginx (4415a129f9194e05545a69218b4e865650f069938e3dc9a39eb581f97b86f4b3): Bind for 0.0.0.0:8086 failed: port is already allocated\")"}
+2025-05-22 09:43:59,517 p=85619 u=sergeylapshov n=ansible INFO| PLAY RECAP **************************************************************************************************************
+2025-05-22 09:43:59,517 p=85619 u=sergeylapshov n=ansible INFO| web1                       : ok=1    changed=0    unreachable=0    failed=1    skipped=0    rescued=0    ignored=0   
+2025-05-22 09:44:15,076 p=85826 u=sergeylapshov n=ansible INFO| PLAY [Установка контейнера ubuntu с nginx] ******************************************************************************
+2025-05-22 09:44:15,081 p=85826 u=sergeylapshov n=ansible INFO| TASK [Gathering Facts] **************************************************************************************************
+2025-05-22 09:44:16,244 p=85826 u=sergeylapshov n=ansible WARNING| [WARNING]: Platform linux on host web1 is using the discovered Python interpreter at /usr/bin/python3.10, but future
+installation of another Python interpreter could change the meaning of that path. See https://docs.ansible.com/ansible-
+core/2.18/reference_appendices/interpreter_discovery.html for more information.
+
+2025-05-22 09:44:16,245 p=85826 u=sergeylapshov n=ansible INFO| ok: [web1]
+2025-05-22 09:44:16,249 p=85826 u=sergeylapshov n=ansible INFO| TASK [Установка контейнера ubuntu] **************************************************************************************
+2025-05-22 09:44:17,017 p=85826 u=sergeylapshov n=ansible INFO| changed: [web1]
+2025-05-22 09:44:17,026 p=85826 u=sergeylapshov n=ansible INFO| TASK [Запуск контейнера nginx] ******************************************************************************************
+2025-05-22 09:44:17,469 p=85826 u=sergeylapshov n=ansible INFO| ok: [web1]
+2025-05-22 09:44:17,476 p=85826 u=sergeylapshov n=ansible INFO| TASK [Копирование файла конфигурации nginx] *****************************************************************************
+2025-05-22 09:44:18,038 p=85826 u=sergeylapshov n=ansible INFO| ok: [web1]
+2025-05-22 09:44:18,042 p=85826 u=sergeylapshov n=ansible INFO| TASK [Копирование файлов в контейнер] ***********************************************************************************
+2025-05-22 09:44:18,619 p=85826 u=sergeylapshov n=ansible INFO| fatal: [web1]: FAILED! => {"changed": true, "rc": 1, "stderr": "cp: cannot stat '/home/vagrant/ubuntu/nginx.conf': No such file or directory", "stderr_lines": ["cp: cannot stat '/home/vagrant/ubuntu/nginx.conf': No such file or directory"], "stdout": "", "stdout_lines": []}
+2025-05-22 09:44:18,621 p=85826 u=sergeylapshov n=ansible INFO| PLAY RECAP **************************************************************************************************************
+2025-05-22 09:44:18,621 p=85826 u=sergeylapshov n=ansible INFO| web1                       : ok=4    changed=1    unreachable=0    failed=1    skipped=0    rescued=0    ignored=0   
+2025-05-22 09:46:14,518 p=86338 u=sergeylapshov n=ansible INFO| PLAY [Установка контейнера ubuntu с nginx] ******************************************************************************
+2025-05-22 09:46:14,524 p=86338 u=sergeylapshov n=ansible INFO| TASK [Gathering Facts] **************************************************************************************************
+2025-05-22 09:46:16,010 p=86338 u=sergeylapshov n=ansible WARNING| [WARNING]: Platform linux on host web1 is using the discovered Python interpreter at /usr/bin/python3.10, but future
+installation of another Python interpreter could change the meaning of that path. See https://docs.ansible.com/ansible-
+core/2.18/reference_appendices/interpreter_discovery.html for more information.
+
+2025-05-22 09:46:16,010 p=86338 u=sergeylapshov n=ansible INFO| ok: [web1]
+2025-05-22 09:46:16,014 p=86338 u=sergeylapshov n=ansible INFO| TASK [Установка контейнера ubuntu] **************************************************************************************
+2025-05-22 09:46:16,661 p=86338 u=sergeylapshov n=ansible INFO| ok: [web1]
+2025-05-22 09:46:16,668 p=86338 u=sergeylapshov n=ansible INFO| TASK [Запуск контейнера nginx] ******************************************************************************************
+2025-05-22 09:46:17,150 p=86338 u=sergeylapshov n=ansible INFO| ok: [web1]
+2025-05-22 09:46:17,157 p=86338 u=sergeylapshov n=ansible INFO| TASK [Копирование файла конфигурации nginx] *****************************************************************************
+2025-05-22 09:46:17,683 p=86338 u=sergeylapshov n=ansible INFO| ok: [web1]
+2025-05-22 09:46:17,690 p=86338 u=sergeylapshov n=ansible INFO| TASK [Копирование файлов в контейнер] ***********************************************************************************
+2025-05-22 09:46:17,998 p=86338 u=sergeylapshov n=ansible INFO| fatal: [web1]: FAILED! => {"changed": true, "cmd": "docker cp /home/vagrant/ubuntu/nginx.conf ubuntu_nginx:/etc/nginx/nginx.conf", "delta": "0:00:00.017081", "end": "2025-05-22 01:46:18.241446", "msg": "non-zero return code", "rc": 1, "start": "2025-05-22 01:46:18.224365", "stderr": "Error response from daemon: Could not find the file /etc/nginx in container ubuntu_nginx", "stderr_lines": ["Error response from daemon: Could not find the file /etc/nginx in container ubuntu_nginx"], "stdout": "", "stdout_lines": []}
+2025-05-22 09:46:17,999 p=86338 u=sergeylapshov n=ansible INFO| PLAY RECAP **************************************************************************************************************
+2025-05-22 09:46:17,999 p=86338 u=sergeylapshov n=ansible INFO| web1                       : ok=4    changed=0    unreachable=0    failed=1    skipped=0    rescued=0    ignored=0   
+2025-05-22 09:47:00,349 p=86661 u=sergeylapshov n=ansible INFO| PLAY [Установка контейнера ubuntu с nginx] ******************************************************************************
+2025-05-22 09:47:00,355 p=86661 u=sergeylapshov n=ansible INFO| TASK [Gathering Facts] **************************************************************************************************
+2025-05-22 09:47:01,529 p=86661 u=sergeylapshov n=ansible WARNING| [WARNING]: Platform linux on host web1 is using the discovered Python interpreter at /usr/bin/python3.10, but future
+installation of another Python interpreter could change the meaning of that path. See https://docs.ansible.com/ansible-
+core/2.18/reference_appendices/interpreter_discovery.html for more information.
+
+2025-05-22 09:47:01,530 p=86661 u=sergeylapshov n=ansible INFO| ok: [web1]
+2025-05-22 09:47:01,534 p=86661 u=sergeylapshov n=ansible INFO| TASK [Установка контейнера ubuntu] **************************************************************************************
+2025-05-22 09:47:02,152 p=86661 u=sergeylapshov n=ansible INFO| ok: [web1]
+2025-05-22 09:47:02,160 p=86661 u=sergeylapshov n=ansible INFO| TASK [Запуск контейнера nginx] ******************************************************************************************
+2025-05-22 09:47:12,901 p=86661 u=sergeylapshov n=ansible INFO| fatal: [web1]: FAILED! => {"changed": false, "msg": "Error starting container 699af6b55029b4bab29210c1acc766094ecf34ca96fa23cad23ce154dc3d503b: 500 Server Error for http+docker://localhost/v1.49/containers/699af6b55029b4bab29210c1acc766094ecf34ca96fa23cad23ce154dc3d503b/start: Internal Server Error (\"failed to set up container networking: driver failed programming external connectivity on endpoint ubuntu_nginx (ecd36a9045bd94510ca11e201c4d51f32ff5a3f8e8725bead0c5b3f2718061c5): Bind for 0.0.0.0:8083 failed: port is already allocated\")"}
+2025-05-22 09:47:12,902 p=86661 u=sergeylapshov n=ansible INFO| PLAY RECAP **************************************************************************************************************
+2025-05-22 09:47:12,903 p=86661 u=sergeylapshov n=ansible INFO| web1                       : ok=2    changed=0    unreachable=0    failed=1    skipped=0    rescued=0    ignored=0   
+2025-05-22 09:47:31,312 p=86914 u=sergeylapshov n=ansible INFO| PLAY [Установка контейнера ubuntu с nginx] ******************************************************************************
+2025-05-22 09:47:31,318 p=86914 u=sergeylapshov n=ansible INFO| TASK [Gathering Facts] **************************************************************************************************
+2025-05-22 09:47:32,520 p=86914 u=sergeylapshov n=ansible WARNING| [WARNING]: Platform linux on host web1 is using the discovered Python interpreter at /usr/bin/python3.10, but future
+installation of another Python interpreter could change the meaning of that path. See https://docs.ansible.com/ansible-
+core/2.18/reference_appendices/interpreter_discovery.html for more information.
+
+2025-05-22 09:47:32,520 p=86914 u=sergeylapshov n=ansible INFO| ok: [web1]
+2025-05-22 09:47:32,525 p=86914 u=sergeylapshov n=ansible INFO| TASK [Установка контейнера ubuntu] **************************************************************************************
+2025-05-22 09:47:33,181 p=86914 u=sergeylapshov n=ansible INFO| ok: [web1]
+2025-05-22 09:47:33,190 p=86914 u=sergeylapshov n=ansible INFO| TASK [Запуск контейнера nginx] ******************************************************************************************
+2025-05-22 09:47:33,789 p=86914 u=sergeylapshov n=ansible INFO| changed: [web1]
+2025-05-22 09:47:33,796 p=86914 u=sergeylapshov n=ansible INFO| TASK [Копирование файла конфигурации nginx] *****************************************************************************
+2025-05-22 09:47:34,343 p=86914 u=sergeylapshov n=ansible INFO| ok: [web1]
+2025-05-22 09:47:34,349 p=86914 u=sergeylapshov n=ansible INFO| TASK [Копирование файлов в контейнер] ***********************************************************************************
+2025-05-22 09:47:34,663 p=86914 u=sergeylapshov n=ansible INFO| changed: [web1]
+2025-05-22 09:47:34,668 p=86914 u=sergeylapshov n=ansible INFO| TASK [Перезапуск nginx] *************************************************************************************************
+2025-05-22 09:47:35,203 p=86914 u=sergeylapshov n=ansible INFO| fatal: [web1]: FAILED! => {"changed": false, "msg": "missing required arguments: container"}
+2025-05-22 09:47:35,205 p=86914 u=sergeylapshov n=ansible INFO| PLAY RECAP **************************************************************************************************************
+2025-05-22 09:47:35,205 p=86914 u=sergeylapshov n=ansible INFO| web1                       : ok=5    changed=2    unreachable=0    failed=1    skipped=0    rescued=0    ignored=0   
+2025-05-22 09:47:53,208 p=87168 u=sergeylapshov n=ansible INFO| PLAY [Установка контейнера ubuntu с nginx] ******************************************************************************
+2025-05-22 09:47:53,214 p=87168 u=sergeylapshov n=ansible INFO| TASK [Gathering Facts] **************************************************************************************************
+2025-05-22 09:47:54,838 p=87168 u=sergeylapshov n=ansible WARNING| [WARNING]: Platform linux on host web1 is using the discovered Python interpreter at /usr/bin/python3.10, but future
+installation of another Python interpreter could change the meaning of that path. See https://docs.ansible.com/ansible-
+core/2.18/reference_appendices/interpreter_discovery.html for more information.
+
+2025-05-22 09:47:54,838 p=87168 u=sergeylapshov n=ansible INFO| ok: [web1]
+2025-05-22 09:47:54,842 p=87168 u=sergeylapshov n=ansible INFO| TASK [Установка контейнера ubuntu] **************************************************************************************
+2025-05-22 09:47:55,656 p=87168 u=sergeylapshov n=ansible INFO| ok: [web1]
+2025-05-22 09:47:55,664 p=87168 u=sergeylapshov n=ansible INFO| TASK [Запуск контейнера nginx] ******************************************************************************************
+2025-05-22 09:47:56,233 p=87168 u=sergeylapshov n=ansible INFO| ok: [web1]
+2025-05-22 09:47:56,241 p=87168 u=sergeylapshov n=ansible INFO| TASK [Копирование файла конфигурации nginx] *****************************************************************************
+2025-05-22 09:47:56,752 p=87168 u=sergeylapshov n=ansible INFO| ok: [web1]
+2025-05-22 09:47:56,758 p=87168 u=sergeylapshov n=ansible INFO| TASK [Копирование файлов в контейнер] ***********************************************************************************
+2025-05-22 09:47:57,098 p=87168 u=sergeylapshov n=ansible INFO| changed: [web1]
+2025-05-22 09:47:57,103 p=87168 u=sergeylapshov n=ansible INFO| TASK [Перезапуск nginx] *************************************************************************************************
+2025-05-22 09:47:57,656 p=87168 u=sergeylapshov n=ansible INFO| fatal: [web1]: FAILED! => {"changed": false, "msg": "missing required arguments: container"}
+2025-05-22 09:47:57,658 p=87168 u=sergeylapshov n=ansible INFO| PLAY RECAP **************************************************************************************************************
+2025-05-22 09:47:57,658 p=87168 u=sergeylapshov n=ansible INFO| web1                       : ok=5    changed=1    unreachable=0    failed=1    skipped=0    rescued=0    ignored=0   
+2025-05-22 09:48:37,949 p=87502 u=sergeylapshov n=ansible INFO| PLAY [Установка контейнера ubuntu с nginx] ******************************************************************************
+2025-05-22 09:48:37,955 p=87502 u=sergeylapshov n=ansible INFO| TASK [Gathering Facts] **************************************************************************************************
+2025-05-22 09:48:39,554 p=87502 u=sergeylapshov n=ansible WARNING| [WARNING]: Platform linux on host web1 is using the discovered Python interpreter at /usr/bin/python3.10, but future
+installation of another Python interpreter could change the meaning of that path. See https://docs.ansible.com/ansible-
+core/2.18/reference_appendices/interpreter_discovery.html for more information.
+
+2025-05-22 09:48:39,554 p=87502 u=sergeylapshov n=ansible INFO| ok: [web1]
+2025-05-22 09:48:39,559 p=87502 u=sergeylapshov n=ansible INFO| TASK [Установка контейнера ubuntu] **************************************************************************************
+2025-05-22 09:48:40,228 p=87502 u=sergeylapshov n=ansible INFO| ok: [web1]
+2025-05-22 09:48:40,236 p=87502 u=sergeylapshov n=ansible INFO| TASK [Запуск контейнера nginx] ******************************************************************************************
+2025-05-22 09:48:40,685 p=87502 u=sergeylapshov n=ansible INFO| ok: [web1]
+2025-05-22 09:48:40,693 p=87502 u=sergeylapshov n=ansible INFO| TASK [Копирование файла конфигурации nginx] *****************************************************************************
+2025-05-22 09:48:41,246 p=87502 u=sergeylapshov n=ansible INFO| ok: [web1]
+2025-05-22 09:48:41,254 p=87502 u=sergeylapshov n=ansible INFO| TASK [Копирование файлов в контейнер] ***********************************************************************************
+2025-05-22 09:48:41,555 p=87502 u=sergeylapshov n=ansible INFO| changed: [web1]
+2025-05-22 09:48:41,560 p=87502 u=sergeylapshov n=ansible INFO| TASK [Перезапуск nginx] *************************************************************************************************
+2025-05-22 09:48:42,085 p=87502 u=sergeylapshov n=ansible INFO| fatal: [web1]: FAILED! => {"changed": false, "msg": "Unsupported parameters for (community.docker.docker_container_exec) module: state. Supported parameters include: api_version, argv, ca_path, chdir, client_cert, client_key, command, container, debug, detach, docker_host, env, stdin, stdin_add_newline, strip_empty_ends, timeout, tls, tls_hostname, tty, use_ssh_client, user, validate_certs (ca_cert, cacert_path, cert_path, docker_api_version, docker_url, key_path, tls_ca_cert, tls_client_cert, tls_client_key, tls_verify)."}
+2025-05-22 09:48:42,088 p=87502 u=sergeylapshov n=ansible INFO| PLAY RECAP **************************************************************************************************************
+2025-05-22 09:48:42,088 p=87502 u=sergeylapshov n=ansible INFO| web1                       : ok=5    changed=1    unreachable=0    failed=1    skipped=0    rescued=0    ignored=0   
+2025-05-22 09:50:04,713 p=87926 u=sergeylapshov n=ansible INFO| PLAY [Установка контейнера ubuntu с nginx] ******************************************************************************
+2025-05-22 09:50:04,723 p=87926 u=sergeylapshov n=ansible INFO| TASK [Gathering Facts] **************************************************************************************************
+2025-05-22 09:50:06,171 p=87926 u=sergeylapshov n=ansible WARNING| [WARNING]: Platform linux on host web1 is using the discovered Python interpreter at /usr/bin/python3.10, but future
+installation of another Python interpreter could change the meaning of that path. See https://docs.ansible.com/ansible-
+core/2.18/reference_appendices/interpreter_discovery.html for more information.
+
+2025-05-22 09:50:06,172 p=87926 u=sergeylapshov n=ansible INFO| ok: [web1]
+2025-05-22 09:50:06,176 p=87926 u=sergeylapshov n=ansible INFO| TASK [Установка контейнера ubuntu] **************************************************************************************
+2025-05-22 09:50:06,817 p=87926 u=sergeylapshov n=ansible INFO| ok: [web1]
+2025-05-22 09:50:06,825 p=87926 u=sergeylapshov n=ansible INFO| TASK [Запуск контейнера nginx] ******************************************************************************************
+2025-05-22 09:50:07,293 p=87926 u=sergeylapshov n=ansible INFO| ok: [web1]
+2025-05-22 09:50:07,300 p=87926 u=sergeylapshov n=ansible INFO| TASK [Копирование файла конфигурации nginx] *****************************************************************************
+2025-05-22 09:50:07,859 p=87926 u=sergeylapshov n=ansible INFO| ok: [web1]
+2025-05-22 09:50:07,865 p=87926 u=sergeylapshov n=ansible INFO| TASK [Копирование файлов в контейнер] ***********************************************************************************
+2025-05-22 09:50:08,187 p=87926 u=sergeylapshov n=ansible INFO| changed: [web1]
+2025-05-22 09:50:08,193 p=87926 u=sergeylapshov n=ansible INFO| TASK [Перезапуск nginx] *************************************************************************************************
+2025-05-22 09:50:08,742 p=87926 u=sergeylapshov n=ansible INFO| fatal: [web1]: FAILED! => {"changed": false, "msg": "The container \"ubuntu_nginx\" has been paused (409 Client Error for http+docker://localhost/v1.49/containers/ubuntu_nginx/exec: Conflict (\"Container e286389045d85b0ba586f7ca9672903773224dab47a02d97b1e118fd1a80c50d is restarting, wait until the container is running\"))"}
+2025-05-22 09:50:08,743 p=87926 u=sergeylapshov n=ansible INFO| PLAY RECAP **************************************************************************************************************
+2025-05-22 09:50:08,743 p=87926 u=sergeylapshov n=ansible INFO| web1                       : ok=5    changed=1    unreachable=0    failed=1    skipped=0    rescued=0    ignored=0   
+2025-05-22 09:50:40,823 p=88225 u=sergeylapshov n=ansible INFO| PLAY [Установка контейнера ubuntu с nginx] ******************************************************************************
+2025-05-22 09:50:40,829 p=88225 u=sergeylapshov n=ansible INFO| TASK [Gathering Facts] **************************************************************************************************
+2025-05-22 09:50:42,004 p=88225 u=sergeylapshov n=ansible WARNING| [WARNING]: Platform linux on host web1 is using the discovered Python interpreter at /usr/bin/python3.10, but future
+installation of another Python interpreter could change the meaning of that path. See https://docs.ansible.com/ansible-
+core/2.18/reference_appendices/interpreter_discovery.html for more information.
+
+2025-05-22 09:50:42,004 p=88225 u=sergeylapshov n=ansible INFO| ok: [web1]
+2025-05-22 09:50:42,008 p=88225 u=sergeylapshov n=ansible INFO| TASK [Установка контейнера ubuntu] **************************************************************************************
+2025-05-22 09:50:42,662 p=88225 u=sergeylapshov n=ansible INFO| ok: [web1]
+2025-05-22 09:50:42,670 p=88225 u=sergeylapshov n=ansible INFO| TASK [Запуск контейнера nginx] ******************************************************************************************
+2025-05-22 09:50:43,112 p=88225 u=sergeylapshov n=ansible INFO| ok: [web1]
+2025-05-22 09:50:43,119 p=88225 u=sergeylapshov n=ansible INFO| TASK [Копирование файла конфигурации nginx] *****************************************************************************
+2025-05-22 09:50:43,672 p=88225 u=sergeylapshov n=ansible INFO| ok: [web1]
+2025-05-22 09:50:43,679 p=88225 u=sergeylapshov n=ansible INFO| TASK [Копирование файлов в контейнер] ***********************************************************************************
+2025-05-22 09:50:43,996 p=88225 u=sergeylapshov n=ansible INFO| changed: [web1]
+2025-05-22 09:50:44,002 p=88225 u=sergeylapshov n=ansible INFO| TASK [Перезапуск nginx] *************************************************************************************************
+2025-05-22 09:50:44,549 p=88225 u=sergeylapshov n=ansible INFO| fatal: [web1]: FAILED! => {"changed": false, "msg": "The container \"ubuntu_nginx\" has been paused (409 Client Error for http+docker://localhost/v1.49/containers/ubuntu_nginx/exec: Conflict (\"Container e286389045d85b0ba586f7ca9672903773224dab47a02d97b1e118fd1a80c50d is restarting, wait until the container is running\"))"}
+2025-05-22 09:50:44,551 p=88225 u=sergeylapshov n=ansible INFO| PLAY RECAP **************************************************************************************************************
+2025-05-22 09:50:44,551 p=88225 u=sergeylapshov n=ansible INFO| web1                       : ok=5    changed=1    unreachable=0    failed=1    skipped=0    rescued=0    ignored=0   
+2025-05-22 09:56:32,447 p=89347 u=sergeylapshov n=ansible INFO| PLAY [Установка контейнера ubuntu с nginx] ******************************************************************************
+2025-05-22 09:56:32,453 p=89347 u=sergeylapshov n=ansible INFO| TASK [Gathering Facts] **************************************************************************************************
+2025-05-22 09:56:34,349 p=89347 u=sergeylapshov n=ansible WARNING| [WARNING]: Platform linux on host web1 is using the discovered Python interpreter at /usr/bin/python3.10, but future
+installation of another Python interpreter could change the meaning of that path. See https://docs.ansible.com/ansible-
+core/2.18/reference_appendices/interpreter_discovery.html for more information.
+
+2025-05-22 09:56:34,349 p=89347 u=sergeylapshov n=ansible INFO| ok: [web1]
+2025-05-22 09:56:34,353 p=89347 u=sergeylapshov n=ansible INFO| TASK [Установка контейнера ubuntu + nginx] ******************************************************************************
+2025-05-22 09:56:53,530 p=89347 u=sergeylapshov n=ansible INFO| fatal: [web1]: FAILED! => {"changed": false, "msg": "Error starting container ba1b8b4834af44069935a7d8ce80fc2964274173063654375bf20eb35e5868c1: 500 Server Error for http+docker://localhost/v1.49/containers/ba1b8b4834af44069935a7d8ce80fc2964274173063654375bf20eb35e5868c1/start: Internal Server Error (\"failed to set up container networking: driver failed programming external connectivity on endpoint ubuntu_nginx (cd153300903c1cc40bcb92d85804ced408bb85df5abb14f851f2e4589350c35b): Bind for 0.0.0.0:8086 failed: port is already allocated\")"}
+2025-05-22 09:56:53,531 p=89347 u=sergeylapshov n=ansible INFO| PLAY RECAP **************************************************************************************************************
+2025-05-22 09:56:53,531 p=89347 u=sergeylapshov n=ansible INFO| web1                       : ok=1    changed=0    unreachable=0    failed=1    skipped=0    rescued=0    ignored=0   
+2025-05-22 09:57:44,769 p=89712 u=sergeylapshov n=ansible INFO| PLAY [Установка контейнера ubuntu с nginx] ******************************************************************************
+2025-05-22 09:57:44,776 p=89712 u=sergeylapshov n=ansible INFO| TASK [Gathering Facts] **************************************************************************************************
+2025-05-22 09:57:45,969 p=89712 u=sergeylapshov n=ansible WARNING| [WARNING]: Platform linux on host web1 is using the discovered Python interpreter at /usr/bin/python3.10, but future
+installation of another Python interpreter could change the meaning of that path. See https://docs.ansible.com/ansible-
+core/2.18/reference_appendices/interpreter_discovery.html for more information.
+
+2025-05-22 09:57:45,970 p=89712 u=sergeylapshov n=ansible INFO| ok: [web1]
+2025-05-22 09:57:45,974 p=89712 u=sergeylapshov n=ansible INFO| TASK [Установка контейнера ubuntu + nginx] ******************************************************************************
+2025-05-22 09:57:46,732 p=89712 u=sergeylapshov n=ansible INFO| changed: [web1]
+2025-05-22 09:57:46,740 p=89712 u=sergeylapshov n=ansible INFO| TASK [Установка curl и nginx] *******************************************************************************************
+2025-05-22 09:57:47,307 p=89712 u=sergeylapshov n=ansible INFO| fatal: [web1]: FAILED! => {"changed": true, "rc": 100, "stderr": "\nWARNING: apt does not have a stable CLI interface. Use with caution in scripts.\n\nE: The update command takes no arguments", "stderr_lines": ["", "WARNING: apt does not have a stable CLI interface. Use with caution in scripts.", "", "E: The update command takes no arguments"], "stdout": "", "stdout_lines": []}
+2025-05-22 09:57:47,310 p=89712 u=sergeylapshov n=ansible INFO| PLAY RECAP **************************************************************************************************************
+2025-05-22 09:57:47,310 p=89712 u=sergeylapshov n=ansible INFO| web1                       : ok=2    changed=1    unreachable=0    failed=1    skipped=0    rescued=0    ignored=0   
+2025-05-22 09:59:29,652 p=90161 u=sergeylapshov n=ansible INFO| PLAY [Установка контейнера ubuntu с nginx] ******************************************************************************
+2025-05-22 09:59:29,658 p=90161 u=sergeylapshov n=ansible INFO| TASK [Gathering Facts] **************************************************************************************************
+2025-05-22 09:59:31,166 p=90161 u=sergeylapshov n=ansible WARNING| [WARNING]: Platform linux on host web1 is using the discovered Python interpreter at /usr/bin/python3.10, but future
+installation of another Python interpreter could change the meaning of that path. See https://docs.ansible.com/ansible-
+core/2.18/reference_appendices/interpreter_discovery.html for more information.
+
+2025-05-22 09:59:31,167 p=90161 u=sergeylapshov n=ansible INFO| ok: [web1]
+2025-05-22 09:59:31,171 p=90161 u=sergeylapshov n=ansible INFO| TASK [Установка контейнера ubuntu + nginx] ******************************************************************************
+2025-05-22 09:59:31,811 p=90161 u=sergeylapshov n=ansible INFO| ok: [web1]
+2025-05-22 09:59:31,820 p=90161 u=sergeylapshov n=ansible INFO| TASK [Установка curl и nginx] *******************************************************************************************
+2025-05-22 09:59:32,375 p=90161 u=sergeylapshov n=ansible INFO| fatal: [web1]: FAILED! => {"changed": true, "rc": 127, "stderr": "", "stderr_lines": [], "stdout": "OCI runtime exec failed: exec failed: unable to start container process: exec: \"[/bin/bash,\": stat [/bin/bash,: no such file or directory: unknown", "stdout_lines": ["OCI runtime exec failed: exec failed: unable to start container process: exec: \"[/bin/bash,\": stat [/bin/bash,: no such file or directory: unknown"]}
+2025-05-22 09:59:32,376 p=90161 u=sergeylapshov n=ansible INFO| PLAY RECAP **************************************************************************************************************
+2025-05-22 09:59:32,376 p=90161 u=sergeylapshov n=ansible INFO| web1                       : ok=2    changed=0    unreachable=0    failed=1    skipped=0    rescued=0    ignored=0   
+2025-05-22 10:09:05,536 p=91880 u=sergeylapshov n=ansible INFO| PLAY [Установка контейнера ubuntu с nginx] ******************************************************************************
+2025-05-22 10:09:05,542 p=91880 u=sergeylapshov n=ansible INFO| TASK [Gathering Facts] **************************************************************************************************
+2025-05-22 10:09:07,105 p=91880 u=sergeylapshov n=ansible WARNING| [WARNING]: Platform linux on host web1 is using the discovered Python interpreter at /usr/bin/python3.10, but future
+installation of another Python interpreter could change the meaning of that path. See https://docs.ansible.com/ansible-
+core/2.18/reference_appendices/interpreter_discovery.html for more information.
+
+2025-05-22 10:09:07,105 p=91880 u=sergeylapshov n=ansible INFO| ok: [web1]
+2025-05-22 10:09:07,110 p=91880 u=sergeylapshov n=ansible INFO| TASK [Установка контейнера ubuntu + nginx] ******************************************************************************
+2025-05-22 10:09:07,764 p=91880 u=sergeylapshov n=ansible INFO| ok: [web1]
+2025-05-22 10:09:07,772 p=91880 u=sergeylapshov n=ansible INFO| TASK [Ecnfyjdrf nginx] **************************************************************************************************
+2025-05-22 10:09:08,319 p=91880 u=sergeylapshov n=ansible INFO| fatal: [web1]: FAILED! => {"changed": false, "msg": "missing required arguments: container"}
+2025-05-22 10:09:08,320 p=91880 u=sergeylapshov n=ansible INFO| PLAY RECAP **************************************************************************************************************
+2025-05-22 10:09:08,320 p=91880 u=sergeylapshov n=ansible INFO| web1                       : ok=2    changed=0    unreachable=0    failed=1    skipped=0    rescued=0    ignored=0   
+2025-05-22 10:09:36,015 p=92136 u=sergeylapshov n=ansible INFO| PLAY [Установка контейнера ubuntu с nginx] ******************************************************************************
+2025-05-22 10:09:36,022 p=92136 u=sergeylapshov n=ansible INFO| TASK [Gathering Facts] **************************************************************************************************
+2025-05-22 10:09:37,203 p=92136 u=sergeylapshov n=ansible WARNING| [WARNING]: Platform linux on host web1 is using the discovered Python interpreter at /usr/bin/python3.10, but future
+installation of another Python interpreter could change the meaning of that path. See https://docs.ansible.com/ansible-
+core/2.18/reference_appendices/interpreter_discovery.html for more information.
+
+2025-05-22 10:09:37,204 p=92136 u=sergeylapshov n=ansible INFO| ok: [web1]
+2025-05-22 10:09:37,209 p=92136 u=sergeylapshov n=ansible INFO| TASK [Установка контейнера ubuntu + nginx] ******************************************************************************
+2025-05-22 10:09:37,839 p=92136 u=sergeylapshov n=ansible INFO| ok: [web1]
+2025-05-22 10:09:37,846 p=92136 u=sergeylapshov n=ansible INFO| TASK [Установка nginx] **************************************************************************************************
+2025-05-22 10:09:38,414 p=92136 u=sergeylapshov n=ansible INFO| fatal: [web1]: FAILED! => {"changed": true, "rc": 100, "stderr": "", "stderr_lines": [], "stdout": "", "stdout_lines": []}
+2025-05-22 10:09:38,416 p=92136 u=sergeylapshov n=ansible INFO| PLAY RECAP **************************************************************************************************************
+2025-05-22 10:09:38,417 p=92136 u=sergeylapshov n=ansible INFO| web1                       : ok=2    changed=0    unreachable=0    failed=1    skipped=0    rescued=0    ignored=0   
+2025-05-22 10:10:20,575 p=92429 u=sergeylapshov n=ansible INFO| PLAY [Установка контейнера ubuntu с nginx] ******************************************************************************
+2025-05-22 10:10:20,581 p=92429 u=sergeylapshov n=ansible INFO| TASK [Gathering Facts] **************************************************************************************************
+2025-05-22 10:10:21,745 p=92429 u=sergeylapshov n=ansible WARNING| [WARNING]: Platform linux on host web1 is using the discovered Python interpreter at /usr/bin/python3.10, but future
+installation of another Python interpreter could change the meaning of that path. See https://docs.ansible.com/ansible-
+core/2.18/reference_appendices/interpreter_discovery.html for more information.
+
+2025-05-22 10:10:21,745 p=92429 u=sergeylapshov n=ansible INFO| ok: [web1]
+2025-05-22 10:10:21,750 p=92429 u=sergeylapshov n=ansible INFO| TASK [Установка контейнера ubuntu + nginx] ******************************************************************************
+2025-05-22 10:10:22,367 p=92429 u=sergeylapshov n=ansible INFO| ok: [web1]
+2025-05-22 10:10:22,376 p=92429 u=sergeylapshov n=ansible INFO| TASK [Установка nginx] **************************************************************************************************
+2025-05-22 10:10:22,916 p=92429 u=sergeylapshov n=ansible INFO| fatal: [web1]: FAILED! => {"changed": true, "rc": 100, "stderr": "", "stderr_lines": [], "stdout": "", "stdout_lines": []}
+2025-05-22 10:10:22,918 p=92429 u=sergeylapshov n=ansible INFO| PLAY RECAP **************************************************************************************************************
+2025-05-22 10:10:22,918 p=92429 u=sergeylapshov n=ansible INFO| web1                       : ok=2    changed=0    unreachable=0    failed=1    skipped=0    rescued=0    ignored=0   
+2025-05-22 10:11:17,940 p=92753 u=sergeylapshov n=ansible INFO| PLAY [Установка контейнера ubuntu с nginx] ******************************************************************************
+2025-05-22 10:11:17,946 p=92753 u=sergeylapshov n=ansible INFO| TASK [Gathering Facts] **************************************************************************************************
+2025-05-22 10:11:19,230 p=92753 u=sergeylapshov n=ansible WARNING| [WARNING]: Platform linux on host web1 is using the discovered Python interpreter at /usr/bin/python3.10, but future
+installation of another Python interpreter could change the meaning of that path. See https://docs.ansible.com/ansible-
+core/2.18/reference_appendices/interpreter_discovery.html for more information.
+
+2025-05-22 10:11:19,230 p=92753 u=sergeylapshov n=ansible INFO| ok: [web1]
+2025-05-22 10:11:19,238 p=92753 u=sergeylapshov n=ansible INFO| TASK [Установка контейнера ubuntu + nginx] ******************************************************************************
+2025-05-22 10:11:20,209 p=92753 u=sergeylapshov n=ansible INFO| ok: [web1]
+2025-05-22 10:11:20,215 p=92753 u=sergeylapshov n=ansible INFO| TASK [Установка nginx] **************************************************************************************************
+2025-05-22 10:12:03,085 p=92753 u=sergeylapshov n=ansible INFO| changed: [web1]
+2025-05-22 10:12:03,092 p=92753 u=sergeylapshov n=ansible INFO| TASK [Копирование конфигурации nginx] ***********************************************************************************
+2025-05-22 10:12:03,148 p=92753 u=sergeylapshov n=ansible INFO| An exception occurred during task execution. To see the full traceback, use -vvv. The error was: If you are using a module and expect the file to exist on the remote, see the remote_src option
+2025-05-22 10:12:03,148 p=92753 u=sergeylapshov n=ansible INFO| fatal: [web1]: FAILED! => {"changed": false, "msg": "Could not find or access 'docker/Ansible/DOCKER-ANS-04/nginx.conf'\nSearched in:\n\t/Users/sergeylapshov/Documents/Devops/docker/Ansible/DOCKER-ANS-04/files/docker/Ansible/DOCKER-ANS-04/nginx.conf\n\t/Users/sergeylapshov/Documents/Devops/docker/Ansible/DOCKER-ANS-04/docker/Ansible/DOCKER-ANS-04/nginx.conf\n\t/Users/sergeylapshov/Documents/Devops/docker/Ansible/DOCKER-ANS-04/files/docker/Ansible/DOCKER-ANS-04/nginx.conf\n\t/Users/sergeylapshov/Documents/Devops/docker/Ansible/DOCKER-ANS-04/docker/Ansible/DOCKER-ANS-04/nginx.conf on the Ansible Controller.\nIf you are using a module and expect the file to exist on the remote, see the remote_src option"}
+2025-05-22 10:12:03,149 p=92753 u=sergeylapshov n=ansible INFO| PLAY RECAP **************************************************************************************************************
+2025-05-22 10:12:03,149 p=92753 u=sergeylapshov n=ansible INFO| web1                       : ok=3    changed=1    unreachable=0    failed=1    skipped=0    rescued=0    ignored=0   
+2025-05-22 10:13:55,067 p=93354 u=sergeylapshov n=ansible INFO| PLAY [Установка контейнера ubuntu с nginx] ******************************************************************************
+2025-05-22 10:13:55,073 p=93354 u=sergeylapshov n=ansible INFO| TASK [Gathering Facts] **************************************************************************************************
+2025-05-22 10:13:56,679 p=93354 u=sergeylapshov n=ansible WARNING| [WARNING]: Platform linux on host web1 is using the discovered Python interpreter at /usr/bin/python3.10, but future
+installation of another Python interpreter could change the meaning of that path. See https://docs.ansible.com/ansible-
+core/2.18/reference_appendices/interpreter_discovery.html for more information.
+
+2025-05-22 10:13:56,679 p=93354 u=sergeylapshov n=ansible INFO| ok: [web1]
+2025-05-22 10:13:56,683 p=93354 u=sergeylapshov n=ansible INFO| TASK [Установка контейнера ubuntu + nginx] ******************************************************************************
+2025-05-22 10:13:57,342 p=93354 u=sergeylapshov n=ansible INFO| ok: [web1]
+2025-05-22 10:13:57,350 p=93354 u=sergeylapshov n=ansible INFO| TASK [Установка nginx] **************************************************************************************************
+2025-05-22 10:14:03,523 p=93354 u=sergeylapshov n=ansible INFO| changed: [web1]
+2025-05-22 10:14:03,532 p=93354 u=sergeylapshov n=ansible INFO| TASK [Копирование конфигурации nginx] ***********************************************************************************
+2025-05-22 10:14:04,079 p=93354 u=sergeylapshov n=ansible INFO| ok: [web1]
+2025-05-22 10:14:04,084 p=93354 u=sergeylapshov n=ansible INFO| TASK [Копирование конфигурации nginx в контейнер] ***********************************************************************
+2025-05-22 10:14:04,478 p=93354 u=sergeylapshov n=ansible INFO| fatal: [web1]: FAILED! => {"changed": false, "msg": "missing required arguments: container"}
+2025-05-22 10:14:04,479 p=93354 u=sergeylapshov n=ansible INFO| PLAY RECAP **************************************************************************************************************
+2025-05-22 10:14:04,479 p=93354 u=sergeylapshov n=ansible INFO| web1                       : ok=4    changed=1    unreachable=0    failed=1    skipped=0    rescued=0    ignored=0   
+2025-05-22 10:14:46,008 p=93694 u=sergeylapshov n=ansible INFO| PLAY [Установка контейнера ubuntu с nginx] ******************************************************************************
+2025-05-22 10:14:46,014 p=93694 u=sergeylapshov n=ansible INFO| TASK [Gathering Facts] **************************************************************************************************
+2025-05-22 10:14:47,193 p=93694 u=sergeylapshov n=ansible WARNING| [WARNING]: Platform linux on host web1 is using the discovered Python interpreter at /usr/bin/python3.10, but future
+installation of another Python interpreter could change the meaning of that path. See https://docs.ansible.com/ansible-
+core/2.18/reference_appendices/interpreter_discovery.html for more information.
+
+2025-05-22 10:14:47,193 p=93694 u=sergeylapshov n=ansible INFO| ok: [web1]
+2025-05-22 10:14:47,197 p=93694 u=sergeylapshov n=ansible INFO| TASK [Установка контейнера ubuntu + nginx] ******************************************************************************
+2025-05-22 10:14:47,852 p=93694 u=sergeylapshov n=ansible INFO| ok: [web1]
+2025-05-22 10:14:47,861 p=93694 u=sergeylapshov n=ansible INFO| TASK [Установка nginx] **************************************************************************************************
+2025-05-22 10:14:56,399 p=93694 u=sergeylapshov n=ansible INFO| changed: [web1]
+2025-05-22 10:14:56,410 p=93694 u=sergeylapshov n=ansible INFO| TASK [Копирование конфигурации nginx] ***********************************************************************************
+2025-05-22 10:14:56,974 p=93694 u=sergeylapshov n=ansible INFO| ok: [web1]
+2025-05-22 10:14:56,980 p=93694 u=sergeylapshov n=ansible INFO| TASK [Копирование конфигурации nginx в контейнер] ***********************************************************************
+2025-05-22 10:14:57,434 p=93694 u=sergeylapshov n=ansible INFO| fatal: [web1]: FAILED! => {"changed": true, "rc": 1, "stderr": "", "stderr_lines": [], "stdout": "", "stdout_lines": []}
+2025-05-22 10:14:57,435 p=93694 u=sergeylapshov n=ansible INFO| PLAY RECAP **************************************************************************************************************
+2025-05-22 10:14:57,435 p=93694 u=sergeylapshov n=ansible INFO| web1                       : ok=4    changed=1    unreachable=0    failed=1    skipped=0    rescued=0    ignored=0   
+2025-05-22 10:15:26,767 p=93995 u=sergeylapshov n=ansible INFO| PLAY [Установка контейнера ubuntu с nginx] ******************************************************************************
+2025-05-22 10:15:26,774 p=93995 u=sergeylapshov n=ansible INFO| TASK [Gathering Facts] **************************************************************************************************
+2025-05-22 10:15:27,986 p=93995 u=sergeylapshov n=ansible WARNING| [WARNING]: Platform linux on host web1 is using the discovered Python interpreter at /usr/bin/python3.10, but future
+installation of another Python interpreter could change the meaning of that path. See https://docs.ansible.com/ansible-
+core/2.18/reference_appendices/interpreter_discovery.html for more information.
+
+2025-05-22 10:15:27,987 p=93995 u=sergeylapshov n=ansible INFO| ok: [web1]
+2025-05-22 10:15:27,991 p=93995 u=sergeylapshov n=ansible INFO| TASK [Установка контейнера ubuntu + nginx] ******************************************************************************
+2025-05-22 10:15:28,635 p=93995 u=sergeylapshov n=ansible INFO| ok: [web1]
+2025-05-22 10:15:28,644 p=93995 u=sergeylapshov n=ansible INFO| TASK [Установка nginx] **************************************************************************************************
+2025-05-22 10:15:36,087 p=93995 u=sergeylapshov n=ansible INFO| changed: [web1]
+2025-05-22 10:15:36,097 p=93995 u=sergeylapshov n=ansible INFO| TASK [Копирование конфигурации nginx] ***********************************************************************************
+2025-05-22 10:15:36,647 p=93995 u=sergeylapshov n=ansible INFO| ok: [web1]
+2025-05-22 10:15:36,653 p=93995 u=sergeylapshov n=ansible INFO| TASK [Копирование конфигурации nginx в контейнер] ***********************************************************************
+2025-05-22 10:15:37,117 p=93995 u=sergeylapshov n=ansible INFO| fatal: [web1]: FAILED! => {"changed": true, "rc": 1, "stderr": "", "stderr_lines": [], "stdout": "", "stdout_lines": []}
+2025-05-22 10:15:37,118 p=93995 u=sergeylapshov n=ansible INFO| PLAY RECAP **************************************************************************************************************
+2025-05-22 10:15:37,118 p=93995 u=sergeylapshov n=ansible INFO| web1                       : ok=4    changed=1    unreachable=0    failed=1    skipped=0    rescued=0    ignored=0   
+2025-05-22 10:16:04,413 p=94285 u=sergeylapshov n=ansible INFO| PLAY [Установка контейнера ubuntu с nginx] ******************************************************************************
+2025-05-22 10:16:04,418 p=94285 u=sergeylapshov n=ansible INFO| TASK [Gathering Facts] **************************************************************************************************
+2025-05-22 10:16:05,589 p=94285 u=sergeylapshov n=ansible WARNING| [WARNING]: Platform linux on host web1 is using the discovered Python interpreter at /usr/bin/python3.10, but future
+installation of another Python interpreter could change the meaning of that path. See https://docs.ansible.com/ansible-
+core/2.18/reference_appendices/interpreter_discovery.html for more information.
+
+2025-05-22 10:16:05,590 p=94285 u=sergeylapshov n=ansible INFO| ok: [web1]
+2025-05-22 10:16:05,594 p=94285 u=sergeylapshov n=ansible INFO| TASK [Установка контейнера ubuntu + nginx] ******************************************************************************
+2025-05-22 10:16:06,207 p=94285 u=sergeylapshov n=ansible INFO| ok: [web1]
+2025-05-22 10:16:06,216 p=94285 u=sergeylapshov n=ansible INFO| TASK [Установка nginx] **************************************************************************************************
+2025-05-22 10:16:12,502 p=94285 u=sergeylapshov n=ansible INFO| changed: [web1]
+2025-05-22 10:16:12,510 p=94285 u=sergeylapshov n=ansible INFO| TASK [Копирование конфигурации nginx] ***********************************************************************************
+2025-05-22 10:16:13,050 p=94285 u=sergeylapshov n=ansible INFO| ok: [web1]
+2025-05-22 10:16:13,056 p=94285 u=sergeylapshov n=ansible INFO| TASK [Копирование конфигурации nginx в контейнер] ***********************************************************************
+2025-05-22 10:16:13,503 p=94285 u=sergeylapshov n=ansible INFO| fatal: [web1]: FAILED! => {"changed": true, "rc": 1, "stderr": "", "stderr_lines": [], "stdout": "", "stdout_lines": []}
+2025-05-22 10:16:13,504 p=94285 u=sergeylapshov n=ansible INFO| PLAY RECAP **************************************************************************************************************
+2025-05-22 10:16:13,504 p=94285 u=sergeylapshov n=ansible INFO| web1                       : ok=4    changed=1    unreachable=0    failed=1    skipped=0    rescued=0    ignored=0   
+2025-05-22 10:17:58,878 p=94778 u=sergeylapshov n=ansible ERROR| ERROR! couldn't resolve module/action 'community.docker.docker_cp'. This often indicates a misspelling, missing collection, or incorrect module path.
+
+The error appears to be in '/Users/sergeylapshov/Documents/Devops/docker/Ansible/DOCKER-ANS-04/ubuntu_nginx.yml': line 26, column 7, but may
+be elsewhere in the file depending on the exact syntax problem.
+
+The offending line appears to be:
+
+
+    - name: Копирование конфигурации nginx в контейнер
+      ^ here
+
+2025-05-22 10:21:19,459 p=95492 u=sergeylapshov n=ansible ERROR| ERROR! couldn't resolve module/action 'community.docker.docker_cp_file'. This often indicates a misspelling, missing collection, or incorrect module path.
+
+The error appears to be in '/Users/sergeylapshov/Documents/Devops/docker/Ansible/DOCKER-ANS-04/ubuntu_nginx.yml': line 26, column 7, but may
+be elsewhere in the file depending on the exact syntax problem.
+
+The offending line appears to be:
+
+
+    - name: Копирование конфигурации nginx в контейнер
+      ^ here
+
+2025-05-22 10:22:06,076 p=95758 u=sergeylapshov n=ansible ERROR| ERROR! couldn't resolve module/action 'community.docker.docker_copy_to_container'. This often indicates a misspelling, missing collection, or incorrect module path.
+
+The error appears to be in '/Users/sergeylapshov/Documents/Devops/docker/Ansible/DOCKER-ANS-04/ubuntu_nginx.yml': line 26, column 7, but may
+be elsewhere in the file depending on the exact syntax problem.
+
+The offending line appears to be:
+
+
+    - name: Копирование конфигурации nginx в контейнер
+      ^ here
+
+2025-05-22 10:23:41,187 p=96160 u=sergeylapshov n=ansible INFO| PLAY [Установка контейнера ubuntu с nginx] ******************************************************************************
+2025-05-22 10:23:41,194 p=96160 u=sergeylapshov n=ansible INFO| TASK [Gathering Facts] **************************************************************************************************
+2025-05-22 10:23:42,709 p=96160 u=sergeylapshov n=ansible WARNING| [WARNING]: Platform linux on host web1 is using the discovered Python interpreter at /usr/bin/python3.10, but future
+installation of another Python interpreter could change the meaning of that path. See https://docs.ansible.com/ansible-
+core/2.18/reference_appendices/interpreter_discovery.html for more information.
+
+2025-05-22 10:23:42,709 p=96160 u=sergeylapshov n=ansible INFO| ok: [web1]
+2025-05-22 10:23:42,713 p=96160 u=sergeylapshov n=ansible INFO| TASK [Установка контейнера ubuntu + nginx] ******************************************************************************
+2025-05-22 10:23:43,360 p=96160 u=sergeylapshov n=ansible INFO| ok: [web1]
+2025-05-22 10:23:43,368 p=96160 u=sergeylapshov n=ansible INFO| TASK [Установка nginx] **************************************************************************************************
+2025-05-22 10:23:49,566 p=96160 u=sergeylapshov n=ansible INFO| changed: [web1]
+2025-05-22 10:23:49,574 p=96160 u=sergeylapshov n=ansible INFO| TASK [Копирование конфигурации nginx] ***********************************************************************************
+2025-05-22 10:23:50,115 p=96160 u=sergeylapshov n=ansible INFO| ok: [web1]
+2025-05-22 10:23:50,122 p=96160 u=sergeylapshov n=ansible INFO| TASK [Копирование конфигурации nginx в контейнер] ***********************************************************************
+2025-05-22 10:23:50,437 p=96160 u=sergeylapshov n=ansible INFO| changed: [web1]
+2025-05-22 10:23:50,442 p=96160 u=sergeylapshov n=ansible INFO| TASK [Перезапуск nginx] *************************************************************************************************
+2025-05-22 10:23:50,901 p=96160 u=sergeylapshov n=ansible INFO| fatal: [web1]: FAILED! => {"changed": true, "rc": 1, "stderr": "", "stderr_lines": [], "stdout": " * Restarting nginx nginx\n   ...fail!", "stdout_lines": [" * Restarting nginx nginx", "   ...fail!"]}
+2025-05-22 10:23:50,902 p=96160 u=sergeylapshov n=ansible INFO| PLAY RECAP **************************************************************************************************************
+2025-05-22 10:23:50,903 p=96160 u=sergeylapshov n=ansible INFO| web1                       : ok=5    changed=2    unreachable=0    failed=1    skipped=0    rescued=0    ignored=0   
+2025-05-22 10:24:25,273 p=96486 u=sergeylapshov n=ansible INFO| PLAY [Установка контейнера ubuntu с nginx] ******************************************************************************
+2025-05-22 10:24:25,279 p=96486 u=sergeylapshov n=ansible INFO| TASK [Gathering Facts] **************************************************************************************************
+2025-05-22 10:24:26,471 p=96486 u=sergeylapshov n=ansible WARNING| [WARNING]: Platform linux on host web1 is using the discovered Python interpreter at /usr/bin/python3.10, but future
+installation of another Python interpreter could change the meaning of that path. See https://docs.ansible.com/ansible-
+core/2.18/reference_appendices/interpreter_discovery.html for more information.
+
+2025-05-22 10:24:26,471 p=96486 u=sergeylapshov n=ansible INFO| ok: [web1]
+2025-05-22 10:24:26,475 p=96486 u=sergeylapshov n=ansible INFO| TASK [Установка контейнера ubuntu + nginx] ******************************************************************************
+2025-05-22 10:24:27,121 p=96486 u=sergeylapshov n=ansible INFO| ok: [web1]
+2025-05-22 10:24:27,129 p=96486 u=sergeylapshov n=ansible INFO| TASK [Установка nginx] **************************************************************************************************
+2025-05-22 10:24:33,512 p=96486 u=sergeylapshov n=ansible INFO| changed: [web1]
+2025-05-22 10:24:33,519 p=96486 u=sergeylapshov n=ansible INFO| TASK [Копирование конфигурации nginx] ***********************************************************************************
+2025-05-22 10:24:34,094 p=96486 u=sergeylapshov n=ansible INFO| ok: [web1]
+2025-05-22 10:24:34,101 p=96486 u=sergeylapshov n=ansible INFO| TASK [Копирование конфигурации nginx в контейнер] ***********************************************************************
+2025-05-22 10:24:34,419 p=96486 u=sergeylapshov n=ansible INFO| changed: [web1]
+2025-05-22 10:24:34,424 p=96486 u=sergeylapshov n=ansible INFO| TASK [Перезапуск nginx] *************************************************************************************************
+2025-05-22 10:24:34,874 p=96486 u=sergeylapshov n=ansible INFO| fatal: [web1]: FAILED! => {"changed": true, "rc": 1, "stderr": "", "stderr_lines": [], "stdout": " * Restarting nginx nginx\n   ...fail!", "stdout_lines": [" * Restarting nginx nginx", "   ...fail!"]}
+2025-05-22 10:24:34,876 p=96486 u=sergeylapshov n=ansible INFO| PLAY RECAP **************************************************************************************************************
+2025-05-22 10:24:34,876 p=96486 u=sergeylapshov n=ansible INFO| web1                       : ok=5    changed=2    unreachable=0    failed=1    skipped=0    rescued=0    ignored=0   
+2025-05-22 10:26:41,330 p=97052 u=sergeylapshov n=ansible INFO| PLAY [Установка контейнера ubuntu с nginx] ******************************************************************************
+2025-05-22 10:26:41,337 p=97052 u=sergeylapshov n=ansible INFO| TASK [Gathering Facts] **************************************************************************************************
+2025-05-22 10:26:42,873 p=97052 u=sergeylapshov n=ansible WARNING| [WARNING]: Platform linux on host web1 is using the discovered Python interpreter at /usr/bin/python3.10, but future
+installation of another Python interpreter could change the meaning of that path. See https://docs.ansible.com/ansible-
+core/2.18/reference_appendices/interpreter_discovery.html for more information.
+
+2025-05-22 10:26:42,873 p=97052 u=sergeylapshov n=ansible INFO| ok: [web1]
+2025-05-22 10:26:42,877 p=97052 u=sergeylapshov n=ansible INFO| TASK [Установка контейнера ubuntu + nginx] ******************************************************************************
+2025-05-22 10:26:43,516 p=97052 u=sergeylapshov n=ansible INFO| ok: [web1]
+2025-05-22 10:26:43,524 p=97052 u=sergeylapshov n=ansible INFO| TASK [Установка nginx] **************************************************************************************************
+2025-05-22 10:26:50,066 p=97052 u=sergeylapshov n=ansible INFO| changed: [web1]
+2025-05-22 10:26:50,075 p=97052 u=sergeylapshov n=ansible INFO| TASK [Копирование конфигурации nginx] ***********************************************************************************
+2025-05-22 10:26:50,613 p=97052 u=sergeylapshov n=ansible INFO| ok: [web1]
+2025-05-22 10:26:50,620 p=97052 u=sergeylapshov n=ansible INFO| TASK [Копирование конфигурации nginx в контейнер] ***********************************************************************
+2025-05-22 10:26:50,916 p=97052 u=sergeylapshov n=ansible INFO| changed: [web1]
+2025-05-22 10:26:50,921 p=97052 u=sergeylapshov n=ansible INFO| TASK [Запустить nginx] **************************************************************************************************
+2025-05-22 10:26:51,372 p=97052 u=sergeylapshov n=ansible INFO| fatal: [web1]: FAILED! => {"changed": true, "rc": 1, "stderr": "", "stderr_lines": [], "stdout": "", "stdout_lines": []}
+2025-05-22 10:26:51,373 p=97052 u=sergeylapshov n=ansible INFO| PLAY RECAP **************************************************************************************************************
+2025-05-22 10:26:51,374 p=97052 u=sergeylapshov n=ansible INFO| web1                       : ok=5    changed=2    unreachable=0    failed=1    skipped=0    rescued=0    ignored=0   
+2025-05-22 10:29:14,850 p=97676 u=sergeylapshov n=ansible INFO| PLAY [Установка контейнера ubuntu с nginx] ******************************************************************************
+2025-05-22 10:29:14,857 p=97676 u=sergeylapshov n=ansible INFO| TASK [Gathering Facts] **************************************************************************************************
+2025-05-22 10:29:16,832 p=97676 u=sergeylapshov n=ansible WARNING| [WARNING]: Platform linux on host web1 is using the discovered Python interpreter at /usr/bin/python3.10, but future
+installation of another Python interpreter could change the meaning of that path. See https://docs.ansible.com/ansible-
+core/2.18/reference_appendices/interpreter_discovery.html for more information.
+
+2025-05-22 10:29:16,832 p=97676 u=sergeylapshov n=ansible INFO| ok: [web1]
+2025-05-22 10:29:16,836 p=97676 u=sergeylapshov n=ansible INFO| TASK [Установка контейнера ubuntu + nginx] ******************************************************************************
+2025-05-22 10:29:25,066 p=97676 u=sergeylapshov n=ansible INFO| fatal: [web1]: FAILED! => {"changed": false, "msg": "Error pulling image ubuntu:alpine - 404 Client Error for http+docker://localhost/v1.49/images/create?tag=alpine&fromImage=ubuntu: Not Found (\"manifest for ubuntu:alpine not found: manifest unknown: manifest unknown\")"}
+2025-05-22 10:29:25,067 p=97676 u=sergeylapshov n=ansible INFO| PLAY RECAP **************************************************************************************************************
+2025-05-22 10:29:25,067 p=97676 u=sergeylapshov n=ansible INFO| web1                       : ok=1    changed=0    unreachable=0    failed=1    skipped=0    rescued=0    ignored=0   
+2025-05-22 10:31:17,348 p=98173 u=sergeylapshov n=ansible INFO| PLAY [Установка контейнера ubuntu с nginx] ******************************************************************************
+2025-05-22 10:31:17,356 p=98173 u=sergeylapshov n=ansible INFO| TASK [Gathering Facts] **************************************************************************************************
+2025-05-22 10:31:18,884 p=98173 u=sergeylapshov n=ansible WARNING| [WARNING]: Platform linux on host web1 is using the discovered Python interpreter at /usr/bin/python3.10, but future
+installation of another Python interpreter could change the meaning of that path. See https://docs.ansible.com/ansible-
+core/2.18/reference_appendices/interpreter_discovery.html for more information.
+
+2025-05-22 10:31:18,884 p=98173 u=sergeylapshov n=ansible INFO| ok: [web1]
+2025-05-22 10:31:18,888 p=98173 u=sergeylapshov n=ansible INFO| TASK [Установка контейнера ubuntu + nginx] ******************************************************************************
+2025-05-22 10:31:27,431 p=98173 u=sergeylapshov n=ansible INFO| fatal: [web1]: FAILED! => {"changed": false, "msg": "Error pulling image ubuntu:alpine - 404 Client Error for http+docker://localhost/v1.49/images/create?tag=alpine&fromImage=ubuntu: Not Found (\"manifest for ubuntu:alpine not found: manifest unknown: manifest unknown\")"}
+2025-05-22 10:31:27,434 p=98173 u=sergeylapshov n=ansible INFO| PLAY RECAP **************************************************************************************************************
+2025-05-22 10:31:27,434 p=98173 u=sergeylapshov n=ansible INFO| web1                       : ok=1    changed=0    unreachable=0    failed=1    skipped=0    rescued=0    ignored=0   
+2025-05-22 10:31:53,876 p=98441 u=sergeylapshov n=ansible INFO| PLAY [Установка контейнера ubuntu с nginx] ******************************************************************************
+2025-05-22 10:31:53,882 p=98441 u=sergeylapshov n=ansible INFO| TASK [Gathering Facts] **************************************************************************************************
+2025-05-22 10:31:55,052 p=98441 u=sergeylapshov n=ansible WARNING| [WARNING]: Platform linux on host web1 is using the discovered Python interpreter at /usr/bin/python3.10, but future
+installation of another Python interpreter could change the meaning of that path. See https://docs.ansible.com/ansible-
+core/2.18/reference_appendices/interpreter_discovery.html for more information.
+
+2025-05-22 10:31:55,052 p=98441 u=sergeylapshov n=ansible INFO| ok: [web1]
+2025-05-22 10:31:55,057 p=98441 u=sergeylapshov n=ansible INFO| TASK [Установка контейнера ubuntu + nginx] ******************************************************************************
+2025-05-22 10:31:55,705 p=98441 u=sergeylapshov n=ansible INFO| ok: [web1]
+2025-05-22 10:31:55,713 p=98441 u=sergeylapshov n=ansible INFO| TASK [Установка nginx] **************************************************************************************************
+2025-05-22 10:32:01,834 p=98441 u=sergeylapshov n=ansible INFO| changed: [web1]
+2025-05-22 10:32:01,843 p=98441 u=sergeylapshov n=ansible INFO| TASK [Копирование конфигурации nginx] ***********************************************************************************
+2025-05-22 10:32:02,393 p=98441 u=sergeylapshov n=ansible INFO| ok: [web1]
+2025-05-22 10:32:02,400 p=98441 u=sergeylapshov n=ansible INFO| TASK [Копирование конфигурации nginx в контейнер] ***********************************************************************
+2025-05-22 10:32:02,706 p=98441 u=sergeylapshov n=ansible INFO| changed: [web1]
+2025-05-22 10:32:02,711 p=98441 u=sergeylapshov n=ansible INFO| TASK [Проверка работы nginx] ********************************************************************************************
+2025-05-22 10:32:03,072 p=98441 u=sergeylapshov n=ansible INFO| ok: [web1]
+2025-05-22 10:32:03,073 p=98441 u=sergeylapshov n=ansible INFO| PLAY RECAP **************************************************************************************************************
+2025-05-22 10:32:03,073 p=98441 u=sergeylapshov n=ansible INFO| web1                       : ok=6    changed=2    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
