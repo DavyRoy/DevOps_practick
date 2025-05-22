@@ -1,0 +1,5 @@
+- name: Деплой приложения через роль
+  hosts: web
+  become: true
+  roles:
+    - role: deploy_docker_app

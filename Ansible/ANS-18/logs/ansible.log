@@ -1496,3 +1496,117 @@ core/2.18/reference_appendices/interpreter_discovery.html for more information.
 2025-05-22 10:32:03,072 p=98441 u=sergeylapshov n=ansible INFO| ok: [web1]
 2025-05-22 10:32:03,073 p=98441 u=sergeylapshov n=ansible INFO| PLAY RECAP **************************************************************************************************************
 2025-05-22 10:32:03,073 p=98441 u=sergeylapshov n=ansible INFO| web1                       : ok=6    changed=2    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+2025-05-22 10:52:49,128 p=3552 u=sergeylapshov n=ansible INFO| PLAY [Клонирование репозитория] *****************************************************************************************
+2025-05-22 10:52:49,134 p=3552 u=sergeylapshov n=ansible INFO| TASK [Gathering Facts] **************************************************************************************************
+2025-05-22 10:52:50,633 p=3552 u=sergeylapshov n=ansible WARNING| [WARNING]: Platform linux on host web1 is using the discovered Python interpreter at /usr/bin/python3.10, but future
+installation of another Python interpreter could change the meaning of that path. See https://docs.ansible.com/ansible-
+core/2.18/reference_appendices/interpreter_discovery.html for more information.
+
+2025-05-22 10:52:50,633 p=3552 u=sergeylapshov n=ansible INFO| ok: [web1]
+2025-05-22 10:52:50,637 p=3552 u=sergeylapshov n=ansible INFO| TASK [Клонировать приложение] *******************************************************************************************
+2025-05-22 10:52:54,622 p=3552 u=sergeylapshov n=ansible INFO| changed: [web1]
+2025-05-22 10:52:54,633 p=3552 u=sergeylapshov n=ansible INFO| TASK [Сборка Docker-образа] *********************************************************************************************
+2025-05-22 10:52:54,911 p=3552 u=sergeylapshov n=ansible INFO| fatal: [web1]: FAILED! => {"changed": false, "msg": "Unsupported parameters for (ansible.legacy.command) module: build, name. Supported parameters include: _raw_params, _uses_shell, argv, chdir, creates, executable, expand_argument_vars, removes, stdin, stdin_add_newline, strip_empty_ends."}
+2025-05-22 10:52:54,912 p=3552 u=sergeylapshov n=ansible INFO| PLAY RECAP **************************************************************************************************************
+2025-05-22 10:52:54,912 p=3552 u=sergeylapshov n=ansible INFO| web1                       : ok=2    changed=1    unreachable=0    failed=1    skipped=0    rescued=0    ignored=0   
+2025-05-22 10:56:06,957 p=4329 u=sergeylapshov n=ansible INFO| PLAY [Клонирование репозитория] *****************************************************************************************
+2025-05-22 10:56:06,966 p=4329 u=sergeylapshov n=ansible INFO| TASK [Gathering Facts] **************************************************************************************************
+2025-05-22 10:56:08,479 p=4329 u=sergeylapshov n=ansible WARNING| [WARNING]: Platform linux on host web1 is using the discovered Python interpreter at /usr/bin/python3.10, but future
+installation of another Python interpreter could change the meaning of that path. See https://docs.ansible.com/ansible-
+core/2.18/reference_appendices/interpreter_discovery.html for more information.
+
+2025-05-22 10:56:08,479 p=4329 u=sergeylapshov n=ansible INFO| ok: [web1]
+2025-05-22 10:56:08,483 p=4329 u=sergeylapshov n=ansible INFO| TASK [Клонировать приложение] *******************************************************************************************
+2025-05-22 10:56:11,097 p=4329 u=sergeylapshov n=ansible INFO| ok: [web1]
+2025-05-22 10:56:11,105 p=4329 u=sergeylapshov n=ansible INFO| TASK [Сборка Docker-образа] *********************************************************************************************
+2025-05-22 10:56:11,650 p=4329 u=sergeylapshov n=ansible INFO| fatal: [web1]: FAILED! => {"changed": false, "msg": "state is present but all of the following are missing: source"}
+2025-05-22 10:56:11,651 p=4329 u=sergeylapshov n=ansible INFO| PLAY RECAP **************************************************************************************************************
+2025-05-22 10:56:11,651 p=4329 u=sergeylapshov n=ansible INFO| web1                       : ok=2    changed=0    unreachable=0    failed=1    skipped=0    rescued=0    ignored=0   
+2025-05-22 10:57:56,069 p=4796 u=sergeylapshov n=ansible INFO| PLAY [Клонирование репозитория] *****************************************************************************************
+2025-05-22 10:57:56,075 p=4796 u=sergeylapshov n=ansible INFO| TASK [Gathering Facts] **************************************************************************************************
+2025-05-22 10:57:57,573 p=4796 u=sergeylapshov n=ansible WARNING| [WARNING]: Platform linux on host web1 is using the discovered Python interpreter at /usr/bin/python3.10, but future
+installation of another Python interpreter could change the meaning of that path. See https://docs.ansible.com/ansible-
+core/2.18/reference_appendices/interpreter_discovery.html for more information.
+
+2025-05-22 10:57:57,573 p=4796 u=sergeylapshov n=ansible INFO| ok: [web1]
+2025-05-22 10:57:57,578 p=4796 u=sergeylapshov n=ansible INFO| TASK [Клонировать приложение] *******************************************************************************************
+2025-05-22 10:58:00,368 p=4796 u=sergeylapshov n=ansible INFO| ok: [web1]
+2025-05-22 10:58:00,378 p=4796 u=sergeylapshov n=ansible INFO| TASK [Сборка Docker-образа] *********************************************************************************************
+2025-05-22 10:59:18,255 p=4796 u=sergeylapshov n=ansible INFO| changed: [web1]
+2025-05-22 10:59:18,261 p=4796 u=sergeylapshov n=ansible INFO| TASK [Запуск контейнера] ************************************************************************************************
+2025-05-22 10:59:19,237 p=4796 u=sergeylapshov n=ansible INFO| fatal: [web1]: FAILED! => {"changed": false, "msg": "Error starting container 2404cbfffb305df51930991cbbdb0ace2583467c2dda3f7f7abe607b56860e60: 500 Server Error for http+docker://localhost/v1.49/containers/2404cbfffb305df51930991cbbdb0ace2583467c2dda3f7f7abe607b56860e60/start: Internal Server Error (\"failed to set up container networking: driver failed programming external connectivity on endpoint demo-backend (75c415f83c4814b7785ae936ff2a15d50ac057d10b0085ae5f0d14ab050613df): Bind for 0.0.0.0:8083 failed: port is already allocated\")"}
+2025-05-22 10:59:19,238 p=4796 u=sergeylapshov n=ansible INFO| PLAY RECAP **************************************************************************************************************
+2025-05-22 10:59:19,238 p=4796 u=sergeylapshov n=ansible INFO| web1                       : ok=3    changed=1    unreachable=0    failed=1    skipped=0    rescued=0    ignored=0   
+2025-05-22 10:59:41,483 p=5269 u=sergeylapshov n=ansible INFO| PLAY [Клонирование репозитория] *****************************************************************************************
+2025-05-22 10:59:41,489 p=5269 u=sergeylapshov n=ansible INFO| TASK [Gathering Facts] **************************************************************************************************
+2025-05-22 10:59:42,735 p=5269 u=sergeylapshov n=ansible WARNING| [WARNING]: Platform linux on host web1 is using the discovered Python interpreter at /usr/bin/python3.10, but future
+installation of another Python interpreter could change the meaning of that path. See https://docs.ansible.com/ansible-
+core/2.18/reference_appendices/interpreter_discovery.html for more information.
+
+2025-05-22 10:59:42,735 p=5269 u=sergeylapshov n=ansible INFO| ok: [web1]
+2025-05-22 10:59:42,740 p=5269 u=sergeylapshov n=ansible INFO| TASK [Клонировать приложение] *******************************************************************************************
+2025-05-22 10:59:45,475 p=5269 u=sergeylapshov n=ansible INFO| ok: [web1]
+2025-05-22 10:59:45,484 p=5269 u=sergeylapshov n=ansible INFO| TASK [Сборка Docker-образа] *********************************************************************************************
+2025-05-22 10:59:46,058 p=5269 u=sergeylapshov n=ansible INFO| ok: [web1]
+2025-05-22 10:59:46,064 p=5269 u=sergeylapshov n=ansible INFO| TASK [Запуск контейнера] ************************************************************************************************
+2025-05-22 10:59:47,173 p=5269 u=sergeylapshov n=ansible INFO| changed: [web1]
+2025-05-22 10:59:47,180 p=5269 u=sergeylapshov n=ansible INFO| TASK [Проверка состояния доступности] ***********************************************************************************
+2025-05-22 10:59:47,542 p=5269 u=sergeylapshov n=ansible INFO| fatal: [web1]: FAILED! => {"changed": false, "content": "", "elapsed": 0, "msg": "Status code was -1 and not [200]: Request failed: <urlopen error [Errno 111] Connection refused>", "redirected": false, "status": -1, "url": "http://localhost:8000"}
+2025-05-22 10:59:47,543 p=5269 u=sergeylapshov n=ansible INFO| PLAY RECAP **************************************************************************************************************
+2025-05-22 10:59:47,543 p=5269 u=sergeylapshov n=ansible INFO| web1                       : ok=4    changed=1    unreachable=0    failed=1    skipped=0    rescued=0    ignored=0   
+2025-05-22 11:02:29,438 p=5922 u=sergeylapshov n=ansible INFO| PLAY [Клонирование репозитория] *****************************************************************************************
+2025-05-22 11:02:29,444 p=5922 u=sergeylapshov n=ansible INFO| TASK [Gathering Facts] **************************************************************************************************
+2025-05-22 11:02:31,020 p=5922 u=sergeylapshov n=ansible WARNING| [WARNING]: Platform linux on host web1 is using the discovered Python interpreter at /usr/bin/python3.10, but future
+installation of another Python interpreter could change the meaning of that path. See https://docs.ansible.com/ansible-
+core/2.18/reference_appendices/interpreter_discovery.html for more information.
+
+2025-05-22 11:02:31,020 p=5922 u=sergeylapshov n=ansible INFO| ok: [web1]
+2025-05-22 11:02:31,027 p=5922 u=sergeylapshov n=ansible INFO| TASK [Клонировать приложение] *******************************************************************************************
+2025-05-22 11:02:33,800 p=5922 u=sergeylapshov n=ansible INFO| ok: [web1]
+2025-05-22 11:02:33,807 p=5922 u=sergeylapshov n=ansible INFO| TASK [Сборка Docker-образа] *********************************************************************************************
+2025-05-22 11:02:34,395 p=5922 u=sergeylapshov n=ansible INFO| ok: [web1]
+2025-05-22 11:02:34,402 p=5922 u=sergeylapshov n=ansible INFO| TASK [Запуск контейнера] ************************************************************************************************
+2025-05-22 11:02:35,035 p=5922 u=sergeylapshov n=ansible INFO| ok: [web1]
+2025-05-22 11:02:35,041 p=5922 u=sergeylapshov n=ansible INFO| TASK [Проверка состояния доступности] ***********************************************************************************
+2025-05-22 11:02:35,391 p=5922 u=sergeylapshov n=ansible INFO| ok: [web1]
+2025-05-22 11:02:35,392 p=5922 u=sergeylapshov n=ansible INFO| PLAY RECAP **************************************************************************************************************
+2025-05-22 11:02:35,393 p=5922 u=sergeylapshov n=ansible INFO| web1                       : ok=5    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+2025-05-22 11:16:24,605 p=9095 u=sergeylapshov n=ansible INFO| PLAY [Деплой приложения через роль] *************************************************************************************
+2025-05-22 11:16:24,613 p=9095 u=sergeylapshov n=ansible INFO| TASK [Gathering Facts] **************************************************************************************************
+2025-05-22 11:16:26,153 p=9095 u=sergeylapshov n=ansible WARNING| [WARNING]: Platform linux on host web1 is using the discovered Python interpreter at /usr/bin/python3.10, but future
+installation of another Python interpreter could change the meaning of that path. See https://docs.ansible.com/ansible-
+core/2.18/reference_appendices/interpreter_discovery.html for more information.
+
+2025-05-22 11:16:26,153 p=9095 u=sergeylapshov n=ansible INFO| ok: [web1]
+2025-05-22 11:16:26,161 p=9095 u=sergeylapshov n=ansible INFO| TASK [deploy_docker_app : Клонировать приложение] ***********************************************************************
+2025-05-22 11:16:31,223 p=9095 u=sergeylapshov n=ansible INFO| fatal: [web1]: FAILED! => {"changed": false, "cmd": "/usr/bin/git clone --origin origin https://github.com/DavyRoy/DevOps_practick.git /home/vagrant/app/Ansible/DOCKER-ANS-05", "msg": "fatal: destination path '/home/vagrant/app/Ansible/DOCKER-ANS-05' already exists and is not an empty directory.", "rc": 128, "stderr": "fatal: destination path '/home/vagrant/app/Ansible/DOCKER-ANS-05' already exists and is not an empty directory.\n", "stderr_lines": ["fatal: destination path '/home/vagrant/app/Ansible/DOCKER-ANS-05' already exists and is not an empty directory."], "stdout": "", "stdout_lines": []}
+2025-05-22 11:16:31,224 p=9095 u=sergeylapshov n=ansible INFO| PLAY RECAP **************************************************************************************************************
+2025-05-22 11:16:31,224 p=9095 u=sergeylapshov n=ansible INFO| web1                       : ok=1    changed=0    unreachable=0    failed=1    skipped=0    rescued=0    ignored=0   
+2025-05-22 11:17:18,148 p=9407 u=sergeylapshov n=ansible INFO| PLAY [Деплой приложения через роль] *************************************************************************************
+2025-05-22 11:17:18,155 p=9407 u=sergeylapshov n=ansible INFO| TASK [Gathering Facts] **************************************************************************************************
+2025-05-22 11:17:19,352 p=9407 u=sergeylapshov n=ansible WARNING| [WARNING]: Platform linux on host web1 is using the discovered Python interpreter at /usr/bin/python3.10, but future
+installation of another Python interpreter could change the meaning of that path. See https://docs.ansible.com/ansible-
+core/2.18/reference_appendices/interpreter_discovery.html for more information.
+
+2025-05-22 11:17:19,352 p=9407 u=sergeylapshov n=ansible INFO| ok: [web1]
+2025-05-22 11:17:19,361 p=9407 u=sergeylapshov n=ansible INFO| TASK [deploy_docker_app : Клонировать приложение] ***********************************************************************
+2025-05-22 11:17:22,131 p=9407 u=sergeylapshov n=ansible INFO| ok: [web1]
+2025-05-22 11:17:22,137 p=9407 u=sergeylapshov n=ansible INFO| TASK [deploy_docker_app : Собрать Docker-образ] *************************************************************************
+2025-05-22 11:17:22,688 p=9407 u=sergeylapshov n=ansible INFO| fatal: [web1]: FAILED! => {"changed": false, "msg": "state is present but all of the following are missing: source"}
+2025-05-22 11:17:22,689 p=9407 u=sergeylapshov n=ansible INFO| PLAY RECAP **************************************************************************************************************
+2025-05-22 11:17:22,689 p=9407 u=sergeylapshov n=ansible INFO| web1                       : ok=2    changed=0    unreachable=0    failed=1    skipped=0    rescued=0    ignored=0   
+2025-05-22 11:17:57,709 p=9712 u=sergeylapshov n=ansible INFO| PLAY [Деплой приложения через роль] *************************************************************************************
+2025-05-22 11:17:57,716 p=9712 u=sergeylapshov n=ansible INFO| TASK [Gathering Facts] **************************************************************************************************
+2025-05-22 11:17:58,899 p=9712 u=sergeylapshov n=ansible WARNING| [WARNING]: Platform linux on host web1 is using the discovered Python interpreter at /usr/bin/python3.10, but future
+installation of another Python interpreter could change the meaning of that path. See https://docs.ansible.com/ansible-
+core/2.18/reference_appendices/interpreter_discovery.html for more information.
+
+2025-05-22 11:17:58,899 p=9712 u=sergeylapshov n=ansible INFO| ok: [web1]
+2025-05-22 11:17:58,907 p=9712 u=sergeylapshov n=ansible INFO| TASK [deploy_docker_app : Клонировать приложение] ***********************************************************************
+2025-05-22 11:18:01,593 p=9712 u=sergeylapshov n=ansible INFO| ok: [web1]
+2025-05-22 11:18:01,601 p=9712 u=sergeylapshov n=ansible INFO| TASK [deploy_docker_app : Собрать Docker-образ] *************************************************************************
+2025-05-22 11:18:02,172 p=9712 u=sergeylapshov n=ansible INFO| ok: [web1]
+2025-05-22 11:18:02,178 p=9712 u=sergeylapshov n=ansible INFO| TASK [deploy_docker_app : Запуск контейнера] ****************************************************************************
+2025-05-22 11:18:02,999 p=9712 u=sergeylapshov n=ansible INFO| changed: [web1]
+2025-05-22 11:18:03,005 p=9712 u=sergeylapshov n=ansible INFO| PLAY RECAP **************************************************************************************************************
+2025-05-22 11:18:03,005 p=9712 u=sergeylapshov n=ansible INFO| web1                       : ok=4    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   

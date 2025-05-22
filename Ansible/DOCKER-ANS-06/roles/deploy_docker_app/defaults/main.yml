@@ -1,0 +1,7 @@
+repo_url: "https://github.com/DavyRoy/DevOps_practick.git"
+repo_dir: "/home/vagrant/app/Ansible/DOCKER-ANS-05"
+app_dir: "/home/vagrant/app"
+image_name: "demo-backend"
+container_name: "demo_backend_new"
+container_port: "3000"
+host_port: "8091"

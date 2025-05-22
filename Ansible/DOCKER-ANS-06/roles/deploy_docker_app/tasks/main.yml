@@ -1,0 +1,22 @@
+- name: Клонировать приложение
+  ansible.builtin.git:
+    repo: "{{ repo_url }}"
+    dest: "{{ app_dir }}"
+    force: yes
+
+- name: Собрать Docker-образ
+  community.docker.docker_image:
+    name: "{{ image_name }}"
+    source: build
+    build:
+      path: "{{ repo_dir }}"
+    state: present
+
+- name: Запуск контейнера
+  community.docker.docker_container:
+    name: "{{ container_name }}"
+    image: "{{ image_name }}"
+    state: started
+    restart_policy: always
+    published_ports:
+      - "{{ host_port }}:{{ container_port }}"

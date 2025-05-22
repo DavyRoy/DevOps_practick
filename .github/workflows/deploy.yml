@@ -13,5 +13,22 @@ jobs:
       - name: Install Ansible
         run: sudo apt update && sudo apt install -y ansible
 
-      - name: Run playbook
-        run: ansible-playbook Ansible/ANS-15/deploy.yml
+      - name: Подключение к серверу и запуск Ansible
+        env:
+          ANSIBLE_HOST_KEY_CHECKING: "False"
+        run: |
+          ansible-playbook deploy.yml --private-key .ssh/id_rsa
+
+      - name: 📬 Отправка уведомления в Telegram (успех)
+        if: success()
+        run: |
+          curl -s -X POST https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/sendMessage \
+            -d chat_id=${{ secrets.TELEGRAM_CHAT_ID }} \
+            -d text="✅ Деплой завершён успешно! (GitHub Actions + Ansible)"
+
+      - name: ⚠️ Уведомление в Telegram (ошибка)
+        if: failure()
+        run: |
+          curl -s -X POST https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/sendMessage \
+            -d chat_id=${{ secrets.TELEGRAM_CHAT_ID }} \
+            -d text="❌ Ошибка в пайплайне! Проверь GitHub Actions."
