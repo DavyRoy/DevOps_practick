@@ -1,0 +1,34 @@
+- name: Установка Prometheus и Node Exporter
+  hosts: web
+  become: true
+  tasks:
+
+    - name: Создать директорию для Prometheus конфигурации
+      file:
+        path: /home/vagrant/prometheus
+        state: directory
+
+    - name: Копировать конфиг Prometheus
+      copy:
+        src: /Users/sergeylapshov/Documents/Devops/docker/Ansible/DOCKER-ANS-08/files/prometheus.yml
+        dest: /home/vagrant/prometheus/prometheus.yml
+
+    - name: Запустить Node Exporter
+      community.docker.docker_container:
+        name: node_exporter
+        image: prom/node-exporter:latest
+        state: started
+        restart_policy: always
+        published_ports:
+          - "9100:9100"
+
+    - name: Запустить Prometheus
+      community.docker.docker_container:
+        name: prometheus
+        image: prom/prometheus:latest
+        state: started
+        restart_policy: always
+        published_ports:
+          - "9090:9090"
+        volumes:
+          - /home/vagrant/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml

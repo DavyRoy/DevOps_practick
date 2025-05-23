@@ -1,0 +1,42 @@
+- name: Обновленный репозиторий
+  hosts: web
+  become: true
+  tasks:
+
+    - name: Остановка контейнера
+      community.docker.docker_container:
+        name: demo-backend
+        state: absent
+        force_kill: true
+
+    - name: Удаление образа
+      community.docker.docker_image:
+        name: demo-backend
+        state: absent
+        force_absent: true
+
+    - name: Клонировать приложение
+      ansible.builtin.git:
+        repo: "https://github.com/DavyRoy/DevOps_practick.git"
+        dest: /home/vagrant/apps
+        force: yes
+
+    - name: Сборка Docker-образа
+      community.docker.docker_image:
+        name: demo-backend
+        source: build
+        build:
+          path: /home/vagrant/app/Ansible/DOCKER-ANS-05
+        state: present
+
+    - name: Запуск контейнера
+      community.docker.docker_container:
+        name: demo-backend
+        image: demo-backend
+        state: started
+        restart_policy: always
+        published_ports:
+          - 8093:3000
+
+    - name: Очистить dangling-образы
+      ansible.builtin.shell: docker image prune -f

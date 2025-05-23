@@ -1,0 +1,38 @@
+- name: Клонировать backend-приложение
+  ansible.builtin.git:
+    repo: "{{ backend_repo }}"
+    dest: "{{ backend_dir }}"
+    force: yes
+
+- name: Собрать Docker-образ backend
+  community.docker.docker_image:
+    name: "{{ backend_image }}"
+    source: build
+    build:
+      path: "{{ backend_app }}"
+    state: present
+
+- name: Запустить backend-контейнер
+  community.docker.docker_container:
+    name: backend_app
+    image: "{{ backend_image }}"
+    state: started
+    restart_policy: always
+    published_ports:
+      - "{{ backend_host_port }}:{{ backend_port }}"
+
+- name: Скопировать конфиг Nginx
+  copy:
+    src: nginx.conf
+    dest: /home/vagrant/nginx.conf
+
+- name: Запустить nginx-контейнер
+  community.docker.docker_container:
+    name: nginx_frontend
+    image: "{{ nginx_image }}"
+    state: started
+    restart_policy: always
+    published_ports:
+      - "{{ nginx_host_port }}:{{ nginx_port }}"
+    volumes:
+      - /home/vagrant/nginx.conf:/etc/nginx/conf.d/default.confs

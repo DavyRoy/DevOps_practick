@@ -1,0 +1,5 @@
+- name: Развёртывание бэкенда и nginx через роль
+  hosts: web
+  become: true
+  roles:
+    - role: deploy_multi_service

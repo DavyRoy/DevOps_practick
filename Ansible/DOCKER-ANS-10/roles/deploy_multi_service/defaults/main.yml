@@ -1,0 +1,10 @@
+backend_repo: "https://github.com/DavyRoy/DevOps_practick.git"
+backend_app: "/home/vagrant/app/Ansible/DOCKER-ANS-05"
+backend_dir: "/home/vagrant/app"
+backend_image: "demo-backend"
+backend_port: "3000"
+backend_host_port: "8098"
+
+nginx_image: "nginx:latest"
+nginx_port: "80"
+nginx_host_port: "8099"
